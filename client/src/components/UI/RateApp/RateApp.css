@@ -1,4 +1,5 @@
 .rate-form{
+    position: relative;
     border: none;
     max-width: 90%;
     margin: auto;

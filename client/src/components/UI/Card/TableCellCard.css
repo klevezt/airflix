@@ -159,3 +159,9 @@ hr {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+@media(max-width:1023.98px){
+::-webkit-scrollbar {
+  display: none;
+}
+}

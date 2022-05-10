@@ -139,3 +139,39 @@
         height: 180px;
     }
 }
+
+.modal-view-food-container{
+    position: relative;
+    background-color: white;
+    max-width: 80%;
+    max-height: 80vh;
+    height: auto;
+    border-radius: 10px;
+    border: 0;
+    outline: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: scroll;
+    z-index: 10000;
+}
+.circular-close-button{
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: white;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.black-bg{background-color: #353535;color: white;right: 0;}
+
+.modal-view-food-container hr{
+    border: 1px solid #0091a4 !important;
+}
+.modal-view-food-container li{font-size: 18px;}
+.modal-view-food-container .kp-special-ingredients li{color: #0091a4;font-weight: bold;}
+
+.kp-custom.kp-ingredients{list-style: circle;}
+.kp-custom.kp-special-ingredients{list-style: disc;}

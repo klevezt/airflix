@@ -7,7 +7,7 @@ import {
   fetchFoodTypesFromDB,
   fetchInfoTypesFromDB,
 } from "../../../api_requests/hotel_requests";
-import { ReadMore } from "@mui/icons-material";
+import { Close, ReadMore } from "@mui/icons-material";
 import IconButton from "../../UI/Buttons/IconButton";
 import { getCurrentWeekInMonth } from "../../../Helpers/Functions/functions";
 import { fetchTodaysMenuFromDB } from "../../../api_requests/user_requests";
@@ -127,7 +127,6 @@ const Home = () => {
   };
   const handlePreview = (currentFood) => {
     handleOpen();
-    console.log(currentFood.name);
     setPreviewSelectedFood([currentFood.name]);
   };
 
@@ -147,28 +146,46 @@ const Home = () => {
         }}
       >
         <Fade in={open}>
-          <div className="modalReview-container">
+          <div className="modal-view-food-container">
+            <div className="circular-close-button" onClick={handleClose}>
+              <Close />
+            </div>
             <img
               src={`${process.env.REACT_APP_IMAGES_URL}/Images/Food/${previewSelectedFood[0].images[0]}`}
               alt="food-view-img"
               className="w-100"
             />
-            {previewSelectedFood[0].name}
-            {previewSelectedFood[0].ingredients && (
-              <ul>
-                {previewSelectedFood[0].ingredients.map((ingr, i) => {
-                  return <li key={i}> {ingr}</li>;
-                })}
-              </ul>
-            )}
-            {previewSelectedFood[0].special_features.lenght >= 1 && (
-              <ul>
-                {previewSelectedFood[0].special_features.map((feat, j) => {
-                  return <li key={j}> {feat}</li>;
-                })}
-              </ul>
-            )}
-            {previewSelectedFood[0].description}
+            <div className="p-4">
+              <h2 className="text-center">{previewSelectedFood[0].name}</h2>
+              {previewSelectedFood[0].ingredients && (
+                <>
+                  <hr />
+                  <ul className="kp-custom kp-ingredients">
+                    {previewSelectedFood[0].ingredients.map((ingr, i) => {
+                      return <li key={i}> {ingr}</li>;
+                    })}
+                  </ul>
+                </>
+              )}
+              {previewSelectedFood[0].special_features && (
+                <>
+                  <hr />
+                  <ul className="kp-custom kp-special-ingredients">
+                    {previewSelectedFood[0].special_features.map((feat, j) => {
+                      return <li key={j}> {feat}</li>;
+                    })}
+                  </ul>
+                </>
+              )}
+              <p>{previewSelectedFood[0].description}</p>
+              <IconButton
+                text={t("close")}
+                icon={<Close className="mr-2" />}
+                variant="contained"
+                onClick={handleClose}
+                className="mt-3"
+              />
+            </div>
           </div>
         </Fade>
       </Modal>,

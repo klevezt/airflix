@@ -4,10 +4,17 @@ const mongoose = require("mongoose");
 const { validateToken, tokenRefresh } = require("./middleware/auth");
 const path = require("path");
 
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const multer = require("multer");
+
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use(cors());
 app.use(express.json());
@@ -44,6 +51,7 @@ const serviceType = require("./routes/serviceType");
 const rate = require("./routes/rate");
 const login = require("./routes/login");
 const refresh = require("./routes/refresh");
+const imageTest = require("./routes/imageTest");
 
 app.use("/users", validateToken, usersRouter);
 app.use("/food", validateToken, foodRouter);
@@ -63,6 +71,9 @@ app.use("/serviceType", validateToken, serviceType);
 app.use("/rate", validateToken, rate);
 // app.use("/refresh", tokenRefresh, refresh);
 app.use("/login", login);
+app.use("/imageTest", imageTest);
+
+// var imgModel = require("./models/imageTest.model");
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Home,
@@ -34,6 +34,10 @@ const MobileSidebarComponent = (props) => {
   const menuClickHandler = () => {
     props.handleOpenMenu();
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "scroll";
+  }, []);
 
   const logoutHandler = () => {
     dispatch({
@@ -125,9 +129,9 @@ const MobileSidebarComponent = (props) => {
               src={`http://localhost:3000/assets/Images/Logo/logo.png`}
               alt="logo"
             />
-            <span className="close" onClick={menuClickHandler}>
-              x
-            </span>
+            <div className="circular-close-button" onClick={menuClickHandler}>
+              <Close />
+            </div>
           </div>
         </div>
         <ul className="mobile__sidebar__list">
@@ -206,6 +210,17 @@ const MobileSidebarComponent = (props) => {
             >
               <ExitToApp />
               <h5>{t("logout")}</h5>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              exact
+              to="/test"
+              className="mobile__navigation__link"
+              onClick={menuClickHandler}
+            >
+              {/* <ExitToApp /> */}
+              <h5>{t("TEST")}</h5>
             </NavLink>
           </li>
           <li>

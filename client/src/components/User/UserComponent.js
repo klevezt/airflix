@@ -22,6 +22,7 @@ import Home from "./Home/Home";
 import EventsAll from "./Events/EventsAll";
 import EventsDetail from "./Events/EventsDetail";
 import Info from "./Info/Info";
+import Test from "./Test/Test";
 
 const User = () => {
   const [state] = useStateValue();
@@ -36,6 +37,9 @@ const User = () => {
               <div className="user-container text-center mb-80">
                 <Route exact path="/info">
                   {state.authenticated && <Info />}
+                </Route>
+                <Route exact path="/test">
+                  {state.authenticated && <Test />}
                 </Route>
                 <Route exact path="/services">
                   {state.authenticated && (

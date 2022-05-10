@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ReactDOM from "react-dom";
 import IconButton from "../../UI/Buttons/IconButton";
-import { Search } from "@mui/icons-material";
+import { Search, Close } from "@mui/icons-material";
 import { Fade, Backdrop, Modal, TextField } from "@mui/material";
 
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
@@ -36,6 +36,8 @@ const BuffetLandingPage = () => {
   const [foodState, setFood] = useState([]);
   const [todaysFoodCategories, setTodaysFoodCategories] = useState([]);
   const [date, setDate] = useState(new Date());
+  const [openPreview, setOpenPreview] = useState(false);
+  const [previewSelectedFood, setPreviewSelectedFood] = useState([]);
 
   const [fullDate, setFullDate] = useState(
     date.getDate() + " " + date.toLocaleString("default", { month: "long" })
@@ -89,6 +91,80 @@ const BuffetLandingPage = () => {
     setOpenSearch(false);
   };
 
+  const handleOpenPreview = () => {
+    setOpenPreview(true);
+  };
+
+  const handleClosePreview = () => {
+    setOpenPreview(false);
+  };
+  const handlePreview = (currentFood) => {
+    handleOpenPreview();
+    setPreviewSelectedFood([currentFood]);
+  };
+
+  const previewFood =
+    previewSelectedFood[0] !== undefined &&
+    ReactDOM.createPortal(
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={"modalMenu"}
+        open={openPreview}
+        onClose={handleClosePreview}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openPreview}>
+          <div className="modal-view-food-container">
+            <div className="circular-close-button" onClick={handleClosePreview}>
+              <Close />
+            </div>
+            <img
+              src={`${process.env.REACT_APP_IMAGES_URL}/Images/Food/${previewSelectedFood[0].images[0]}`}
+              alt="food-view-img"
+              className="w-100"
+            />
+            <div className="p-4">
+              <h2 className="text-center">{previewSelectedFood[0].name}</h2>
+              {previewSelectedFood[0].ingredients && (
+                <>
+                  <hr />
+                  <ul className="kp-custom kp-ingredients">
+                    {previewSelectedFood[0].ingredients.map((ingr, i) => {
+                      return <li key={i}> {ingr}</li>;
+                    })}
+                  </ul>
+                </>
+              )}
+              {previewSelectedFood[0].special_features && (
+                <>
+                  <hr />
+                  <ul className="kp-custom kp-special-ingredients">
+                    {previewSelectedFood[0].special_features.map((feat, j) => {
+                      return <li key={j}> {feat}</li>;
+                    })}
+                  </ul>
+                </>
+              )}
+              <p>{previewSelectedFood[0].description}</p>
+              <IconButton
+                text={t("close")}
+                icon={<Close className="mr-2" />}
+                variant="contained"
+                onClick={handleClosePreview}
+                className="mt-3"
+              />
+            </div>
+          </div>
+        </Fade>
+      </Modal>,
+      document.getElementById("user-preview-ingredients-root")
+    );
+
   const showAllCategories = todaysFoodCategories.map((category, q) => {
     const foodPerEachCategory = category[1].map((food, kk) => {
       const variable = foodState.filter((f) => f.name === food);
@@ -98,6 +174,7 @@ const BuffetLandingPage = () => {
             className={`user-home-todayFood-inner-wrapper ${
               todaysFoodCategories[q][1].length - 1 === 0 && "w-100"
             } ${kk === 0 && "final-element"}`}
+            onClick={() => handlePreview(currentFood)}
             key={j}
           >
             <div className="user-buffet-wrapper" key={j}>
@@ -188,6 +265,8 @@ const BuffetLandingPage = () => {
             openSearchModal={handleOpen}
             closeSearchModal={handleClose}
           />
+          {openPreview && previewSelectedFood.length >= 1 && previewFood}
+
           {openSearch && (
             <>
               {ReactDOM.createPortal(
