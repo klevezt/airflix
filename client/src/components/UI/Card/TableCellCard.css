@@ -1,0 +1,161 @@
+hr {
+  border: 1px solid red;
+  opacity: 0.5;
+  width: 100%;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.modalMenu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalMenu-content {
+  margin-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.modalMenu input {
+  /* border: none !important; */
+}
+
+.modalMenu-container {
+  background-color: #fff;
+  min-width: 500px;
+  min-height: 600px;
+  max-height: 99vh;
+  border-radius: 10px;
+  border: 0;
+  outline: 0;
+  padding: 0;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: scroll;
+  z-index: 1;
+}
+
+.list-group-item {
+  width: 100%;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.list-group-item-theme-color {
+  background-color: #f7c6a2;
+}
+
+.card-container {
+  min-width: 150px;
+  min-height: 270px;
+}
+.card-container.isTodaysCard {
+  background-color: #f7c6a2;
+}
+.card-container-empty {
+  min-height: 270px;
+  background-color: #bababa !important;
+}
+.typography-container {
+  font-size: 14px !important;
+  font-weight: bold !important;
+}
+
+.food-table-card-container {
+  width: 90%;
+  margin: auto;
+  padding: 15px 40px;
+  background-color: #bdbdbd2b;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.food-table-card-container h5 {
+  text-align: center;
+  padding: 5px 0;
+  border-bottom: 2px solid #212529;
+}
+
+.food-table-card-container ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.food-table-card-input {
+  /* padding: 20px 0px; */
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+
+.food-table-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.food-table-card-input input {
+  width: auto;
+  padding: 12px 10px;
+  height: 35px;
+  margin: 6px 0;
+  margin-right: 20px;
+  border: 1px solid #ccc;
+}
+
+.w-10 {
+  width: 20px;
+  height: 20px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.mt-5 {
+  margin-top: 5px !important;
+}
+
+.basic-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalMenu-footer {
+  display: flex;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

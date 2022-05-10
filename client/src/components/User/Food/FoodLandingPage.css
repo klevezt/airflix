@@ -1,0 +1,209 @@
+.food-landing-page {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  /* flex-direction: column; */
+  align-items: center;
+}
+.food-landing-page .column > div {
+  height: 100%;
+  text-align: center;
+}
+.food-landing-page .column {
+  background-color: rgb(255, 255, 255);
+}
+.food-landing-page h2 {
+  width: 100%;
+  color: #ffffff;
+}
+.food-landing-page .spinner {
+  margin: 50% auto;
+  width: 70px;
+  height: 70px !important;
+  text-align: center;
+  font-size: 10px;
+}
+.user.main__content > .container,
+.user.main__content .container .user-container {
+  height: 100%;
+  max-width: calc(100vw - 20px);
+  padding: 0;
+}
+
+.food-landing-page .landing-page-icon {
+  font-size: 150px;
+  color: #ffffff;
+}
+
+.column .back-button {
+  width: auto;
+  margin-top: 10px;
+}
+
+.food-landing-page__inside_wrapper h2 {
+  font-size: 36px;
+  color: white;
+}
+.food-landing-page__inside_wrapper h3 {
+  font-size: 24px;
+  text-align: start;
+  background: rgb(247 198 162);
+  width: fit-content;
+  padding: 8px 25px;
+  margin-bottom: 0;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 5px;
+  padding-bottom: 0;
+}
+
+.food-landing-page__category__each_category {
+  border: 10px solid rgb(247 198 162);
+  padding: 20px 10px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.food-landing-page__inside_wrapper h4 {
+  padding: 15px;
+  word-break: break-all;
+  margin: 0;
+  align-self: center;
+}
+.food-landing-page__inside_wrapper img {
+  max-height: 350px;
+  width: 100%;
+  object-fit: contain;
+  max-width: 50%;
+  padding: 10px;
+  margin-right: 10px;
+}
+.food-landing-page .outer-box {
+  position: relative;
+  width: 48%;
+  border: 1px solid rgb(247 198 162);
+  margin: 2% auto;
+  padding: 0;
+  box-shadow: none;
+  border-radius: 5px;
+  margin-bottom: 0;
+}
+.food-landing-page__category__wrapper {
+  /* border: 1px solid rgb(247 198 162); */
+  /* padding: 20px; */
+  margin: 40px auto;
+}
+.food-landing-page__category__wrapper .food-landing-page__category__headline {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  max-width: 85%;
+  margin: auto;
+}
+.food-landing-page__category__wrapper .food-landing-page__category__content {
+  margin: 0;
+}
+.food-landing-page .outer-box a {
+  display: flex;
+  /* align-items: center; */
+  padding: 15px;
+}
+
+@media (max-width: 991.98px) {
+  .food-landing-page .outer-box {
+    width: 85%;
+    margin: 2% auto;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .food-landing-page .outer-box {
+    width: 85%;
+    margin: 2% auto;
+  }
+}
+
+@media (max-width: 574.98px) {
+  .food-landing-page__inside_wrapper h2{
+    font-size: 28px;
+  }
+  .food-landing-page__inside_wrapper img{
+    max-height: 220px;
+    max-width: 100%;
+    margin-right: 0;
+  }
+  .food-landing-page .landing-page-icon{
+    font-size: 100px;
+  }
+  .form-back-button span,
+  .back-button span{
+    display: none;
+  }
+  .food-landing-page__inside_wrapper h4 {
+    font-size: 18px;
+    text-align: start;
+    width: 100%;
+    padding: 10px;
+    padding-bottom: 0px;
+  }
+  .food-landing-page__inside_wrapper p {
+    font-size: 14px;
+    text-align: start;
+    width: 100%;
+    padding: 0 10px 10px 10px;
+    margin: 0;
+  }
+  .food-landing-page__inside_wrapper p span {
+    margin-right: 3px;
+  }
+  .food-landing-page__category__wrapper hr{
+    border: 1px solid rgb(247 198 162) !important;
+  }
+  .food-landing-page__category__wrapper .food-landing-page__category__headline {
+    max-width: 100%;
+  }
+  .food-landing-page .outer-box {
+    /* width: 100%; */
+  }
+  .food-landing-page .outer-box a {
+    flex-wrap: wrap;
+    padding: 0;
+  }
+  
+}
+
+
+.modalFoodSearch-container {
+  background-color: white;
+  width: 75%;
+  max-width: 80%;
+  height: auto;
+  border-radius: 5px;
+  border: 0;
+  outline: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10000;
+}
+.modalFoodSearch-container .search-button{
+  background-color: #0091a4;
+}
+.modalFoodSearch-container h3,
+.modalFoodSearch-container .datetime-picker {
+  padding: 0;
+}
+.bookmark {
+  position: absolute;
+  top: -6px;
+  left: 2px;
+  height: 45px;
+  width: 30px;
+  padding: 0px;
+  -webkit-transform: rotate(0deg) skew(0deg);
+  transform: rotate(0deg) skew(0deg);
+  border-left: 15px solid rgb(255, 168, 105);
+  border-right: 15px solid rgb(255, 168, 105);
+  border-bottom: 15px solid transparent;
+  border-radius: 5px;
+}

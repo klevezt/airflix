@@ -1,0 +1,18 @@
+
+.full__content{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+
+.content{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.main__content{
+    background-color: tomato;
+    flex: 0.9;
+}

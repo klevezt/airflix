@@ -1,0 +1,20 @@
+.kp-input-group-prepend {
+}
+
+.kp-input-group-text {
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 8px 8px;
+  margin-right: 4px;
+  margin-left: 0;
+  /* margin-bottom: 0; */
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #ed6c02;
+  border-radius: 0.25rem;
+}

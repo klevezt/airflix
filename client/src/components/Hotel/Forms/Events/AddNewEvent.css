@@ -1,0 +1,20 @@
+.datetime-picker > div {
+  width: 100%;
+  background: white;
+}
+.datetime-picker input[type="text"] {
+  border: none;
+}
+
+.datetime-picker fieldset {
+  top: 0;
+}
+.MuiCalendarPicker-root .css-1dozdou button.MuiButtonBase-root,
+.css-fhpqww button,
+.MuiClockPicker-arrowSwitcher button {
+  width: auto;
+}
+.PrivatePickersYear-root button {
+  padding: 5px;
+  height: auto;
+}

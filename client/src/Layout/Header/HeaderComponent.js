@@ -1,0 +1,65 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import { Settings, ExitToApp } from "@mui/icons-material";
+import { actionTypes } from "../../reducer";
+import { useStateValue } from "../../StateProvider";
+
+import "./HeaderComponent.css";
+import { useTranslation } from "react-i18next";
+
+const Header = () => {
+  const { t } = useTranslation();
+  const [state, dispatch] = useStateValue();
+
+  const logoutHandler = () => {
+    dispatch({
+      type: actionTypes.REMOVE_JWT_TOKEN,
+      authenticated: false,
+      jwtauthtoken: "",
+    });
+  };
+
+  return (
+    <div className="header">
+      {state.authenticated && (
+        <>
+          <img
+            src="http://localhost:3000/assets/Images/Logo/logo.png"
+            alt="white-logo"
+          />
+          {state.user.role === "Customer" && (
+            <div className="header-user-text ">
+              <h3>{t("hotel_logo")}</h3>
+              <p className="m-0">
+                {t("room_number")}: {state.user.room_number}
+                <br />
+                {state.user.room_type}
+              </p>
+            </div>
+          )}
+        </>
+      )}
+
+      {state.authenticated && (
+        <div className="header__right">
+          <ul>
+            <li>
+              <Link to="/settings">
+                <Settings />
+                <h5>{t("settings")}</h5>
+              </Link>
+            </li>
+            <li>
+              <Link to="/" onClick={logoutHandler}>
+                <ExitToApp />
+                <h5>{t("logout")}</h5>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Header;

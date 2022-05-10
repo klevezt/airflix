@@ -1,0 +1,47 @@
+.page-link span.sr-only {
+  display: none;
+}
+.pagination .page-item:hover {
+  cursor: pointer;
+}
+table > thead > tr > th {
+  cursor: pointer;
+}
+.button__addUser {
+  width: auto;
+}
+.kp {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: #f0914d85;
+  border-radius: 5px;
+  padding: 20px 50px;
+}
+.kp img {
+  max-width: 200px;
+  margin-right: 40px;
+}
+.service-wrapper .form-back-button {
+  width: auto;
+  position: relative !important;
+  margin-bottom: 1rem;
+  transform: none;
+  margin-right: 10px;
+}
+
+.kp .buttons-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.kp .buttons-wrapper .button__rounded {
+  width: auto;
+  margin: 0px 5px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding-left: 0;
+  padding-right: 0;
+}

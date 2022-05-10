@@ -1,0 +1,39 @@
+.full__content {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.main__content {
+    background-color: #f0914d00;
+    flex: 0.9;
+}
+
+table .table-bordered .table-hover .table-sm .table-striped .dataTable{
+    width: 100%;
+}
+table.table-sm th,
+table.table-sm td {
+    padding-top: .6rem;
+    padding-bottom: .6rem;
+}
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.hotel-container {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    min-height: 560px;
+}
+

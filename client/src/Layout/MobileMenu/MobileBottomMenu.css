@@ -1,0 +1,198 @@
+@media (min-width: 991px) {
+  .mobile-bottom-wrapper {
+    display: none;
+  }
+}
+.mobile-bottom-wrapper {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  z-index: 10;
+}
+.mobile-bottom-list {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0;
+  padding: 10px 0px;
+  background-color: rgba(15, 15, 15, 0.9);
+  border-radius: 0;
+}
+.mobile-bottom-list li {
+  flex-basis: 100%;
+  border-right: 1px solid #0091a4;
+  padding: 0 2%;
+}
+
+.mobile-bottom-list li:last-child {
+  border-right: none;
+}
+.mobile-bottom-list li,
+.mobile-bottom-list li a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.mobile-bottom-list li * {
+  margin-bottom: 0;
+  color: white;
+}
+
+.mobile-bottom-list li:hover {
+  cursor: pointer;
+}
+
+.mobile-bottom-list li .mobile-menu-icon {
+  font-size: 30px;
+}
+
+.overlay.openedMenu {
+  height: 100vh;
+  width: 35%;
+  animation-name: menuOpen;
+  -webkit-animation-name: menuOpen;
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+}
+
+@media (max-width: 767.98px) {
+  .overlay.openedMenu {
+    width: 50%;
+  }
+}
+
+/* The Overlay (background) */
+.overlay {
+  /* Height & width depends on how you want to reveal the overlay (see JS below) */
+  /* margin-top: 12vh; */
+  height: 0;
+  width: 0;
+  position: fixed; /* Stay in place */
+  z-index: 20; /* Sit on top */
+  left: 0;
+  top: 0;
+  background-color: #353535; /* Black fallback color */
+  overflow: hidden; /* Disable horizontal scroll */
+  transition: 0s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
+
+.mobile-menu-overlay {
+  content: "";
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #29292981;
+}
+
+.openedMenu .mobile-menu-overlay {
+  display: block;
+}
+
+.closedMenu .mobile-menu-overlay {
+  animation-name: menuClose;
+  -webkit-animation-name: menuClose;
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+}
+
+/* Position the content inside the overlay */
+.overlay-content {
+  position: relative;
+  width: 100%; /* 100% width */
+  height: 100%;
+  text-align: center; /* Centered text/links */
+}
+
+.overlay ul {
+  padding: 0;
+}
+
+/* The navigation links inside the overlay */
+.overlay a {
+  padding: 16px;
+  display: flex; /* Display block instead of inline */
+  justify-content: flex-start;
+  align-items: center;
+  /* text-transform: uppercase; */
+  text-align: start;
+}
+
+/* When you mouse over the navigation links, change their color */
+.overlay a:hover,
+.overlay a:focus {
+  color: #292929;
+}
+
+/* Position the close button (top right corner) */
+.overlay #closebtn {
+  position: absolute;
+  font-size: 20px;
+  top: 15px;
+  right: 35px;
+}
+
+@-webkit-keyframes menuOpen {
+  0% {
+    -webkit-width: 0;
+    width: 0;
+  }
+  100% {
+    -webkit-width: 65%;
+    width: 65%;
+  }
+}
+@keyframes menuOpen {
+  0% {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+  100% {
+    -webkit-transform: translateX(0%);
+    transform: translateX(0%);
+  }
+}
+
+@-webkit-keyframes menuClose {
+  0% {
+    -webkit-width: 65%;
+    width: 65%;
+  }
+  100% {
+    -webkit-width: 0;
+    width: 0;
+  }
+}
+@keyframes menuClose {
+  0% {
+    -webkit-transform: translateX(0%);
+    transform: translateX(0%);
+  }
+  100% {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+}
+@media (max-width: 574.98px) {
+  .overlay a {
+    padding: 10px;
+  }
+  .overlay a svg {
+    font-size: 20px;
+  }
+  .mobile-bottom-list li .mobile-menu-icon{
+    font-size: 36px;
+    background: #0091a4;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  .mobile-bottom-list li h5 {
+    display: none;
+  }
+  .overlay.openedMenu {
+    width: 80%;
+  }
+}

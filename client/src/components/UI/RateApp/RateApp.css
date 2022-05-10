@@ -1,0 +1,12 @@
+.rate-form{
+    border: none;
+    max-width: 90%;
+    margin: auto;
+    background-color: white;
+    text-align: start;
+    padding: 20px 0px;
+}
+
+.rate-form hr{border: 1px solid #0091a4 !important;}
+.rate-form button{border: 1px solid #0091a4;}
+.text-error{color: red;font-weight: bold;}

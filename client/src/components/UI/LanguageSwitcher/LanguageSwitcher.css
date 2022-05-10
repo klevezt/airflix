@@ -1,0 +1,11 @@
+.language-wrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+.language-wrapper img:hover {
+  cursor: pointer;
+}
+.language-wrapper img {
+  max-width: 25px;
+  margin-right: 10px;
+}

@@ -1,0 +1,473 @@
+import { DeleteForeverSharp, Edit } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import Card from "../../components/UI/Card/TableCellCard";
+import { getWeeksInMonth } from "../Functions/functions";
+import i18next from "i18next";
+
+export const assignWeeksToTable = (year, month, week) => {
+  const [weeeek] = getWeeksInMonth(year, month);
+  const menu_week = [];
+  const weekObject = [];
+  const defaultValue = "";
+
+  weeeek.forEach((_, i) => {
+    week.forEach((weeks) => {
+      weekObject.push(weeks);
+    });
+  });
+
+  weeeek.forEach((_, i) => {
+    menu_week.push({
+      year: weekObject[i] ? weekObject[i].year : defaultValue,
+      month: weekObject[i] ? weekObject[i].month : defaultValue,
+      week: weekObject[i] ? weekObject[i].week : defaultValue,
+      monday: weekObject[i] ? weekObject[i].monday : defaultValue,
+      tuesday: weekObject[i] ? weekObject[i].tuesday : defaultValue,
+      wednesday: weekObject[i] ? weekObject[i].wednesday : defaultValue,
+      thursday: weekObject[i] ? weekObject[i].thursday : defaultValue,
+      friday: weekObject[i] ? weekObject[i].friday : defaultValue,
+      saturday: weekObject[i] ? weekObject[i].saturday : defaultValue,
+      sunday: weekObject[i] ? weekObject[i].sunday : defaultValue,
+    });
+  });
+
+  return menu_week;
+};
+
+const checkDay = (i, j, k, start, end) => {
+  return (
+    (i === 0 && end[i] - j < 0) ||
+    (end.length - 1 === i && end[i] - start[i] < k)
+  );
+};
+
+export const monthTableRow = (year, month, menu, tableMenu) => {
+  const [weeeek, start, end] = getWeeksInMonth(year, month);
+
+  weeeek.forEach((week, i) => {
+    try {
+      menu.push({
+        week: (
+          <h6 className="d-flex justify-content-center pt-2" key={i}>
+            {week}
+          </h6>
+        ),
+        day1: (
+          <>
+            {checkDay(i, 7, 0, start, end) ? (
+              <Card empty />
+            ) : (
+              <Card
+                day="monday"
+                dayNumber="1"
+                data={tableMenu[i].monday}
+                week={
+                  end.length - 1 !== i
+                    ? end[i] - 6 + "/" + month
+                    : start[i] + "/" + month
+                }
+                weekNumber={i + 1}
+                yearNumber={year}
+                monthNumber={month}
+              />
+            )}
+          </>
+        ),
+        day2: (
+          <>
+            {checkDay(i, 6, 1, start, end) ? (
+              <Card empty />
+            ) : (
+              <Card
+                day="tuesday"
+                dayNumber="2"
+                data={tableMenu[i].tuesday}
+                week={
+                  end.length - 1 !== i
+                    ? end[i] - 5 + "/" + month
+                    : start[i] + 1 + "/" + month
+                }
+                weekNumber={i + 1}
+                yearNumber={year}
+                monthNumber={month}
+              />
+            )}
+          </>
+        ),
+        day3: (
+          <>
+            {checkDay(i, 5, 2, start, end) ? (
+              <Card empty />
+            ) : (
+              <Card
+                day="wednesday"
+                dayNumber="3"
+                data={tableMenu[i].wednesday}
+                week={
+                  end.length - 1 !== i
+                    ? end[i] - 4 + "/" + month
+                    : start[i] + 2 + "/" + month
+                }
+                weekNumber={i + 1}
+                yearNumber={year}
+                monthNumber={month}
+              />
+            )}
+          </>
+        ),
+        day4: (
+          <>
+            {checkDay(i, 4, 3, start, end) ? (
+              <Card empty />
+            ) : (
+              <Card
+                day="thursday"
+                dayNumber="4"
+                data={tableMenu[i].thursday}
+                week={
+                  end.length - 1 !== i
+                    ? end[i] - 3 + "/" + month
+                    : start[i] + 3 + "/" + month
+                }
+                weekNumber={i + 1}
+                yearNumber={year}
+                monthNumber={month}
+              />
+            )}
+          </>
+        ),
+        day5: (
+          <>
+            {checkDay(i, 3, 4, start, end) ? (
+              <Card empty />
+            ) : (
+              <Card
+                day="friday"
+                dayNumber="5"
+                data={tableMenu[i].friday}
+                week={
+                  end.length - 1 !== i
+                    ? end[i] - 2 + "/" + month
+                    : start[i] + 4 + "/" + month
+                }
+                weekNumber={i + 1}
+                yearNumber={year}
+                monthNumber={month}
+              />
+            )}
+          </>
+        ),
+        day6: (
+          <>
+            {checkDay(i, 2, 5, start, end) ? (
+              <Card empty />
+            ) : (
+              <Card
+                day="saturday"
+                dayNumber="6"
+                data={tableMenu[i].saturday}
+                week={
+                  end.length - 1 !== i
+                    ? end[i] - 1 + "/" + month
+                    : start[i] + 5 + "/" + month
+                }
+                weekNumber={i + 1}
+                yearNumber={year}
+                monthNumber={month}
+              />
+            )}
+          </>
+        ),
+        day7: (
+          <>
+            {checkDay(i, 1, 6, start, end) ? (
+              <Card empty />
+            ) : (
+              <Card
+                day="sunday"
+                dayNumber="7"
+                data={tableMenu[i].sunday}
+                week={
+                  end.length - 1 !== i
+                    ? end[i] + "/" + month
+                    : start[i] + 6 + "/" + month
+                }
+                weekNumber={i + 1}
+                yearNumber={year}
+                monthNumber={month}
+              />
+            )}
+          </>
+        ),
+      });
+    } catch (error) {
+      // console.log("Error: " + error);
+    }
+  });
+};
+
+export const menuFoodRowC = (
+  menuFoodRows,
+  food,
+  handleFoodStatus,
+  handleEditFood,
+  handleDeleteFood
+) => {
+  menuFoodRows.push({
+    name: food.name,
+    type: food.type,
+    status: (
+      <div className="form-check form-switch">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={food.status ? true : false}
+          onChange={() => handleFoodStatus(food._id, !food.status)}
+          autoComplete="off"
+        />
+      </div>
+    ),
+    actions: (
+      <div>
+        <Link to="/food" onClick={() => handleEditFood(food._id)}>
+          <Edit />
+        </Link>
+        <Link to="/food" onClick={() => handleDeleteFood(food._id)}>
+          <DeleteForeverSharp />
+        </Link>
+      </div>
+    ),
+  });
+  return menuFoodRows;
+};
+
+export const menuFoodTypeRowC = (
+  menuFoodTypeRows,
+  foodType,
+  handleFoodTypeStatus,
+  handleEditFoodType,
+  handleDeleteFoodType
+) => {
+  menuFoodTypeRows.push({
+    name: foodType.name,
+    status: (
+      <div className="form-check form-switch">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={foodType.status ? true : false}
+          onChange={() => handleFoodTypeStatus(foodType._id, !foodType.status)}
+          autoComplete="off"
+        />
+      </div>
+    ),
+    actions: (
+      <>
+        <Link to="/food" onClick={() => handleEditFoodType(foodType._id)}>
+          <Edit />
+        </Link>
+        <Link to="/food" onClick={() => handleDeleteFoodType(foodType._id)}>
+          <DeleteForeverSharp />
+        </Link>
+      </>
+    ),
+  });
+  return menuFoodTypeRows;
+};
+
+export const drinkTypesColumns = [
+  {
+    label: i18next.t("drink_type_name"),
+    field: "name",
+    attributes: {
+      "aria-controls": "DataTable",
+      "aria-label": "Name",
+    },
+  },
+  {
+    label: i18next.t("actions"),
+    field: "actions",
+  },
+  {
+    label: i18next.t("status"),
+    field: "status",
+  },
+];
+
+export const menuFoodTypesColumns = [
+  {
+    label: i18next.t("food_type_name"),
+    field: "name",
+    attributes: {
+      "aria-controls": "DataTable",
+      "aria-label": "Name",
+    },
+  },
+  {
+    label: i18next.t("actions"),
+    field: "actions",
+  },
+  {
+    label: i18next.t("status"),
+    field: "status",
+  },
+];
+
+export const menuFoodStockColumns = [
+  {
+    label: i18next.t("food_type_name"),
+    field: "name",
+    attributes: {
+      "aria-controls": "DataTable",
+      "aria-label": "Name",
+    },
+  },
+  {
+    label: i18next.t("quantity"),
+    field: "quantity",
+  },
+  {
+    label: i18next.t("actions"),
+    field: "actions",
+  },
+  {
+    label: i18next.t("status"),
+    field: "status",
+  },
+];
+
+export const menuDrinkStockColumns = [
+  {
+    label: i18next.t("drink_type_name"),
+    field: "name",
+    attributes: {
+      "aria-controls": "DataTable",
+      "aria-label": "Name",
+    },
+  },
+  {
+    label: i18next.t("quantity"),
+    field: "quantity",
+  },
+  {
+    label: i18next.t("actions"),
+    field: "actions",
+  },
+  {
+    label: i18next.t("status"),
+    field: "status",
+  },
+];
+
+export const menuFoodColumns = [
+  {
+    label: i18next.t("food_name"),
+    field: "name",
+    attributes: {
+      "aria-controls": "DataTable",
+      "aria-label": "Name",
+    },
+  },
+  {
+    label: i18next.t("food_type"),
+    field: "type",
+  },
+  {
+    label: i18next.t("actions"),
+    field: "actions",
+  },
+  {
+    label: i18next.t("status"),
+    field: "status",
+  },
+];
+
+export const menuTableColumns = [
+  {
+    label: i18next.t("week"),
+    field: "week",
+    attributes: {
+      className: "",
+    },
+  },
+  {
+    label: i18next.t("monday"),
+    field: "day1",
+  },
+  {
+    label: i18next.t("tuesday"),
+    field: "day2",
+  },
+  {
+    label: i18next.t("wednesday"),
+    field: "day3",
+  },
+  {
+    label: i18next.t("thursday"),
+    field: "day4",
+  },
+  {
+    label: i18next.t("friday"),
+    field: "day5",
+  },
+  {
+    label: i18next.t("saturday"),
+    field: "day6",
+  },
+  {
+    label: i18next.t("sunday"),
+    field: "day7",
+  },
+];
+
+export const drinksTable = [
+  {
+    label: i18next.t("drink_name"),
+    field: "name",
+    attributes: {
+      "aria-controls": "DataTable",
+      "aria-label": "Name",
+    },
+  },
+  {
+    label: i18next.t("drink_type"),
+    field: "type",
+  },
+  {
+    label: i18next.t("actions"),
+    field: "actions",
+  },
+  {
+    label: i18next.t("status"),
+    field: "status",
+  },
+];
+
+export const months = [
+  // i18next.t("january"),
+  // i18next.t("february"),
+  i18next.t("march"),
+  i18next.t("april"),
+  i18next.t("may"),
+  i18next.t("june"),
+  i18next.t("july"),
+  i18next.t("august"),
+  i18next.t("september"),
+  i18next.t("october"),
+  i18next.t("november"),
+  i18next.t("december"),
+];
+
+export const weekNamesAliases = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+];
+
+export const years = [2021, 2022, 2023, 2024, 2025];
+
+export const roomTypes = ["Superior", "Suite", "Premium"];

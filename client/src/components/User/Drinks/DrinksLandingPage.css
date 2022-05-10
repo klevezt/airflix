@@ -1,0 +1,51 @@
+@media(max-width:574.98px){
+  .drinkTypes-user-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 5px;
+    flex-basis: 100%;
+    margin-bottom: 25px; 
+    border-radius: 10px;
+    height: 240px;
+  }
+  .drinkTypes-user-box:last-child{
+    margin-bottom: 0;
+  }
+
+  .drinkTypes-user-box .img-wrapper img{
+    border-radius: 5px;
+    object-fit: cover;
+    border: 2px solid #ffffff;
+    height: 100%;
+  }
+  .drinkTypes-user-box .img-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+  .drinkTypes-user-box__bookmark-text-wrapper{
+    position: absolute;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    background: #0091a4;
+    bottom: 2px;
+    left: 2px;
+    right: 2px;
+  }
+ 
+  .drinkTypes-user-box__bookmark-text-wrapper h2{
+    color:white;
+    position: relative;
+    text-align: center;
+    font-size: 16px;
+    margin: 0;
+    padding: 8px;
+  }
+}
+
+@media(max-width:424.98px) {
+  .drinkTypes-user-box{
+    height: 200px;
+  }
+}

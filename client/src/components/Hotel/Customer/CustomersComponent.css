@@ -1,0 +1,4 @@
+.page-link span.sr-only {display: none;}
+.pagination .page-item:hover{cursor: pointer;}
+table>thead>tr>th{cursor: pointer;}
+.button__addUser{width: auto;}

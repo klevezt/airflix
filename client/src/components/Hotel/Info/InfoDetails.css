@@ -1,0 +1,19 @@
+.page-link span.sr-only {
+  display: none;
+}
+.pagination .page-item:hover {
+  cursor: pointer;
+}
+table > thead > tr > th {
+  cursor: pointer;
+}
+.button__addUser {
+  width: auto;
+}
+.info-wrapper .form-back-button {
+  width: auto;
+  position: relative !important;
+  margin-bottom: 1rem;
+  transform: none;
+  margin-right: 10px;
+}

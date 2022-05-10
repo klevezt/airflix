@@ -1,0 +1,18 @@
+
+.image-container{
+    width: auto;
+    max-width: 50%;
+}
+.image-container img{
+    max-width: 100%;
+    height: auto;
+}
+.chip{
+    min-width: 70px;
+}
+@media (max-width: 767.98px) {
+    .image-container {
+        width: 250px;
+    }
+}
+.max-width-50{max-width: 50%;}

@@ -1,0 +1,146 @@
+@media(max-width:574.98px) {
+    .drink-user-headline::before {
+        position: absolute;
+        left: -13px;
+        top: -42px;
+        content: none;
+        width: 29px;
+        border-bottom: 2px solid rgb(53, 53, 53);
+        border-right: 2px solid rgb(53, 53, 53);
+        background-color: rgb(53, 53, 53);
+        transform: skew(251deg, 319deg);
+        border-radius: 10px;
+    }
+
+    .drink-user-wrapper .page1,
+    .drink-user-wrapper .page2,
+    .drink-user-wrapper .page3,
+    .drink-user-wrapper .page4 {
+        position: absolute;
+        /* content: ''; */
+        height: 101%;
+        border: 2px solid #7b65569e;
+        width: 103%;
+        border-left: 0;
+        z-index: -1;
+        background: #a89393;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 5px;
+    }
+
+    .drink-user-wrapper .page1 {
+        right: -10px;
+        top: -10px;
+        z-index: -2;
+    }
+
+    .drink-user-wrapper .page2 {
+        right: -15px;
+        top: -15px;
+        z-index: -3;
+    }
+
+    .drink-user-wrapper .page3 {
+        right: -20px;
+        top: -20px;
+        z-index: -4;
+    }
+
+    .drink-user-wrapper .page4 {
+        right: -25px;
+        top: -25px;
+        z-index: -5;
+    }
+
+    .drink-user-headline {
+        position: relative;
+        text-align: center;
+        width: 100%;
+        color: white;
+        padding-bottom: 5px;
+        font-family: 'Source Serif Pro';
+        font-size: 28px;
+        margin-bottom: 15px;
+
+    }
+
+    .drink-user-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        border: 5px solid rgb(53, 53, 53);
+        padding-bottom: 25px;
+        position: relative;
+        background: rgb(53, 53, 53);
+        min-height: 78vh;
+        margin-top: 10px;
+        margin-bottom: -20px;
+    }
+
+    .user-book-general-headline {
+        text-align: start;
+        background: rgb(53, 53, 53);
+        color: white;
+        width: fit-content;
+        padding-right: 10px;
+        padding-left: 10px;
+        font-size: 28px;
+        font-weight: bolder;
+        z-index: 10;
+        position: relative;
+        margin: auto;
+    }
+    .user-book-general-headline-wrapper{
+        position: relative;
+        margin-bottom: 20px;
+        margin-top: 15px;
+        width: 100%;
+    }
+    .user-book-general-headline-wrapper::before {
+        content: '';
+        position: absolute;
+        height: 1px;
+        width: 100%;
+        right: 0;
+        bottom: 5px;
+        background: white;
+        z-index: 1;
+    }
+    .user-book-general-search {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
+        background: white;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .with-search{
+        margin-top: 10px;
+    }
+    .with-search .user-book-general-headline-wrapper{
+        /* margin-top: 5px;
+        margin-bottom: 40px; */
+    }
+    .user-book-general-search .search-icon{
+        color: #353535;
+        z-index: 9;
+        font-size: 32px;
+    }
+    .user-book-general-search .search-icon:hover{
+        cursor: pointer;
+    }
+    .user-book-general-search h4 {
+        color: #353535;
+        font-size: 24px;
+        margin: 0;
+        z-index: 9;
+    }
+    .user-book-general-search .back-button {
+        background-color: #0091a4;
+        width: auto;
+    }
+    
+}

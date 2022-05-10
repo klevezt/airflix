@@ -1,0 +1,158 @@
+/* Bordered form */
+form {
+  border: 1px solid #111;
+  border-radius: 10px;
+  background-color: rgba(100, 148, 237, 0.233);
+}
+
+/* Full-width inputs */
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #04aa6d;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Add a hover effect for buttons */
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra style for the cancel button (red) */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 16px;
+}
+
+/* The "Forgot password" text */
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+    display: block;
+    float: none;
+  }
+
+  .cancelbtn {
+    width: 100%;
+  }
+}
+
+.container__form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 83vh;
+}
+
+.container__form form {
+  min-width: 600px;
+}
+
+@media (max-width: 990.98px) {
+  .container__form form {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+.flex-direction-column {
+  flex-direction: column !important;
+}
+
+.general-form {
+  border: none;
+  max-width: 80%;
+  margin: auto;
+  background-color: rgb(247 198 162);
+  text-align: start;
+}
+
+.general-form .form-headline {
+  text-align: center;
+  padding: 15px 0;
+}
+
+.general-form .btn-primary-theme {
+  background-color: #f3a46c;
+}
+
+.form-control {
+}
+
+.form-select,
+.form-control {
+  font-size: 1rem !important;
+  padding: 8px 16px !important;
+}
+
+.form-header {
+  position: relative;
+}
+.form-back-button {
+  position: absolute !important;
+  width: auto;
+  top: 50%;
+  transform: translate(10%, -50%);
+}
+
+.mt-5 {
+  margin-top: 5rem !important;
+}
+.about-text-box {
+  background-color: #fff;
+  padding: 30px;
+  margin-bottom: 40px;
+}
+.about-img {
+  overflow: hidden;
+}
+.about-section .about-text-box .about-text {
+  font-size: 14px;
+  padding-left: 20px;
+}
+.about-text .subheadline {
+  font-size: 14px;
+  color: #707070;
+  font-weight: 400;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+.min-width-unset {
+  min-width: unset !important;
+}
+.row {
+  margin: 0;
+}
+
+.kp-warning{
+  background: #ffe13c;
+  padding: 10px;
+  border-radius: 5px;
+}
+.h-fit-content{height: fit-content;}

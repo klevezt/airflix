@@ -1,0 +1,27 @@
+.latest-post-box .post-img img {
+  max-width: 100%;
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  object-position: center;
+}
+.latest-post-box .post-desc {
+  background-color: #fff;
+  padding: 20px 15px;
+}
+.latest-post-box {
+  border: 1px solid #707070;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+  text-align: start;
+}
+.latest-post-box h4 {
+  text-align: start;
+}
+.latest-post-box h4 a {
+  text-decoration: none;
+  color: black;
+}
+.kp-events > h2 {
+  font-size: 40px;
+}

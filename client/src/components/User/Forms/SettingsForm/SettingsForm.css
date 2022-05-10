@@ -1,0 +1,11 @@
+.input-password-wrapper {
+  position: relative;
+}
+.toggle-visibility-wrapper {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+.toggle-visibility-wrapper button {
+  width: fit-content;
+}

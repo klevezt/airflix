@@ -1,0 +1,73 @@
+.full__content {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.main__content {
+  background-color: #f0914d00;
+  flex: 0.9;
+}
+
+table .table-bordered .table-hover .table-sm .table-striped .dataTable {
+  width: 100%;
+}
+table.table-sm th,
+table.table-sm td {
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.hotel-container {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  min-height: 560px;
+  max-width: 95%;
+}
+
+@media (max-width: 1203.98px) {
+  .form-back-button {
+    top: -60% !important;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 990.98px) {
+  .user.main__content {
+    flex: auto 1;
+  }
+  .user .general-form {
+    max-width: 100%;
+  }
+}
+.user-container .general-form{
+  padding: 10px;
+  margin-top: 20px;
+  background-color: white;
+  border: 2px solid #0091a4;
+}
+.user-container .general-form .form-header {
+  margin-top: 0;
+}
+.user-container .general-form hr {
+  opacity: 1;
+  border: none !important;
+  border-bottom: 1px solid #0091a4 !important;
+}
+.user-container .general-form .btn-primary-theme {
+  background-color: #0091a4;
+  color: white;
+}
+.user-container .toggle-visibility-wrapper button {
+  background-color: #0091a4;
+}
