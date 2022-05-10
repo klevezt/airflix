@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const { validateToken, tokenRefresh } = require("./middleware/auth");
+const path = require("path");
 
 require("dotenv").config();
 
@@ -10,6 +11,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "client", "build")));
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, {
@@ -61,6 +63,10 @@ app.use("/serviceType", validateToken, serviceType);
 app.use("/rate", validateToken, rate);
 // app.use("/refresh", tokenRefresh, refresh);
 app.use("/login", login);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 app.listen(port, () =>
   console.log(`API is running on http://localhost:${port}`)
