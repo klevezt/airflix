@@ -126,7 +126,7 @@ const MobileSidebarComponent = (props) => {
         <div className="menu-img">
           <div>
             <img
-              src={`${REACT_APP_IMAGES_URL}/Images/Logo/logo.png`}
+              src={`${process.env.REACT_APP_IMAGES_URL}/Images/Logo/logo.png`}
               alt="logo"
             />
             <div className="circular-close-button" onClick={menuClickHandler}>
