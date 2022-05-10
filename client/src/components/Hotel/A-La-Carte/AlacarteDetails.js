@@ -53,7 +53,7 @@ function AlacarteDetails() {
             />
           </div>
           <div className="row w-100 mb-3">
-            <div className="col-md-4 col-sm-12 offset-md-2 offset-sm-0">
+            <div className="col-md-4 col-sm-12 ">
               <h1>{alacarte.name}</h1>
               <hr />
               <h6>{alacarte.description}</h6>
