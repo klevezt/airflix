@@ -24,7 +24,7 @@ const Header = () => {
       {state.authenticated && (
         <>
           <img
-            src="http://localhost:3000/assets/Images/Logo/logo.png"
+            src={`${REACT_APP_IMAGES_URL}/Images/Logo/logo.png`}
             alt="white-logo"
           />
           {state.user.role === "Customer" && (
