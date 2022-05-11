@@ -1,12 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
 import useImageGetter from "../../_hooks/useImageGetter";
+import { storage } from "../../../firebase";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 function Test() {
   const imageRef = useRef("");
-  const [image] = useImageGetter();
+  // const [image] = useImageGetter();
+  // const [image, setImage] = useState("");
+
+  const upload = (image) => {
+    // Create a root reference
+    const storage = getStorage();
+    const storageRef = ref(storage, image.name);
+
+    uploadBytes(storageRef, image).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+  };
 
   const handleUpload = (e) => {
     e.preventDefault();
+    upload(imageRef.current.files[0]);
     console.log(imageRef.current.files[0]);
   };
 
@@ -30,7 +44,6 @@ function Test() {
           </div>
         </form>
       </div>
-      <img src={image} alt="" />
     </>
   );
 }
