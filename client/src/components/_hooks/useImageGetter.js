@@ -1,45 +1,43 @@
 import React, { useState, useEffect } from "react";
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebase";
 
-const useImageGetter = (props) => {
-  const [image, setImage] = useState();
+const useImageGetter = (token) => {
+  const [data, setData] = useState([]);
+  const [mm_image, setImage] = useState();
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     let controller = new AbortController();
-
     const exec = async () => {
-      //   props.e.preventDefault();
-      //   console.log(imageRef.current.files);
-      //   await fetch(process.env.REACT_APP_SERVER_URL + "/imageTest/uploads", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({
-      //       filename: props.name,
-      //     }),
-      //   });
-      const data = await fetch(
-        process.env.REACT_APP_SERVER_URL + "/imageTest",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((data) => data.json());
+      const d = await fetch(process.env.REACT_APP_SERVER_URL + "/serviceType", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+      }).then((data) => data.json());
+      setData(d);
 
-      const img = new Buffer.from(data["items"][0]["img"].data).toString(
-        "base64"
-      );
-
-      setImage(`data:${data["items"][0]["img"].contentType};base64,${img}`);
+      var arr = [];
+      data.map((imageArr, i) => {
+        const storageRef = ref(storage, imageArr.image);
+        getDownloadURL(storageRef)
+          .then((image) => arr.push({ ...imageArr, image }))
+          .catch(setError(true))
+          .finally(() => setLoading(false));
+      });
+      setImage(arr);
     };
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [token]);
 
-  return [image];
+  console.log(mm_image);
+  return { mm_image, error, loading };
 };
 
 export default useImageGetter;

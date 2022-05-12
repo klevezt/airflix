@@ -3,6 +3,16 @@ import { Link } from "react-router-dom";
 import Card from "../../components/UI/Card/TableCellCard";
 import { getWeeksInMonth } from "../Functions/functions";
 import i18next from "i18next";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+
+export const imageUpload = (image) => {
+  const storage = getStorage();
+  const storageRef = ref(storage, image.name);
+
+  uploadBytes(storageRef, image).then((snapshot) => {
+    console.log("Uploaded a blob or file!");
+  });
+};
 
 export const assignWeeksToTable = (year, month, week) => {
   const [weeeek] = getWeeksInMonth(year, month);

@@ -5,6 +5,9 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import "./ServicesLandingPage.css";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
+import imageGetter from "../../_hooks/imageGetter";
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../firebase";
 
 const ServicesLandingPage = () => {
   const { t } = useTranslation();
@@ -16,8 +19,24 @@ const ServicesLandingPage = () => {
   useEffect(() => {
     setIsSpinnerLoading(true);
     const exec = async () => {
+      var loading = true;
+      var error = false;
       const services = await fetchServicesTypesFromDB(state.token);
-      setCatalog(services);
+      // setCatalog(services);
+
+      var arr = [];
+      services.map((imageArr) => {
+        const storageRef = ref(storage, imageArr.image);
+        getDownloadURL(storageRef)
+          .then((image) => arr.push({ ...imageArr, image }))
+          .catch((error = true))
+          .finally(() => (loading = false));
+      });
+      console.log(arr);
+      setCatalog(arr);
+
+      //   const services = await fetchServicesTypesFromDB(state.token);
+      //   setCatalog(services);
 
       setTimeout(() => {
         setIsSpinnerLoading(false);
@@ -38,10 +57,7 @@ const ServicesLandingPage = () => {
           key={i}
         >
           <div className="user-services-img">
-            <img
-              src={`${process.env.REACT_APP_IMAGES_URL}/Images/Services/${service.image}`}
-              alt="service"
-            />
+            <img src={service.image} alt="service" />
           </div>
           <div className="user-services-content">
             <h2>{service.name}</h2>

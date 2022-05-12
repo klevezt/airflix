@@ -1,27 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
+
 import useImageGetter from "../../_hooks/useImageGetter";
-import { storage } from "../../../firebase";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { imageUpload } from "../../../Helpers/Const/constants";
 
 function Test() {
   const imageRef = useRef("");
-  // const [image] = useImageGetter();
-  // const [image, setImage] = useState("");
-
-  const upload = (image) => {
-    // Create a root reference
-    const storage = getStorage();
-    const storageRef = ref(storage, image.name);
-
-    uploadBytes(storageRef, image).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-    });
-  };
+  const { image, error, loading } = useImageGetter("taski_diversey_logo.png");
 
   const handleUpload = (e) => {
     e.preventDefault();
-    upload(imageRef.current.files[0]);
-    console.log(imageRef.current.files[0]);
+    imageUpload(imageRef.current.files[0]);
   };
 
   return (
@@ -44,6 +32,8 @@ function Test() {
           </div>
         </form>
       </div>
+      {loading && <h1>LOADING......</h1>}
+      {!loading && <img src={image} alt="" />}
     </>
   );
 }
