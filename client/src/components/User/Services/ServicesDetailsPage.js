@@ -7,10 +7,17 @@ import { fetchServiceWithParamasFromDB } from "../../../api_requests/hotel_reque
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../firebase";
+import { imageGetter } from "../../../Helpers/Const/constants";
+
 const ServicesDetailsPage = () => {
   const [serviceDetails, setServiceDetails] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [state] = useStateValue();
+
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const params = useParams();
 
@@ -21,7 +28,10 @@ const ServicesDetailsPage = () => {
         "type=" + params.type,
         state.token
       );
-      setServiceDetails(data);
+
+      const { myArr } = await imageGetter(data, "Services/", true);
+
+      setServiceDetails(myArr);
       setTimeout(() => {
         setIsSpinnerLoading(false);
       }, 500);
@@ -33,10 +43,7 @@ const ServicesDetailsPage = () => {
     return (
       <div className="user-services-details-wrapper" key={i}>
         <div className="user-services-details-img">
-          <img
-            src={`${process.env.REACT_APP_IMAGES_URL}/Images/Services/${serviceDetail.image}`}
-            alt="service"
-          />
+          <img src={serviceDetail.image} alt="service" />
         </div>
         <div className="user-services-details-content">
           <h2>{serviceDetail.name}</h2>

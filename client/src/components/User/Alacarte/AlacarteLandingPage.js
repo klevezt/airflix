@@ -7,6 +7,7 @@ import "./AlacarteLandingPage.css";
 import { fetchAlacarteTypeFromDB } from "../../../api_requests/hotel_requests";
 import BookCover from "../../UI/Book/BookCover";
 import { useStateValue } from "../../../StateProvider";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const AlacarteLandingPage = () => {
   const [state] = useStateValue();
@@ -23,7 +24,10 @@ const AlacarteLandingPage = () => {
     setIsSpinnerLoading(true);
     const exec = async () => {
       const alacarte = await fetchAlacarteTypeFromDB(state.token);
-      setCatalog(alacarte);
+
+      const { myArr } = await imageGetter(alacarte, "Alacarte/");
+
+      setCatalog(myArr);
 
       setTimeout(() => {
         setIsSpinnerLoading(false);
@@ -44,7 +48,7 @@ const AlacarteLandingPage = () => {
         <div className="img-wrapper">
           <img
             className="w-100"
-            src={`${process.env.REACT_APP_IMAGES_URL}/Images/Alacarte/${alacarte.images[0]}`}
+            src={`${alacarte.image}`}
             alt="alacart-catalog-img"
           />
         </div>

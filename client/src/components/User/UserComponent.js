@@ -22,7 +22,6 @@ import Home from "./Home/Home";
 import EventsAll from "./Events/EventsAll";
 import EventsDetail from "./Events/EventsDetail";
 import Info from "./Info/Info";
-import Test from "./Test/Test";
 
 const User = () => {
   const [state] = useStateValue();
@@ -38,9 +37,6 @@ const User = () => {
                 <Route exact path="/info">
                   {state.authenticated && <Info />}
                 </Route>
-                <Route exact path="/test">
-                  {state.authenticated && <Test />}
-                </Route>
                 <Route exact path="/services">
                   {state.authenticated && (
                     <ServicesLandingPage user={state.user} />
@@ -55,20 +51,20 @@ const User = () => {
                   {state.authenticated && <Settings user={state.user} />}
                 </Route>
                 <Route exact path="/food">
-                  {state.authenticated && <FoodLandingPage user={state.user} />}
+                  {state.authenticated && <FoodLandingPage />}
                 </Route>
                 <Route exact path="/buffet">
                   {state.authenticated && (
                     <BuffetLandingPage user={state.user} />
                   )}
                 </Route>
-                <Route exact path="/buffet/:type/detail">
+                {/* <Route exact path="/buffet/:type/detail">
                   {state.authenticated && (
                     <div className="p-relative  d-flex">
-                      <BuffetDetailsPage user={state.user} />
+                      <BuffetDetailsPage />
                     </div>
                   )}
-                </Route>
+                </Route> */}
                 <Route exact path="/alacarte">
                   {state.authenticated && (
                     <AlacarteLandingPage user={state.user} />

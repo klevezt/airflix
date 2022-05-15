@@ -213,17 +213,6 @@ const MobileSidebarComponent = (props) => {
             </NavLink>
           </li>
           <li>
-            <NavLink
-              exact
-              to="/test"
-              className="mobile__navigation__link"
-              onClick={menuClickHandler}
-            >
-              {/* <ExitToApp /> */}
-              <h5>{t("TEST")}</h5>
-            </NavLink>
-          </li>
-          <li>
             <LanguageSwitcher />
           </li>
         </ul>

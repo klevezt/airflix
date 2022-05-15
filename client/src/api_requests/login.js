@@ -16,5 +16,6 @@ export const authenticateUserWithToken = (username, password) => {
       document.cookie = `token=${userWithToken.token};max-age=100;`;
       document.cookie = `refresh-token=${userWithToken.refreshToken};max-age=2592000;`;
       return userWithToken;
-    });
+    })
+    .catch();
 };

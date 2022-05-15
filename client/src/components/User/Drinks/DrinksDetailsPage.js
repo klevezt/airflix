@@ -5,6 +5,7 @@ import { fetchDrinksWithParamasFromDB } from "../../../api_requests/hotel_reques
 import "./DrinksDetailsPage.css";
 import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const DrinksDetailsPage = (props) => {
   const params = useParams();
@@ -20,7 +21,10 @@ const DrinksDetailsPage = (props) => {
         "type=" + params.type,
         state.token
       );
-      setDrinkDetails(data);
+
+      const { myArr } = await imageGetter(data, "Drinks/");
+
+      setDrinkDetails(myArr);
       setTimeout(() => {
         setIsSpinnerLoading(false);
       }, 500);
@@ -36,10 +40,7 @@ const DrinksDetailsPage = (props) => {
             drinkDetails.length - 1 !== i && ""
           }`}
         >
-          <img
-            src={`${process.env.REACT_APP_IMAGES_URL}/Images/Drinks/${drink.images[0]}`}
-            alt="drink"
-          />
+          <img src={`${drink.image}`} alt="drink" />
           <div className="drink-details-each-drink-text text-end">
             <h3>{drink.name}</h3>
             <p>

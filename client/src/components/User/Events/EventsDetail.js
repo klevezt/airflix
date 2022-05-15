@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { fetchEventWithParamasFromDB } from "../../../api_requests/hotel_requests";
+import { imageGetter } from "../../../Helpers/Const/constants";
 import { useStateValue } from "../../../StateProvider";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 
@@ -16,13 +17,15 @@ function EventsDetail() {
     let timer;
 
     const exec = async () => {
-      const arr = [];
-      await fetchEventWithParamasFromDB(
+      const data = await fetchEventWithParamasFromDB(
         "alias=" + params.eventAlias,
         state.token
-      ).then((data) => {
-        setEvent(data[0]);
-      });
+      );
+      const { myArr } = await imageGetter(data, "Events/");
+
+      // .then((data) => {
+      setEvent(myArr[0]);
+      // });
       setIsSpinnerLoading(false);
     };
 
@@ -43,15 +46,7 @@ function EventsDetail() {
             <div className="user-home-general-headline-wrapper mb-4">
               <h2 className="user-home-general-headline">{event.name}</h2>
             </div>
-            <img
-              className="w-100 mb-4"
-              src={
-                process.env.REACT_APP_IMAGES_URL +
-                "/Images/Events/" +
-                event.images[0]
-              }
-              alt="event-image"
-            />
+            <img className="w-100 mb-4" src={event.image} alt="event-image" />
             <p className="text-start">{event.description}</p>
           </div>
         </div>

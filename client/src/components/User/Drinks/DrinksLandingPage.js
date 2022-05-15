@@ -8,6 +8,7 @@ import { fetchDrinksTypesFromDB } from "../../../api_requests/hotel_requests";
 import { useStateValue } from "../../../StateProvider";
 
 import BookCover from "../../UI/Book/BookCover";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const DrinksLandingPage = () => {
   const [state] = useStateValue();
@@ -22,7 +23,10 @@ const DrinksLandingPage = () => {
     setIsSpinnerLoading(true);
     const exec = async () => {
       const drinks = await fetchDrinksTypesFromDB(state.token);
-      setCatalog(drinks);
+
+      const { myArr } = await imageGetter(drinks, "Drinks/");
+
+      setCatalog(myArr);
 
       setTimeout(() => {
         setIsSpinnerLoading(false);
@@ -39,11 +43,7 @@ const DrinksLandingPage = () => {
         key={i}
       >
         <div className="img-wrapper">
-          <img
-            className="w-100"
-            src={`${process.env.REACT_APP_IMAGES_URL}/Images/Drinks/${drink.images[0]}`}
-            alt="drink-img"
-          />
+          <img className="w-100" src={`${drink.image}`} alt="drink-img" />
         </div>
         <div className="drinkTypes-user-box__bookmark-text-wrapper">
           <h2>{drink.name}</h2>

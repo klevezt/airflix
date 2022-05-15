@@ -35,7 +35,10 @@ const LoginForm = () => {
           });
         }
       })
-      .catch((err) => console.log(err + "NOOOOOOOOOOO"));
+      .catch((err) => {
+        setSubmitError(true);
+        setIsButtonSpinnerLoading(false);
+      });
   };
 
   const loginFormSubmitHandler = (e) => {
@@ -63,7 +66,7 @@ const LoginForm = () => {
       <form
         method="post"
         onSubmit={(e) => loginFormSubmitHandler(e)}
-        className="general-form"
+        className="general-form login-form"
       >
         <div className="form-header">
           <img
@@ -121,7 +124,6 @@ const LoginForm = () => {
                 loginFormSubmitHandler(e);
               }}
               text="Είσοδος"
-              color="warning"
               variant="contained"
             />
           ) : (

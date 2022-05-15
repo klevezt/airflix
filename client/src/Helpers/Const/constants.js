@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import Card from "../../components/UI/Card/TableCellCard";
 import { getWeeksInMonth } from "../Functions/functions";
 import i18next from "i18next";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebase";
 
 export const imageUpload = (image) => {
   const storage = getStorage();
@@ -12,6 +13,30 @@ export const imageUpload = (image) => {
   uploadBytes(storageRef, image).then((snapshot) => {
     console.log("Uploaded a blob or file!");
   });
+};
+
+export const imageGetter = async (
+  data,
+  img_path,
+  data_with_only_one_image = false
+) => {
+  var myArr = [];
+  var error = false;
+  var loading = true;
+  await Promise.all(
+    data.map(async (imageArr) => {
+      var temp = data_with_only_one_image ? imageArr.image : imageArr.images[0];
+
+      const storageRef = ref(storage, img_path + temp);
+
+      await getDownloadURL(storageRef)
+        .then((image) => myArr.push({ ...imageArr, image }))
+        .catch(() => (error = true))
+        .finally(() => (loading = false));
+    })
+  );
+
+  return { myArr, error, loading };
 };
 
 export const assignWeeksToTable = (year, month, week) => {

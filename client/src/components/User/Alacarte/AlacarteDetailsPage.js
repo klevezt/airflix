@@ -5,8 +5,9 @@ import { fetchAlacarteWithParamasFromDB } from "../../../api_requests/hotel_requ
 import "./AlacarteDetailsPage.css";
 import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
-const AlacarteDetailsPage = (props) => {
+const AlacarteDetailsPage = () => {
   const params = useParams();
   const [state] = useStateValue();
 
@@ -20,7 +21,9 @@ const AlacarteDetailsPage = (props) => {
         "type=" + params.type,
         state.token
       );
-      setAlacarteDetails(data);
+      const { myArr } = await imageGetter(data, "Alacarte/");
+
+      setAlacarteDetails(myArr);
       setTimeout(() => {
         setIsSpinnerLoading(false);
       }, 500);
@@ -32,10 +35,7 @@ const AlacarteDetailsPage = (props) => {
     return (
       <Fragment key={i}>
         <div className="drink-details-each-drink-wrapper d-flex justify-content-between align-items-start">
-          <img
-            src={`${process.env.REACT_APP_IMAGES_URL}/Images/Alacarte/${alacarte.images[0]}`}
-            alt="alacarte"
-          />
+          <img src={`${alacarte.images[0]}`} alt="alacarte" />
           <div className="drink-details-each-drink-text text-end">
             <h3>{alacarte.name}</h3>
             <p>

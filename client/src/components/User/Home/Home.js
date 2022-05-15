@@ -11,7 +11,10 @@ import { Close, ReadMore } from "@mui/icons-material";
 import IconButton from "../../UI/Buttons/IconButton";
 import { getCurrentWeekInMonth } from "../../../Helpers/Functions/functions";
 import { fetchTodaysMenuFromDB } from "../../../api_requests/user_requests";
-import { weekNamesAliases } from "../../../Helpers/Const/constants";
+import {
+  imageGetter,
+  weekNamesAliases,
+} from "../../../Helpers/Const/constants";
 import { fetchFoodFromDBWithParams } from "../../../api_requests/hotel_requests";
 import {
   Table,
@@ -51,24 +54,27 @@ const Home = () => {
 
     let controller = new AbortController();
     setIsSpinnerLoading(true);
+
     const exec = async () => {
+      const dataaa = await fetchEventsFromDB(state.token);
+      const { myArr: eventArr } = await imageGetter(dataaa, "Events/");
       const arr = [];
-      await fetchEventsFromDB(state.token).then((data) => {
-        data.forEach((event) => {
-          if (
-            event.status &&
-            new Date().getTime() < new Date(event.time).getTime()
-          )
-            arr.push({
-              img: event.images[0],
-              alias: event.alias,
-              title: event.name,
-              time: event.time,
-              description: event.description,
-            });
-        });
-        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+
+      eventArr.forEach((event) => {
+        if (
+          event.status &&
+          new Date().getTime() < new Date(event.time).getTime()
+        )
+          arr.push({
+            img: event.images[0],
+            alias: event.alias,
+            title: event.name,
+            time: event.time,
+            description: event.description,
+          });
       });
+      setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+
       const todaysYear = today.getFullYear();
       const todaysMonth = today.getMonth() + 1;
       const currentWeekNumber = getCurrentWeekInMonth(todaysYear, todaysMonth);
@@ -91,8 +97,11 @@ const Home = () => {
       const arr2 = [];
 
       const foodd = await fetchFoodFromDBWithParams("status=true", state.token);
-      foodd.forEach((f) => {
-        arr2.push({ name: f, img: f.images });
+
+      const { myArr } = await imageGetter(foodd, "Food/");
+
+      myArr.forEach((f) => {
+        arr2.push({ name: f, img: f.image });
       });
       setFoodWithImages(arr2);
       setTodaysFoodCategories(allCategoriesArray);
@@ -107,6 +116,7 @@ const Home = () => {
         setIsSpinnerLoading(false);
       }, 1000);
     };
+
     exec();
     controller = null;
     return () => controller?.abort();
@@ -151,7 +161,7 @@ const Home = () => {
               <Close />
             </div>
             <img
-              src={`${process.env.REACT_APP_IMAGES_URL}/Images/Food/${previewSelectedFood[0].images[0]}`}
+              src={`${previewSelectedFood[0].image}`}
               alt="food-view-img"
               className="w-100"
             />
@@ -207,10 +217,7 @@ const Home = () => {
             >
               <div className="user-services-wrapper">
                 <div className="user-services-img">
-                  <img
-                    src={`${process.env.REACT_APP_IMAGES_URL}/Images/Food/${currentFood.img[0]}`}
-                    alt="buffet"
-                  />
+                  <img src={`${currentFood.img}`} alt="buffet" />
                 </div>
                 <div className="user-services-content">
                   <h2>{currentFood.name.name}</h2>

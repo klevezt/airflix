@@ -10,6 +10,7 @@ import IconButton from "../../UI/Buttons/IconButton";
 import "./EventsComponent.css";
 import { truncateString } from "../../../Helpers/Functions/functions";
 import { useTranslation } from "react-i18next";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const EventsComponent = () => {
   const { t } = useTranslation();
@@ -25,26 +26,25 @@ const EventsComponent = () => {
 
     const exec = async () => {
       const arr = [];
-      await fetchEventsFromDB(state.token).then((data) => {
-        data.forEach((event) => {
-          if (
-            event.status &&
-            new Date().getTime() < new Date(event.time).getTime()
-          )
-            arr.push({
-              img:
-                process.env.REACT_APP_IMAGES_URL +
-                "/Images/Events/" +
-                event.images[0],
-              alias: event.alias,
-              title: event.name,
-              time: event.time,
-              description: event.description,
-            });
-        });
-        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
-        setIsSpinnerLoading(false);
+      const data = await fetchEventsFromDB(state.token);
+
+      const { myArr: eventArr } = await imageGetter(data, "Events/");
+
+      eventArr.forEach((event) => {
+        if (
+          event.status &&
+          new Date().getTime() < new Date(event.time).getTime()
+        )
+          arr.push({
+            img: event.image,
+            alias: event.alias,
+            title: event.name,
+            time: event.time,
+            description: event.description,
+          });
       });
+      setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+      setIsSpinnerLoading(false);
     };
     exec();
     controller = null;

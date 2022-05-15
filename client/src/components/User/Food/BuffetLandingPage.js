@@ -24,6 +24,7 @@ import BookCover from "../../UI/Book/BookCover";
 import { useStateValue } from "../../../StateProvider";
 
 import "./BuffetLandingPage.css";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const BuffetLandingPage = () => {
   const { t } = useTranslation();
@@ -71,7 +72,9 @@ const BuffetLandingPage = () => {
 
       const foodd = await fetchFoodFromDBWithParams("status=true", state.token);
 
-      setFood(foodd);
+      const { myArr } = await imageGetter(foodd, "Food/");
+
+      setFood(myArr);
       setTodaysFoodCategories(allCategoriesArray);
 
       setTimeout(() => {
@@ -124,7 +127,7 @@ const BuffetLandingPage = () => {
               <Close />
             </div>
             <img
-              src={`${process.env.REACT_APP_IMAGES_URL}/Images/Food/${previewSelectedFood[0].images[0]}`}
+              src={`${previewSelectedFood[0].image}`}
               alt="food-view-img"
               className="w-100"
             />
@@ -179,10 +182,7 @@ const BuffetLandingPage = () => {
           >
             <div className="user-buffet-wrapper" key={j}>
               <div className="user-services-img">
-                <img
-                  src={`${process.env.REACT_APP_IMAGES_URL}/Images/Food/${currentFood.images[0]}`}
-                  alt="buffet"
-                />
+                <img src={`${currentFood.image}`} alt="buffet" />
               </div>
               <div className="user-services-content">
                 <h2>{currentFood.name}</h2>

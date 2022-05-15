@@ -5,6 +5,7 @@ import { fetchBuffetWithParamasFromDB } from "../../../api_requests/hotel_reques
 import "./BuffetDetailsPage.css";
 import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const BuffetDetailsPage = () => {
   const params = useParams();
@@ -20,7 +21,10 @@ const BuffetDetailsPage = () => {
         "type=" + params.type,
         state.token
       );
-      setBuffetDetails(data);
+
+      const { myArr } = await imageGetter(data, "Food/");
+
+      setBuffetDetails(myArr);
       setTimeout(() => {
         setIsSpinnerLoading(false);
       }, 500);

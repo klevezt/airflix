@@ -5,6 +5,7 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import { truncateString } from "../../../Helpers/Functions/functions";
 import { useTranslation } from "react-i18next";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const EventsAll = () => {
   const { t } = useTranslation();
@@ -20,23 +21,22 @@ const EventsAll = () => {
 
     const exec = async () => {
       const arr = [];
-      await fetchEventsFromDB(state.token).then((data) => {
-        data.forEach((event) => {
-          if (event.status)
-            arr.push({
-              img:
-                process.env.REACT_APP_IMAGES_URL +
-                "/Images/Events/" +
-                event.images[0],
-              alias: event.alias,
-              title: event.name,
-              time: event.time,
-              description: event.description,
-            });
-        });
-        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
-        setIsSpinnerLoading(false);
+      const data = await fetchEventsFromDB(state.token);
+
+      const { myArr: eventArr } = await imageGetter(data, "Events/");
+
+      eventArr.forEach((event) => {
+        if (event.status)
+          arr.push({
+            img: event.image,
+            alias: event.alias,
+            title: event.name,
+            time: event.time,
+            description: event.description,
+          });
       });
+      setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+      setIsSpinnerLoading(false);
     };
     exec();
     controller = null;

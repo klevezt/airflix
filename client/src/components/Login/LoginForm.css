@@ -37,3 +37,11 @@
     height: auto;
   }
 }
+
+.general-form.login-form{background-color: white;
+  border: 3px solid #0091a4;
+}
+
+.general-form.login-form .btn-primary-theme {
+  color: white;background-color: #0091a4;
+}
