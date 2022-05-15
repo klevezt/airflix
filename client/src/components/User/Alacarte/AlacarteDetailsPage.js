@@ -35,7 +35,7 @@ const AlacarteDetailsPage = () => {
     return (
       <Fragment key={i}>
         <div className="drink-details-each-drink-wrapper d-flex justify-content-between align-items-start">
-          <img src={`${alacarte.images[0]}`} alt="alacarte" />
+          <img src={`${alacarte.image}`} alt="alacarte" />
           <div className="drink-details-each-drink-text text-end">
             <h3>{alacarte.name}</h3>
             <p>
