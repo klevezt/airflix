@@ -125,7 +125,11 @@ const TableCellCard = (props) => {
   };
 
   return (
-    <>
+    <Card
+      className={
+        !props.empty ? `card-container ${isTodaysCard}` : "card-container-empty"
+      }
+    >
       {ReactDOM.createPortal(
         <Modal
           aria-labelledby="transition-modal-title"
@@ -139,148 +143,136 @@ const TableCellCard = (props) => {
             timeout: 500,
           }}
         >
-          {isModalSpinning ? (
-            <LoadingSpinner />
-          ) : (
-            <Fade in={open}>
-              <div className="modalMenu-container">
-                <h2 style={{ marginBottom: 10, padding: 20 }}>
-                  {t(props.day)} {props.week}
-                </h2>
-                <hr />
+          <Fade in={open}>
+            <div className="modalMenu-container">
+              <h2 style={{ marginBottom: 10, padding: 20 }}>
+                {t(props.day)} {props.week}
+              </h2>
+              <hr />
 
-                <div className="modalMenu-content">
-                  {foodTypeKeys.map((food, key) => {
-                    return (
-                      <div className="food-table-card-container" key={key}>
-                        <div className="food-table-card-header">
-                          <h5>{t(food)}</h5>
-                        </div>
-
-                        {!editClicked && (
-                          <ul className="list-group">
-                            {data[food] !== undefined &&
-                            data[food].length !== 0 ? (
-                              data[food].map((item, i) => {
-                                return (
-                                  <li
-                                    className="list-group-item list-group-item-theme-color"
-                                    key={i}
-                                  >
-                                    {item}
-                                  </li>
-                                );
-                              })
-                            ) : (
-                              <li className="list-group-item list-group-item-secondary">
-                                {t("no_food_exists")}
-                              </li>
-                            )}
-                          </ul>
-                        )}
-                        {editClicked && (
-                          <div className="food-table-card-input">
-                            {data !== undefined &&
-                              data[food] !== undefined &&
-                              data[food].map((item, i) => {
-                                return (
-                                  <div className="basic-flex mt-2" key={i}>
-                                    <CardSelectDropdown
-                                      onChange={(e) =>
-                                        handleSelectChange(e, i, food)
-                                      }
-                                      index={i}
-                                      food={food}
-                                      item={item}
-                                      optionsSelect={optionsSelect}
-                                    />
-
-                                    <IconButton2
-                                      onClick={() =>
-                                        handleDeleteInputField(i, food)
-                                      }
-                                      size="small"
-                                      component="span"
-                                      color="error"
-                                    >
-                                      <RemoveCircleOutline />
-                                    </IconButton2>
-                                  </div>
-                                );
-                              })}
-                            <IconButton2
-                              onClick={() => handleAddNewInputField(food)}
-                              size="small"
-                              component="span"
-                              style={{ color: "#52b202" }}
-                            >
-                              <AddCircleOutline />
-                            </IconButton2>
-                          </div>
-                        )}
+              <div className="modalMenu-content">
+                {foodTypeKeys.map((food, key) => {
+                  return (
+                    <div className="food-table-card-container" key={key}>
+                      <div className="food-table-card-header">
+                        <h5>{t(food)}</h5>
                       </div>
-                    );
-                  })}
-                </div>
-                <div className="modalMenu-footer">
-                  <IconButton
-                    onClick={editClicked ? handleSave : handleEdit}
-                    icon={
-                      editClicked ? (
-                        <Save className="mr-10" />
-                      ) : (
-                        <Edit className="mr-10" />
-                      )
-                    }
-                    size="medium"
-                    text={editClicked ? t("save") : t("edit")}
-                  />
-                  <IconButton
-                    onClick={editClicked ? handleEdit : handleClose}
-                    icon={<CancelPresentation className="mr-10" />}
-                    size="medium"
-                    text={editClicked ? t("cancel") : t("close")}
-                  />
-                </div>
+
+                      {!editClicked && (
+                        <ul className="list-group">
+                          {data[food] !== undefined &&
+                          data[food].length !== 0 ? (
+                            data[food].map((item, i) => {
+                              return (
+                                <li
+                                  className="list-group-item list-group-item-theme-color"
+                                  key={i}
+                                >
+                                  {item}
+                                </li>
+                              );
+                            })
+                          ) : (
+                            <li className="list-group-item list-group-item-secondary">
+                              {t("no_food_exists")}
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                      {editClicked && (
+                        <div className="food-table-card-input">
+                          {data !== undefined &&
+                            data[food] !== undefined &&
+                            data[food].map((item, i) => {
+                              return (
+                                <div className="basic-flex mt-2" key={i}>
+                                  <CardSelectDropdown
+                                    onChange={(e) =>
+                                      handleSelectChange(e, i, food)
+                                    }
+                                    index={i}
+                                    food={food}
+                                    item={item}
+                                    optionsSelect={optionsSelect}
+                                  />
+
+                                  <IconButton2
+                                    onClick={() =>
+                                      handleDeleteInputField(i, food)
+                                    }
+                                    size="small"
+                                    component="span"
+                                    color="error"
+                                  >
+                                    <RemoveCircleOutline />
+                                  </IconButton2>
+                                </div>
+                              );
+                            })}
+                          <IconButton2
+                            onClick={() => handleAddNewInputField(food)}
+                            size="small"
+                            component="span"
+                            style={{ color: "#52b202" }}
+                          >
+                            <AddCircleOutline />
+                          </IconButton2>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            </Fade>
-          )}
+              <div className="modalMenu-footer">
+                <IconButton
+                  onClick={editClicked ? handleSave : handleEdit}
+                  icon={
+                    editClicked ? (
+                      <Save className="mr-10" />
+                    ) : (
+                      <Edit className="mr-10" />
+                    )
+                  }
+                  size="medium"
+                  text={editClicked ? t("save") : t("edit")}
+                />
+                <IconButton
+                  onClick={editClicked ? handleEdit : handleClose}
+                  icon={<CancelPresentation className="mr-10" />}
+                  size="medium"
+                  text={editClicked ? t("cancel") : t("close")}
+                />
+              </div>
+            </div>
+          </Fade>
         </Modal>,
         document.getElementById("modal-root")
       )}
-      <Card
-        className={
-          !props.empty
-            ? `card-container ${isTodaysCard}`
-            : "card-container-empty"
-        }
-      >
-        {!props.empty && (
-          <>
-            <CardContent>
-              {foodTypeKeys.map((food, i) => {
-                return (
-                  <TableCardTypography data={data[food]} food={food} key={i} />
-                );
-              })}
-            </CardContent>
-            <CardActions>
-              <IconButton
-                onClick={handleOpen}
-                icon={
-                  foodTypeKeys.length === 0 ? (
-                    <Add className="mr-10" />
-                  ) : (
-                    <Visibility className="mr-10" />
-                  )
-                }
-                text={foodTypeKeys.length === 0 ? t("add") : t("view")}
-              />
-            </CardActions>
-          </>
-        )}
-      </Card>
-    </>
+      {!props.empty && (
+        <>
+          <CardContent>
+            {foodTypeKeys.map((food, i) => {
+              return (
+                <TableCardTypography data={data[food]} food={food} key={i} />
+              );
+            })}
+          </CardContent>
+          <CardActions>
+            <IconButton
+              onClick={handleOpen}
+              icon={
+                foodTypeKeys.length === 0 ? (
+                  <Add className="mr-10" />
+                ) : (
+                  <Visibility className="mr-10" />
+                )
+              }
+              text={foodTypeKeys.length === 0 ? t("add") : t("view")}
+            />
+          </CardActions>
+        </>
+      )}
+    </Card>
   );
 };
 export default TableCellCard;

@@ -5,8 +5,6 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import "./ServicesLandingPage.css";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
-import { ref, getDownloadURL } from "firebase/storage";
-import { storage } from "../../../firebase";
 import { imageGetter } from "../../../Helpers/Const/constants";
 
 const ServicesLandingPage = () => {
@@ -16,15 +14,12 @@ const ServicesLandingPage = () => {
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
   const [state] = useStateValue();
 
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     setIsSpinnerLoading(true);
     const exec = async () => {
       const services = await fetchServicesTypesFromDB(state.token);
 
-      const { myArr } = await imageGetter(services, "Services/",true);
+      const { myArr } = await imageGetter(services, "Services/", true);
       setCatalog(myArr);
 
       setTimeout(() => {
