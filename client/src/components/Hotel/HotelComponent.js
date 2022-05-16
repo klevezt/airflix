@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route } from "react-router-dom";
 
 import Sidebar from "../../Layout/Sidebar/SidebarComponent";
@@ -44,6 +44,9 @@ import EventEdit from "./Forms/Events/EditEvent";
 
 const Hotel = () => {
   const [state] = useStateValue();
+  useEffect(() => {
+    console.log("hotel js");
+  }, []);
 
   return (
     <div className="full__content">

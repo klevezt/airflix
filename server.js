@@ -1,12 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const { validateToken, tokenRefresh } = require("./middleware/auth");
 const path = require("path");
+const authToken = require("./middleware/authenticateToken");
 
 const bodyParser = require("body-parser");
-const fs = require("fs");
-const multer = require("multer");
 
 require("dotenv").config();
 
@@ -49,31 +47,27 @@ const info = require("./routes/info");
 const service = require("./routes/service");
 const serviceType = require("./routes/serviceType");
 const rate = require("./routes/rate");
-const login = require("./routes/login");
-const refresh = require("./routes/refresh");
-const imageTest = require("./routes/imageTest");
 
-app.use("/users", validateToken, usersRouter);
-app.use("/food", validateToken, foodRouter);
-app.use("/drink", validateToken, drinkRouter);
-app.use("/foodType", validateToken, foodTypeRouter);
-app.use("/drinkType", validateToken, drinkTypeRouter);
-app.use("/weekMenu", validateToken, weekMenuRouter);
-app.use("/review", validateToken, review);
-app.use("/alacarte", validateToken, alacarte);
-app.use("/alacarteType", validateToken, alacarteType);
-app.use("/staff", validateToken, staff);
-app.use("/staffPosition", validateToken, staffPosition);
-app.use("/events", validateToken, events);
-app.use("/info", validateToken, info);
-app.use("/service", validateToken, service);
-app.use("/serviceType", validateToken, serviceType);
-app.use("/rate", validateToken, rate);
-// app.use("/refresh", tokenRefresh, refresh);
-app.use("/login", login);
-app.use("/imageTest", imageTest);
+const auth = require("./routes/auth");
 
-// var imgModel = require("./models/imageTest.model");
+app.use("/users", authToken, usersRouter);
+app.use("/food", authToken, foodRouter);
+app.use("/drink", authToken, drinkRouter);
+app.use("/foodType", authToken, foodTypeRouter);
+app.use("/drinkType", authToken, drinkTypeRouter);
+app.use("/weekMenu", authToken, weekMenuRouter);
+app.use("/review", authToken, review);
+app.use("/alacarte", authToken, alacarte);
+app.use("/alacarteType", authToken, alacarteType);
+app.use("/staff", authToken, staff);
+app.use("/staffPosition", authToken, staffPosition);
+app.use("/events", authToken, events);
+app.use("/info", authToken, info);
+app.use("/service", authToken, service);
+app.use("/serviceType", authToken, serviceType);
+app.use("/rate", authToken, rate);
+
+app.use("/auth", auth);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));

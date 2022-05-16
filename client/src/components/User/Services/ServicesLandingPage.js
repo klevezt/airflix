@@ -6,18 +6,30 @@ import "./ServicesLandingPage.css";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import { actionTypes } from "../../../reducer";
 
 const ServicesLandingPage = () => {
   const { t } = useTranslation();
 
   const [catalog, setCatalog] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
 
   useEffect(() => {
     setIsSpinnerLoading(true);
     const exec = async () => {
       const services = await fetchServicesTypesFromDB(state.token);
+
+      console.log(services.errors);
+
+      if (services.errors) {
+        dispatch({
+          type: actionTypes.REMOVE_JWT_TOKEN,
+          authenticated: false,
+        });
+        localStorage.clear();
+        return;
+      }
 
       const { myArr } = await imageGetter(services, "Services/", true);
       setCatalog(myArr);

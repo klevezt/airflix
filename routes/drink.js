@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 let Drink = require("../models/drink.model");
-const { validateToken } = require("../middleware/auth");
+const { validateToken } = require("./auth");
 
 // router.all("*", [validateToken]);
 router.route("/").get((req, res) => {

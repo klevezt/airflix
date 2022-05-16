@@ -2,6 +2,7 @@ export const initialState = {
   user: null,
   authenticated: false,
   token: "",
+  refreshToken: "",
   allUsers: [],
 };
 
@@ -20,13 +21,14 @@ const reducer = (state, action) => {
         ...state,
         user: action.user,
         authenticated: action.authenticated,
-        token: action.jwtauthtoken,
+        token: action.token,
+        refreshToken: action.rToken,
       };
     case actionTypes.REMOVE_JWT_TOKEN:
       return {
         ...state,
         authenticated: action.authenticated,
-        token: action.jwtauthtoken,
+        token: action.token,
       };
     case actionTypes.GET_ALL_USERS_ADMIN:
       return {

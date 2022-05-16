@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import Login from "./components/Login/LoginComponent";
@@ -15,10 +16,26 @@ import "./App.css";
 const App = () => {
   const [state] = useStateValue();
 
+  useEffect(() => {
+    var token = localStorage.getItem("token");
+    if (token) checkLoginStatus(localStorage.getItem("rToken"));
+    console.log("app js");
+  }, []);
+
+  const checkLoginStatus = (token) => {
+    fetch(process.env.REACT_APP_SERVER_URL + "/auth/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      },
+    }).then((response) => console.log(response));
+  };
+
   return (
     <BrowserRouter>
       <Header />
-      {!state.authenticated && !state.token ? (
+      {!state.authenticated ? (
         <>
           <Route path="/" exact>
             <Login />

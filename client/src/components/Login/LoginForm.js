@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { actionTypes } from "../../reducer";
 import { useStateValue } from "../../StateProvider";
 import IconButton from "../UI/Buttons/IconButton";
@@ -22,16 +22,19 @@ const LoginForm = () => {
     setIsButtonSpinnerLoading(true);
 
     authenticateUserWithToken(uname, psw)
-      .then(({ user, token }) => {
+      .then(({ user, accessToken, refreshToken }) => {
         setIsButtonSpinnerLoading(false);
         if (user.length === 0) {
           setSubmitError(true);
         } else {
+          localStorage.setItem("token", accessToken);
+          localStorage.setItem("rToken", refreshToken);
           dispatch({
             type: actionTypes.SET_USER,
             user: user,
             authenticated: true,
-            jwtauthtoken: token,
+            token: accessToken,
+            rToken: refreshToken,
           });
         }
       })
