@@ -7,6 +7,7 @@ import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import { actionTypes } from "../../../reducer";
+import jwt from "jsonwebtoken";
 
 const ServicesLandingPage = () => {
   const { t } = useTranslation();
@@ -18,14 +19,44 @@ const ServicesLandingPage = () => {
   useEffect(() => {
     setIsSpinnerLoading(true);
     const exec = async () => {
-      const services = await fetchServicesTypesFromDB(state.token);
+      var isExpired = false;
+      var decodedToken = jwt.decode(state.token, { complete: true });
+      // console.log(decodedToken);
+      var dateNow = new Date();
 
-      console.log(services.errors);
+      if (decodedToken.payload.exp * 1000 < dateNow.getTime()) isExpired = true;
+
+      // console.log(isExpired);
+
+      var services;
+
+      if (isExpired) {
+        const dataaa = await fetch(
+          process.env.REACT_APP_SERVER_URL + "/auth/token",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": state.refreshToken,
+            },
+          }
+        ).then((data) => data.json());
+
+        services = await fetchServicesTypesFromDB(dataaa.accessToken);
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: dataaa.accessToken,
+        });
+      } else {
+        services = await fetchServicesTypesFromDB(state.token);
+      }
 
       if (services.errors) {
         dispatch({
           type: actionTypes.REMOVE_JWT_TOKEN,
           authenticated: false,
+          token: "",
         });
         localStorage.clear();
         return;

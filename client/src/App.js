@@ -16,22 +16,6 @@ import "./App.css";
 const App = () => {
   const [state] = useStateValue();
 
-  useEffect(() => {
-    var token = localStorage.getItem("token");
-    if (token) checkLoginStatus(localStorage.getItem("rToken"));
-    console.log("app js");
-  }, []);
-
-  const checkLoginStatus = (token) => {
-    fetch(process.env.REACT_APP_SERVER_URL + "/auth/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
-      },
-    }).then((response) => console.log(response));
-  };
-
   return (
     <BrowserRouter>
       <Header />

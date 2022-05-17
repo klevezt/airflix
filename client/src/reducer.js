@@ -12,6 +12,7 @@ export const actionTypes = {
   GET_ALL_USERS_ADMIN: "GET_ALL_USERS_ADMIN",
   ADD_NEW_USER_ADMIN: "ADD_NEW_USER_ADMIN",
   GET_CURRENT_USER: "GET_CURRENT_USER",
+  SET_NEW_JWT_TOKEN: "SET_NEW_JWT_TOKEN",
 };
 
 const reducer = (state, action) => {
@@ -44,6 +45,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         user: action.user,
+      };
+    case actionTypes.SET_NEW_JWT_TOKEN:
+      return {
+        ...state,
+        token: action.token,
       };
 
     default:

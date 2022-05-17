@@ -26,10 +26,6 @@ import Info from "./Info/Info";
 const User = () => {
   const [state] = useStateValue();
 
-  useEffect(() => {
-    console.log("user js");
-  }, []);
-
   return (
     <div className="full__content">
       <div className="content">

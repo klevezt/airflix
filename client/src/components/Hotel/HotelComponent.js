@@ -44,9 +44,6 @@ import EventEdit from "./Forms/Events/EditEvent";
 
 const Hotel = () => {
   const [state] = useStateValue();
-  useEffect(() => {
-    console.log("hotel js");
-  }, []);
 
   return (
     <div className="full__content">
