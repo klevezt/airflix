@@ -12,10 +12,12 @@ const Header = () => {
   const [state, dispatch] = useStateValue();
 
   const logoutHandler = () => {
+    localStorage.clear();
+
     dispatch({
       type: actionTypes.REMOVE_JWT_TOKEN,
       authenticated: false,
-      jwtauthtoken: "",
+      token: "",
     });
   };
 

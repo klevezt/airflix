@@ -40,10 +40,12 @@ const MobileSidebarComponent = (props) => {
   }, []);
 
   const logoutHandler = () => {
+    localStorage.clear();
+
     dispatch({
       type: actionTypes.REMOVE_JWT_TOKEN,
       authenticated: false,
-      jwtauthtoken: "",
+      token: "",
     });
   };
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
 
 import Sidebar from "../../Layout/Sidebar/SidebarComponent";
@@ -22,9 +22,55 @@ import Home from "./Home/Home";
 import EventsAll from "./Events/EventsAll";
 import EventsDetail from "./Events/EventsDetail";
 import Info from "./Info/Info";
+import jwt from "jsonwebtoken";
+import { actionTypes } from "../../reducer";
 
 const User = () => {
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
+  const [autoLoggout, setAutoLogout] = useState(false);
+
+  useEffect(() => {
+    let fact = true;
+    const intervalId = setInterval(async () => {
+      var isExpired = false;
+      var isRefreshExpired = false;
+
+      var decodedToken = jwt.decode(state.token, { complete: true });
+      var decodedRefreshToken = jwt.decode(state.refreshToken, {
+        complete: true,
+      });
+      var dateNow = new Date();
+
+      if (decodedToken.payload.exp * 1000 < dateNow.getTime()) isExpired = true;
+      if (decodedRefreshToken.payload.exp * 1000 < dateNow.getTime())
+        isRefreshExpired = true;
+
+      if (isExpired && !isRefreshExpired) {
+        const dataaa = await fetch(
+          process.env.REACT_APP_SERVER_URL + "/auth/token",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": state.refreshToken,
+            },
+          }
+        ).then((data) => data.json());
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: dataaa.accessToken,
+        });
+      } else if (isRefreshExpired) {
+        setAutoLogout(true);
+      }
+    }, 2000);
+
+    return () => {
+      fact = false;
+      clearInterval(intervalId);
+    };
+  }, [state.token]);
 
   return (
     <div className="full__content">

@@ -53,7 +53,7 @@ router.route("/login").post(async (req, res) => {
 
   // Refresh token
   const refreshToken = await JWT.sign({ username }, process.env.REFRESH_KEY, {
-    expiresIn: "10m",
+    expiresIn: "60s",
   });
 
   // Set refersh token in refreshTokens array

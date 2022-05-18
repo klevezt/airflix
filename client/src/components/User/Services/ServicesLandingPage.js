@@ -21,12 +21,9 @@ const ServicesLandingPage = () => {
     const exec = async () => {
       var isExpired = false;
       var decodedToken = jwt.decode(state.token, { complete: true });
-      // console.log(decodedToken);
       var dateNow = new Date();
 
       if (decodedToken.payload.exp * 1000 < dateNow.getTime()) isExpired = true;
-
-      // console.log(isExpired);
 
       var services;
 
@@ -65,9 +62,7 @@ const ServicesLandingPage = () => {
       const { myArr } = await imageGetter(services, "Services/", true);
       setCatalog(myArr);
 
-      setTimeout(() => {
-        setIsSpinnerLoading(false);
-      }, 200);
+      setIsSpinnerLoading(false);
     };
     exec();
   }, []);
