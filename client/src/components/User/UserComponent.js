@@ -24,10 +24,16 @@ import EventsDetail from "./Events/EventsDetail";
 import Info from "./Info/Info";
 import jwt from "jsonwebtoken";
 import { actionTypes } from "../../reducer";
+import { Fade, Backdrop, Modal } from "@mui/material";
+import reactDom from "react-dom";
+import IconButton from "../UI/Buttons/IconButton";
+import { ExitToApp } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 const User = () => {
   const [state, dispatch] = useStateValue();
   const [autoLoggout, setAutoLogout] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     let fact = true;
@@ -64,7 +70,7 @@ const User = () => {
       } else if (isRefreshExpired) {
         setAutoLogout(true);
       }
-    }, 2000);
+    }, 60000);
 
     return () => {
       fact = false;
@@ -72,10 +78,49 @@ const User = () => {
     };
   }, [state.token]);
 
+  const handleClose = () => {
+    setAutoLogout(false);
+    dispatch({
+      type: actionTypes.REMOVE_JWT_TOKEN,
+      authenticated: false,
+      token: "",
+    });
+    localStorage.clear();
+  };
+
+  const logoutModal = reactDom.createPortal(
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      className={"modalMenu"}
+      open={autoLoggout}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={autoLoggout}>
+        <div className="modalRate-container">
+          <h4>Your session is over</h4>
+          <IconButton
+            text={t("exit")}
+            icon={<ExitToApp className="mr-2" />}
+            variant="outlined"
+            className="w-auto"
+            onClick={handleClose}
+          />
+        </div>
+      </Fade>
+    </Modal>,
+    document.getElementById("user-rate-app-root")
+  );
+
   return (
     <div className="full__content">
       <div className="content">
         <Sidebar />
+        {logoutModal}
         <div className="user main__content">
           <div className="container">
             {state.authenticated && state.user.role === "Customer" && (

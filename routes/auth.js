@@ -47,14 +47,22 @@ router.route("/login").post(async (req, res) => {
   }
 
   // Send JWT access token
-  const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
-    expiresIn: "20s",
-  });
+  const accessToken = await JWT.sign(
+    { username, password },
+    process.env.TOKEN_KEY,
+    {
+      expiresIn: "20s",
+    }
+  );
 
   // Refresh token
-  const refreshToken = await JWT.sign({ username }, process.env.REFRESH_KEY, {
-    expiresIn: "60s",
-  });
+  const refreshToken = await JWT.sign(
+    { username, password },
+    process.env.REFRESH_KEY,
+    {
+      expiresIn: "60s",
+    }
+  );
 
   // Set refersh token in refreshTokens array
   refreshTokens.push(refreshToken);
@@ -92,9 +100,13 @@ router.route("/token").post(async (req, res) => {
     const user = await JWT.verify(refreshToken, process.env.REFRESH_KEY);
     // user = { email: 'jame@gmail.com', iat: 1633586290, exp: 1633586350 }
     const { username } = user;
-    const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
-      expiresIn: "20s",
-    });
+    const accessToken = await JWT.sign(
+      { username, password },
+      process.env.TOKEN_KEY,
+      {
+        expiresIn: "20s",
+      }
+    );
     res.json({ accessToken });
   } catch (error) {
     res.status(403).json({

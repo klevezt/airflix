@@ -13,6 +13,7 @@ export const actionTypes = {
   ADD_NEW_USER_ADMIN: "ADD_NEW_USER_ADMIN",
   GET_CURRENT_USER: "GET_CURRENT_USER",
   SET_NEW_JWT_TOKEN: "SET_NEW_JWT_TOKEN",
+  LOGOUT_USER: "LOGOUT_USER",
 };
 
 const reducer = (state, action) => {
@@ -30,6 +31,13 @@ const reducer = (state, action) => {
         ...state,
         authenticated: action.authenticated,
         token: action.token,
+      };
+    case actionTypes.LOGOUT_USER:
+      return {
+        ...state,
+        authenticated: action.authenticated,
+        token: action.token,
+        refreshToken: action.refreshToken,
       };
     case actionTypes.GET_ALL_USERS_ADMIN:
       return {
