@@ -51,7 +51,7 @@ router.route("/login").post(async (req, res) => {
     { username, password },
     process.env.TOKEN_KEY,
     {
-      expiresIn: "20s",
+      expiresIn: "5m",
     }
   );
 
@@ -60,7 +60,7 @@ router.route("/login").post(async (req, res) => {
     { username, password },
     process.env.REFRESH_KEY,
     {
-      expiresIn: "60s",
+      expiresIn: "1h",
     }
   );
 
@@ -76,7 +76,7 @@ router.route("/token").post(async (req, res) => {
 
   // If token is not provided, send error message
   if (!refreshToken) {
-    res.status(401).json({
+    return res.status(401).json({
       errors: [
         {
           msg: "Token not found",
@@ -87,7 +87,7 @@ router.route("/token").post(async (req, res) => {
 
   // If token does not exist, send error message
   if (!refreshTokens.includes(refreshToken)) {
-    res.status(403).json({
+    return res.status(403).json({
       errors: [
         {
           msg: "Invalid refresh token",
@@ -104,7 +104,7 @@ router.route("/token").post(async (req, res) => {
       { username, password },
       process.env.TOKEN_KEY,
       {
-        expiresIn: "20s",
+        expiresIn: "5m",
       }
     );
     res.json({ accessToken });

@@ -1,9 +1,7 @@
 const router = require("express").Router();
 
 let Alacarte = require("../models/alacarte.model");
-const { validateToken } = require("./auth");
 
-// router.all("*", [validateToken]);
 router.route("/").get((req, res) => {
   Alacarte.find(req.query)
     .then((alacarte) => {
