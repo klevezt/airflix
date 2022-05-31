@@ -19,7 +19,7 @@ import "./App.css";
 
 const App = () => {
   const [state, dispatch] = useStateValue();
-  const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
+  const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
   useEffect(() => {
     var fact = true;
@@ -30,9 +30,7 @@ const App = () => {
       var accessToken = localStorage.getItem("token");
       var refreshToken = localStorage.getItem("rToken");
 
-      if (!accessToken || !accessToken) {
-        setIsSpinnerLoading(false);
-
+      if (!accessToken || !refreshToken) {
         return;
       }
       var decodedToken = jwt.decode(accessToken, { complete: true });

@@ -15,6 +15,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET , POST, DELETE , PUT');
+  next();
+});
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "client", "build")));
 
@@ -49,6 +54,7 @@ const serviceType = require("./routes/serviceType");
 const rate = require("./routes/rate");
 
 const auth = require("./routes/auth");
+const error = require("./routes/error");
 
 app.use("/users", authToken, usersRouter);
 app.use("/food", authToken, foodRouter);
@@ -68,6 +74,7 @@ app.use("/serviceType", authToken, serviceType);
 app.use("/rate", authToken, rate);
 
 app.use("/auth", auth);
+app.use("/error", error);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));

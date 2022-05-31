@@ -190,7 +190,7 @@ const User = () => {
                   {state.authenticated && <EventsDetail user={state.user} />}
                 </Route>
                 <Route exact path="/">
-                  {state.authenticated && <Home user={state.user} />}
+                    {state.authenticated && <Home user={state.user} />}
                 </Route>
               </div>
             )}

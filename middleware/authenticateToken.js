@@ -12,11 +12,9 @@ const authToken = async (req, res, next) => {
   // If token not found, send error message
   if (!token) {
     return res.status(401).json({
-      errors: [
-        {
-          msg: "Token not found",
-        },
-      ],
+      error: {
+        msg: "Token not found",
+      },
     });
   }
 
@@ -27,11 +25,9 @@ const authToken = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(403).json({
-      errors: [
-        {
-          msg: "Invalid token",
-        },
-      ],
+      error: {
+        msg: "Invalid token",
+      },
     });
   }
 };

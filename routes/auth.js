@@ -25,11 +25,9 @@ router.route("/login").post(async (req, res) => {
   // If user not found, send error message
   if (!user) {
     return res.status(400).json({
-      errors: [
-        {
-          msg: "Invalid credentials",
-        },
-      ],
+      error: {
+        msg: "Invalid credentials",
+      },
     });
   }
 
@@ -38,11 +36,9 @@ router.route("/login").post(async (req, res) => {
 
   if (!isMatch) {
     return res.status(401).json({
-      errors: [
-        {
-          msg: "Email or password is invalid",
-        },
-      ],
+      error: {
+        msg: "Email or password is invalid",
+      },
     });
   }
 
@@ -51,7 +47,7 @@ router.route("/login").post(async (req, res) => {
     { username, password },
     process.env.TOKEN_KEY,
     {
-      expiresIn: "5m",
+      expiresIn: "10s",
     }
   );
 
@@ -60,7 +56,7 @@ router.route("/login").post(async (req, res) => {
     { username, password },
     process.env.REFRESH_KEY,
     {
-      expiresIn: "1h",
+      expiresIn: "60s",
     }
   );
 
@@ -77,22 +73,18 @@ router.route("/token").post(async (req, res) => {
   // If token is not provided, send error message
   if (!refreshToken) {
     return res.status(401).json({
-      errors: [
-        {
-          msg: "Token not found",
-        },
-      ],
+      error: {
+        msg: "Token not found",
+      },
     });
   }
 
   // If token does not exist, send error message
   if (!refreshTokens.includes(refreshToken)) {
     return res.status(403).json({
-      errors: [
-        {
-          msg: "Invalid refresh token",
-        },
-      ],
+      error: {
+        msg: "Invalid refresh token",
+      },
     });
   }
 
@@ -110,11 +102,9 @@ router.route("/token").post(async (req, res) => {
     res.json({ accessToken });
   } catch (error) {
     res.status(403).json({
-      errors: [
-        {
-          msg: "Invalid token",
-        },
-      ],
+      error: {
+        msg: "Invalid token",
+      },
     });
   }
 });

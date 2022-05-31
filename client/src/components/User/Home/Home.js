@@ -29,10 +29,14 @@ import { Fade, Backdrop, Modal } from "@mui/material";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
 import reactDom from "react-dom";
+import ErrorComponent from "../../Error/Error";
+// import { useErrorHandler } from "react-error-boundary";
 
 const Home = () => {
   const [state] = useStateValue();
   const { t } = useTranslation();
+    // const handleError = useErrorHandler();
+
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [events, setEvents] = useState([]);
@@ -41,6 +45,9 @@ const Home = () => {
   const [scrolled, setScrolled] = useState(0);
   const [open, setOpen] = useState(false);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [todaysFoodCategories, setTodaysFoodCategories] = useState([]);
   const [foodWithImages, setFoodWithImages] = useState([]);
   const [isThereFoodToday, setIsThereFoodToday] = useState(false);
@@ -48,76 +55,95 @@ const Home = () => {
   const [previewSelectedFood, setPreviewSelectedFood] = useState([]);
 
   const [info, setInfo] = useState([]);
-
+  
   useEffect(() => {
     const today = new Date();
-
+    
     let controller = new AbortController();
     setIsSpinnerLoading(true);
-
+    
     const exec = async () => {
-      const dataaa = await fetchEventsFromDB(state.token);
-      const { myArr: eventArr } = await imageGetter(dataaa, "Events/");
-      const arr = [];
+      try {
+        const dataaa = await fetchEventsFromDB(state.token);
+        if (dataaa.error) {
+          // console.log(dataaa.error.msg);
+          setErrorMessage(dataaa.error.msg);
 
-      eventArr.forEach((event) => {
-        if (
-          event.status &&
-          new Date().getTime() < new Date(event.time).getTime()
-        )
-          arr.push({
-            img: event.images[0],
-            alias: event.alias,
-            title: event.name,
-            time: event.time,
-            description: event.description,
-          });
-      });
-      setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
-
-      const todaysYear = today.getFullYear();
-      const todaysMonth = today.getMonth() + 1;
-      const currentWeekNumber = getCurrentWeekInMonth(todaysYear, todaysMonth);
-      const data = await fetchTodaysMenuFromDB(
-        currentWeekNumber,
-        todaysMonth,
-        todaysYear,
-        state.token
-      );
-
-      const currentDay = weekNamesAliases[today.getDay()];
-
-      const allCategoriesObject = data[0][currentDay];
-      const allCategoriesArray = Object.entries(allCategoriesObject).map(
-        (key) => {
-          if (key[1].length !== 0) setIsThereFoodToday(true);
-          return key;
+          throw new Error(dataaa.error.msg);
         }
-      );
-      const arr2 = [];
+        const { myArr: eventArr } = await imageGetter(dataaa, "Events/");
 
-      const foodd = await fetchFoodFromDBWithParams("status=true", state.token);
+        const arr = [];
 
-      const { myArr } = await imageGetter(foodd, "Food/");
+        eventArr.forEach((event) => {
+          if (
+            event.status &&
+            new Date().getTime() < new Date(event.time).getTime()
+          )
+            arr.push({
+              img: event.images[0],
+              alias: event.alias,
+              title: event.name,
+              time: event.time,
+              description: event.description,
+            });
+        });
+        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
 
-      myArr.forEach((f) => {
-        arr2.push({ name: f, img: f.image });
-      });
-      setFoodWithImages(arr2);
-      setTodaysFoodCategories(allCategoriesArray);
+        const todaysYear = today.getFullYear();
+        const todaysMonth = today.getMonth() + 1;
+        const currentWeekNumber = getCurrentWeekInMonth(
+          todaysYear,
+          todaysMonth
+        );
+        const data = await fetchTodaysMenuFromDB(
+          currentWeekNumber,
+          todaysMonth,
+          todaysYear,
+          state.token
+        );
 
-      const buffet = await fetchFoodTypesFromDB(state.token);
-      setTodayBuffet(buffet);
+        const currentDay = weekNamesAliases[today.getDay()];
 
-      const featured_info = await fetchInfoTypesFromDB(state.token);
-      setInfo(featured_info);
+        const allCategoriesObject = data[0][currentDay];
+        const allCategoriesArray = Object.entries(allCategoriesObject).map(
+          (key) => {
+            if (key[1].length !== 0) setIsThereFoodToday(true);
+            return key;
+          }
+        );
+        const arr2 = [];
 
-      setTimeout(() => {
-        setIsSpinnerLoading(false);
-      }, 1000);
+        const foodd = await fetchFoodFromDBWithParams(
+          "status=true",
+          state.token
+        );
+
+        const { myArr } = await imageGetter(foodd, "Food/");
+
+        myArr.forEach((f) => {
+          arr2.push({ name: f, img: f.image });
+        });
+        setFoodWithImages(arr2);
+        setTodaysFoodCategories(allCategoriesArray);
+
+        const buffet = await fetchFoodTypesFromDB(state.token);
+        setTodayBuffet(buffet);
+
+        const featured_info = await fetchInfoTypesFromDB(state.token);
+        setInfo(featured_info);
+
+        setTimeout(() => {
+          setIsSpinnerLoading(false);
+        }, 1000);
+      } catch (err) {
+        setError(true);
+        console.log(err);
+      }
+
     };
-
     exec();
+
     controller = null;
     return () => controller?.abort();
   }, []);
@@ -316,6 +342,7 @@ const Home = () => {
   return (
     <>
       {isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
       {!isSpinnerLoading && (
         <div className="row">
           {todaysMenu}
