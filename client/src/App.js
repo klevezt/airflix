@@ -16,6 +16,7 @@ import LoadingSpinner from "./components/UI/Spinners/LoadingSpinner";
 import { authenticateUserWithToken } from "./api_requests/login";
 
 import "./App.css";
+import { getCookie } from "./Helpers/Functions/functions";
 
 const App = () => {
   const [state, dispatch] = useStateValue();
@@ -29,6 +30,9 @@ const App = () => {
 
       var accessToken = localStorage.getItem("token");
       var refreshToken = localStorage.getItem("rToken");
+
+      // var xxx = getCookie("refresh-token");
+      // console.log(xxx);
 
       if (!accessToken || !refreshToken) {
         return;
@@ -72,7 +76,7 @@ const App = () => {
           });
       }
     };
-    exec();
+    // exec();
     return () => {
       fact = false;
     };

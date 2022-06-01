@@ -38,7 +38,6 @@ const ServicesLandingPage = () => {
             },
           }
         ).then((data) => data.json());
-
         services = await fetchServicesTypesFromDB(dataaa.accessToken);
 
         dispatch({

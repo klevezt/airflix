@@ -1,7 +1,23 @@
 .error-wrapper{
-  border: 2px solid red;
+  border: 2px solid rgba(143, 15, 15, 0.925) ;
+  outline: none;
+  border-radius: 10px;
   width: 90%;
-  height: 80%;
+  height: auto;
   background-color: white;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.error-wrapper p{
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.error-btn{
+  background-color: rgba(143, 15, 15, 0.925)!important;
 }

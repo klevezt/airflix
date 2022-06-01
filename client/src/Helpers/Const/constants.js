@@ -23,18 +23,25 @@ export const imageGetter = async (
   var myArr = [];
   var error = false;
   var loading = true;
-  await Promise.all(
-    data.map(async (imageArr) => {
-      var temp = data_with_only_one_image ? imageArr.image : imageArr.images[0];
 
-      const storageRef = ref(storage, img_path + temp);
+  try {
+    await Promise.all(
+      data.map(async (imageArr) => {
+        var temp = data_with_only_one_image
+          ? imageArr.image
+          : imageArr.images[0];
 
-      await getDownloadURL(storageRef)
-        .then((image) => myArr.push({ ...imageArr, image }))
-        .catch(() => (error = true))
-        .finally(() => (loading = false));
-    })
-  );
+        const storageRef = ref(storage, img_path + temp);
+
+        await getDownloadURL(storageRef)
+          .then((image) => myArr.push({ ...imageArr, image }))
+          .catch(() => (error = true))
+          .finally(() => (loading = false));
+      })
+    );
+  } catch (err) {
+    console.log(err);
+  }
 
   return { myArr, error, loading };
 };

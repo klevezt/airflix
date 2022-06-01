@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { Fade, Backdrop, Modal } from "@mui/material";
 import reactDom from "react-dom";
 import { useStateValue } from "../../StateProvider";
+import { useTranslation } from "react-i18next";
+import IconButton from "../UI/Buttons/IconButton";
 
 import "./Error.css";
 
 const Error = (props) => {
   const [open, setOpen] = useState(true);
   const [state, dispatch] = useStateValue();
+  const { t } = useTranslation();
 
   const handleClose = () => {
     setOpen(false);
@@ -15,7 +18,6 @@ const Error = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(props.errorMessage);
     fetch(process.env.REACT_APP_SERVER_URL + "/error/add", {
       method: "POST",
       headers: {
@@ -26,7 +28,10 @@ const Error = (props) => {
         content: props.errorMessage,
       }),
     })
-      .then((data) => console.log(data))
+      .then((data) => {
+        window.location.reload(false);
+        console.log(data);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -45,9 +50,14 @@ const Error = (props) => {
     >
       <Fade in={open}>
         <div className="error-wrapper">
-          {props.errorMessage}
-          <form onSubmit={submitHandler}>
-            <button type="submit">SUBMIT</button>
+          <p>{t("general_error")}</p>
+          <form className="general-form">
+            <IconButton
+              className="btn error-btn"
+              onClick={submitHandler}
+              text="Ανανεώστε τη σελίδα"
+              variant="contained"
+            />
           </form>
         </div>
       </Fade>

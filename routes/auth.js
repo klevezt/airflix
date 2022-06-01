@@ -18,6 +18,7 @@ let refreshTokens = [];
 // Log in
 router.route("/login").post(async (req, res) => {
   const { username, password } = req.body;
+  console.log(password);
 
   // Look for user email in the database
   const user = await Users.findOne({ username });
@@ -43,22 +44,14 @@ router.route("/login").post(async (req, res) => {
   }
 
   // Send JWT access token
-  const accessToken = await JWT.sign(
-    { username, password },
-    process.env.TOKEN_KEY,
-    {
-      expiresIn: "10s",
-    }
-  );
+  const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
+    expiresIn: "10s",
+  });
 
   // Refresh token
-  const refreshToken = await JWT.sign(
-    { username, password },
-    process.env.REFRESH_KEY,
-    {
-      expiresIn: "60s",
-    }
-  );
+  const refreshToken = await JWT.sign({ username }, process.env.REFRESH_KEY, {
+    expiresIn: "60s",
+  });
 
   // Set refersh token in refreshTokens array
   refreshTokens.push(refreshToken);
@@ -90,17 +83,13 @@ router.route("/token").post(async (req, res) => {
 
   try {
     const user = await JWT.verify(refreshToken, process.env.REFRESH_KEY);
-    // user = { email: 'jame@gmail.com', iat: 1633586290, exp: 1633586350 }
     const { username } = user;
-    const accessToken = await JWT.sign(
-      { username, password },
-      process.env.TOKEN_KEY,
-      {
-        expiresIn: "5m",
-      }
-    );
-    res.json({ accessToken });
+    const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
+      expiresIn: "10s",
+    });
+    res.status(200).json({ accessToken });
   } catch (error) {
+    console.log(error);
     res.status(403).json({
       error: {
         msg: "Invalid token",

@@ -45,7 +45,7 @@ const Home = () => {
   const [scrolled, setScrolled] = useState(0);
   const [open, setOpen] = useState(false);
 
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [todaysFoodCategories, setTodaysFoodCategories] = useState([]);

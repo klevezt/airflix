@@ -104,6 +104,7 @@ const en = {
     your_name: "Full Name",
     thanks_for_the_rating: "Thank you for the rating!",
     feedback: "Feedback",
+    general_error: "The application has encountered an unknown error.Our technical staff have been automatically notified and will be looking into this with the utmost urgency."
   },
 };
 
