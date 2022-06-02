@@ -7,26 +7,45 @@ import {
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import SettingsForm from "../Forms/SettingsForm/SettingsForm";
 import { useStateValue } from "../../../StateProvider";
+import ErrorComponent from "../../Error/Error";
 
 const Settings = (props) => {
   const [user, setUser] = useState("");
   const [state] = useStateValue();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   const handleUpdateUserInfo = async (e, updateUsername, updatePassword) => {
-    e.preventDefault();
-    setIsSpinnerLoading(true);
-    await updateUserInfo(
-      props.user._id,
-      updateUsername,
-      updatePassword,
-      state.token
-    );
-    await fetchUserInfoFromDB(props.user._id, state.token).then((data) => {
-      setUser(data);
+    try {
+      e.preventDefault();
+      setIsSpinnerLoading(true);
+      const updatedInfo = await updateUserInfo(
+        props.user._id,
+        updateUsername,
+        updatePassword,
+        state.token
+      );
+
+      // ---- Error Handler ---- //
+      if (updatedInfo.error) {
+        setErrorMessage(updatedInfo.error.msg);
+        throw new Error(updatedInfo.error.msg);
+      }
+      const userInfo = await fetchUserInfoFromDB(props.user._id, state.token);
+
+      // ---- Error Handler ---- //
+      if (userInfo.error) {
+        setErrorMessage(userInfo.error.msg);
+        throw new Error(userInfo.error.msg);
+      }
+      setUser(userInfo);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+    }
   };
 
   useEffect(() => {
@@ -34,10 +53,20 @@ const Settings = (props) => {
 
     setIsSpinnerLoading(true);
     const exec = async () => {
-      await fetchUserInfoFromDB(props.user._id, state.token).then((data) => {
+      try{
+        const data = await fetchUserInfoFromDB(props.user._id, state.token);
+
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         setUser(data);
         setIsSpinnerLoading(false);
-      });
+      }catch(err){
+        setError(true);
+      }
     };
     exec();
     controller = null;
@@ -48,8 +77,9 @@ const Settings = (props) => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <SettingsForm user={user} handleUpdateUserInfo={handleUpdateUserInfo} />
       )}
     </>

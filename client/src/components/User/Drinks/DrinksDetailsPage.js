@@ -6,28 +6,50 @@ import "./DrinksDetailsPage.css";
 import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import ErrorComponent from "../../Error/Error";
 
 const DrinksDetailsPage = (props) => {
   const params = useParams();
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [state] = useStateValue();
 
+   const [error, setError] = useState(false);
+   const [errorMessage, setErrorMessage] = useState("");
+
   const [drinkDetails, setDrinkDetails] = useState([]);
 
   useEffect(() => {
     setIsSpinnerLoading(true);
     const exec = async () => {
-      const data = await fetchDrinksWithParamasFromDB(
-        "type=" + params.type,
-        state.token
-      );
+      try{
+        const data = await fetchDrinksWithParamasFromDB(
+          "type=" + params.type,
+          state.token
+        );
 
-      const { myArr } = await imageGetter(data, "Drinks/");
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
 
-      setDrinkDetails(myArr);
-      setTimeout(() => {
-        setIsSpinnerLoading(false);
-      }, 500);
+        const { myArr } = await imageGetter(data, "Drinks/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "User/DrinksDetails/useEffect => Drinks imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setDrinkDetails(myArr);
+        setTimeout(() => {
+          setIsSpinnerLoading(false);
+        }, 500);
+      }catch(err){
+      setError(true);
+    }
     };
     exec();
   }, [params.type]);

@@ -25,10 +25,14 @@ import { useStateValue } from "../../../StateProvider";
 
 import "./BuffetLandingPage.css";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import ErrorComponent from "../../Error/Error";
 
 const BuffetLandingPage = () => {
   const { t } = useTranslation();
   const [state] = useStateValue();
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // const translate = (text) => removeUpperAccents(t(text));
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
@@ -48,38 +52,65 @@ const BuffetLandingPage = () => {
     setIsSpinnerLoading(true);
     let controller = new AbortController();
     const exec = async () => {
-      const selectedYear = date.getFullYear();
-      const selectedMonth = date.getMonth() + 1;
-      const currentWeekNumber = getSelectedDayBelongsWeekInMonth(
-        selectedYear,
-        selectedMonth,
-        date
-      );
-      const data = await fetchTodaysMenuFromDB(
-        currentWeekNumber,
-        selectedMonth,
-        selectedYear,
-        state.token
-      );
+      try {
+        const selectedYear = date.getFullYear();
+        const selectedMonth = date.getMonth() + 1;
+        const currentWeekNumber = getSelectedDayBelongsWeekInMonth(
+          selectedYear,
+          selectedMonth,
+          date
+        );
+        const data = await fetchTodaysMenuFromDB(
+          currentWeekNumber,
+          selectedMonth,
+          selectedYear,
+          state.token
+        );
 
-      const currentDay = weekNamesAliases[date.getDay()];
-      const allCategoriesObject = data[0][currentDay];
-      const allCategoriesArray = Object.entries(allCategoriesObject).map(
-        (key) => {
-          return key;
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
         }
-      );
 
-      const foodd = await fetchFoodFromDBWithParams("status=true", state.token);
+        const currentDay = weekNamesAliases[date.getDay()];
+        const allCategoriesObject = data[0][currentDay];
+        const allCategoriesArray = Object.entries(allCategoriesObject).map(
+          (key) => {
+            return key;
+          }
+        );
 
-      const { myArr } = await imageGetter(foodd, "Food/");
+        const foodd = await fetchFoodFromDBWithParams(
+          "status=true",
+          state.token
+        );
 
-      setFood(myArr);
-      setTodaysFoodCategories(allCategoriesArray);
+        // ---- Error Handler ---- //
+        if (foodd.error) {
+          setErrorMessage(foodd.error.msg);
+          throw new Error(foodd.error.msg);
+        }
 
-      setTimeout(() => {
-        setIsSpinnerLoading(false);
-      }, 500);
+        const { myArr } = await imageGetter(foodd, "Food/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "User/BuffetLandingPage/useEffect => Food imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setFood(myArr);
+        setTodaysFoodCategories(allCategoriesArray);
+
+        setTimeout(() => {
+          setIsSpinnerLoading(false);
+        }, 500);
+      } catch (err) {
+        setError(true);
+      }
     };
     exec();
     controller = null;
@@ -214,47 +245,64 @@ const BuffetLandingPage = () => {
     setOpenSearch(false);
     setSearch(true);
 
-    setFullDate(
-      date.getDate() + " " + date.toLocaleString("default", { month: "long" })
-    );
+    try {
+      setFullDate(
+        date.getDate() + " " + date.toLocaleString("default", { month: "long" })
+      );
 
-    const selectedYear = date.getFullYear();
-    const selectedMonth = date.getMonth() + 1;
-    const currentWeekNumber = getSelectedDayBelongsWeekInMonth(
-      selectedYear,
-      selectedMonth,
-      date
-    );
+      const selectedYear = date.getFullYear();
+      const selectedMonth = date.getMonth() + 1;
+      const currentWeekNumber = getSelectedDayBelongsWeekInMonth(
+        selectedYear,
+        selectedMonth,
+        date
+      );
 
-    const data = await fetchTodaysMenuFromDB(
-      currentWeekNumber,
-      selectedMonth,
-      selectedYear,
-      state.token
-    );
+      const data = await fetchTodaysMenuFromDB(
+        currentWeekNumber,
+        selectedMonth,
+        selectedYear,
+        state.token
+      );
 
-    const currentDay = weekNamesAliases[date.getDay()];
-    const allCategoriesObject = data[0][currentDay];
-    const allCategoriesArray = Object.entries(allCategoriesObject).map(
-      (key) => {
-        return key;
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
       }
-    );
 
-    const foodd = await fetchFoodFromDBWithParams("status=true", state.token);
+      const currentDay = weekNamesAliases[date.getDay()];
+      const allCategoriesObject = data[0][currentDay];
+      const allCategoriesArray = Object.entries(allCategoriesObject).map(
+        (key) => {
+          return key;
+        }
+      );
 
-    setFood(foodd);
-    setTodaysFoodCategories(allCategoriesArray);
+      const foodd = await fetchFoodFromDBWithParams("status=true", state.token);
 
-    setTimeout(() => {
-      setIsSpinnerLoading(false);
-    }, 500);
+      // ---- Error Handler ---- //
+      if (foodd.error) {
+        setErrorMessage(foodd.error.msg);
+        throw new Error(foodd.error.msg);
+      }
+
+      setFood(foodd);
+      setTodaysFoodCategories(allCategoriesArray);
+
+      setTimeout(() => {
+        setIsSpinnerLoading(false);
+      }, 500);
+    } catch (err) {
+      setError(true);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="row">
           <BookCover
             coverHeadline="Μπουφές"

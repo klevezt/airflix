@@ -8,9 +8,13 @@ import { fetchAlacarteTypeFromDB } from "../../../api_requests/hotel_requests";
 import BookCover from "../../UI/Book/BookCover";
 import { useStateValue } from "../../../StateProvider";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import ErrorComponent from "../../Error/Error";
 
 const AlacarteLandingPage = () => {
   const [state] = useStateValue();
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // const { t } = useTranslation();
   // const translate = (text) => removeUpperAccents(t(text));
@@ -23,15 +27,33 @@ const AlacarteLandingPage = () => {
 
     setIsSpinnerLoading(true);
     const exec = async () => {
-      const alacarte = await fetchAlacarteTypeFromDB(state.token);
+      try {
+        const alacarte = await fetchAlacarteTypeFromDB(state.token);
 
-      const { myArr } = await imageGetter(alacarte, "Alacarte/");
+        // ---- Error Handler ---- //
+        if (alacarte.error) {
+          setErrorMessage(alacarte.error.msg);
+          throw new Error(alacarte.error.msg);
+        }
 
-      setCatalog(myArr);
+        const { myArr } = await imageGetter(alacarte, "Alacarte/");
 
-      setTimeout(() => {
-        setIsSpinnerLoading(false);
-      }, 500);
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "User/AlacarteLandingPage/useEffect => Alacarte imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setCatalog(myArr);
+
+        setTimeout(() => {
+          setIsSpinnerLoading(false);
+        }, 500);
+      } catch (err) {
+        setError(true);
+      }
     };
     exec();
     controller = null;
@@ -61,8 +83,9 @@ const AlacarteLandingPage = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="row">
           <BookCover
             coverHeadline="Κατάλογος A La Carte"

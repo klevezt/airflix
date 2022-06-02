@@ -138,9 +138,9 @@ const User = () => {
                     <ServicesDetailsPage user={state.user} />
                   )}
                 </Route>
-                <Route exact path="/settings">
+                {/* <Route exact path="/settings">
                   {state.authenticated && <Settings user={state.user} />}
-                </Route>
+                </Route> */}
                 <Route exact path="/food">
                   {state.authenticated && <FoodLandingPage />}
                 </Route>

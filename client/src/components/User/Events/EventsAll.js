@@ -6,9 +6,13 @@ import { useStateValue } from "../../../StateProvider";
 import { truncateString } from "../../../Helpers/Functions/functions";
 import { useTranslation } from "react-i18next";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import ErrorComponent from "../../Error/Error";
 
 const EventsAll = () => {
   const { t } = useTranslation();
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [state] = useStateValue();
   const [events, setEvents] = useState([]);
@@ -17,31 +21,47 @@ const EventsAll = () => {
 
   useEffect(() => {
     let controller = new AbortController();
-    let timer;
 
     const exec = async () => {
       const arr = [];
-      const data = await fetchEventsFromDB(state.token);
+      try {
+        const data = await fetchEventsFromDB(state.token);
 
-      const { myArr: eventArr } = await imageGetter(data, "Events/");
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
 
-      eventArr.forEach((event) => {
-        if (event.status)
-          arr.push({
-            img: event.image,
-            alias: event.alias,
-            title: event.name,
-            time: event.time,
-            description: event.description,
-          });
-      });
-      setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
-      setIsSpinnerLoading(false);
+        const { myArr: eventArr } = await imageGetter(data, "Events/");
+
+        // ---- Error Handler ---- //
+        if (eventArr === undefined || eventArr === null) {
+          let tmp_error =
+            "User/EventsAll/useEffect => Events imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        eventArr.forEach((event) => {
+          if (event.status)
+            arr.push({
+              img: event.image,
+              alias: event.alias,
+              title: event.name,
+              time: event.time,
+              description: event.description,
+            });
+        });
+        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+      }
     };
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, []);
@@ -68,8 +88,9 @@ const EventsAll = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="row justify-content-center kp-events mb-5">
           <div className="mt-3">
             <div className="user-home-general-headline-wrapper">

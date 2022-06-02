@@ -9,9 +9,13 @@ import { useStateValue } from "../../../StateProvider";
 
 import BookCover from "../../UI/Book/BookCover";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import ErrorComponent from "../../Error/Error";
 
 const DrinksLandingPage = () => {
   const [state] = useStateValue();
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // const { t } = useTranslation();
   // const translate = (text) => removeUpperAccents(t(text));
@@ -20,19 +24,41 @@ const DrinksLandingPage = () => {
   const [catalog, setCatalog] = useState([]);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     setIsSpinnerLoading(true);
     const exec = async () => {
-      const drinks = await fetchDrinksTypesFromDB(state.token);
+      try {
+        const drinks = await fetchDrinksTypesFromDB(state.token);
 
-      const { myArr } = await imageGetter(drinks, "Drinks/");
+        // ---- Error Handler ---- //
+        if (drinks.error) {
+          setErrorMessage(drinks.error.msg);
+          throw new Error(drinks.error.msg);
+        }
 
-      setCatalog(myArr);
+        const { myArr } = await imageGetter(drinks, "Drinks/");
 
-      setTimeout(() => {
-        setIsSpinnerLoading(false);
-      }, 500);
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "User/DrinksLandingPage/useEffect => Drinks imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setCatalog(myArr);
+
+        setTimeout(() => {
+          setIsSpinnerLoading(false);
+        }, 500);
+      } catch (err) {
+        setError(true);
+      }
     };
     exec();
+    controller = null;
+    return () => controller?.abort();
   }, []);
 
   const drinkCatalog = catalog.map((drink, i) => {
@@ -54,8 +80,9 @@ const DrinksLandingPage = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="row">
           <BookCover
             coverHeadline="Κατάλογος Ποτών"

@@ -18,7 +18,6 @@ let refreshTokens = [];
 // Log in
 router.route("/login").post(async (req, res) => {
   const { username, password } = req.body;
-  console.log(password);
 
   // Look for user email in the database
   const user = await Users.findOne({ username });
@@ -89,7 +88,6 @@ router.route("/token").post(async (req, res) => {
     });
     res.status(200).json({ accessToken });
   } catch (error) {
-    console.log(error);
     res.status(403).json({
       error: {
         msg: "Invalid token",

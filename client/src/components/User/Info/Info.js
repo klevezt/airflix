@@ -11,9 +11,13 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import ErrorComponent from "../../Error/Error";
 
 const Info = () => {
   const { t } = useTranslation();
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [state] = useStateValue();
   const [info, setInfo] = useState([]);
@@ -25,9 +29,20 @@ const Info = () => {
     let timer;
 
     const exec = async () => {
-      const all_info = await fetchInfoTypesFromDB(state.token);
-      setInfo(all_info);
-      setIsSpinnerLoading(false);
+      try {
+        const all_info = await fetchInfoTypesFromDB(state.token);
+
+        // ---- Error Handler ---- //
+        if (all_info.error) {
+          setErrorMessage(all_info.error.msg);
+          throw new Error(all_info.error.msg);
+        }
+
+        setInfo(all_info);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+      }
     };
     exec();
     controller = null;
@@ -63,8 +78,9 @@ const Info = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="row justify-content-center kp-events mb-5">
           <div className="mt-3">
             <div className="user-home-general-headline-wrapper">

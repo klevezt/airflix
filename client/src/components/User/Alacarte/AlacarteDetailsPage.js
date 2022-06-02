@@ -6,15 +6,21 @@ import "./AlacarteDetailsPage.css";
 import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import ErrorComponent from "../../Error/Error";
 
 const AlacarteDetailsPage = () => {
   const params = useParams();
   const [state] = useStateValue();
 
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
   const [alacarteDetails, setAlacarteDetails] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     setIsSpinnerLoading(true);
     const exec = async () => {
       const data = await fetchAlacarteWithParamasFromDB(
@@ -29,6 +35,8 @@ const AlacarteDetailsPage = () => {
       }, 500);
     };
     exec();
+    controller = null;
+    return () => controller?.abort();
   }, [params.type]);
 
   const allDrinkDetails = alacarteDetails.map((alacarte, i) => {
@@ -55,7 +63,6 @@ const AlacarteDetailsPage = () => {
 
   return (
     <>
-      {/* <Book /> */}
       <BookContent
         contentHeadline={params.type}
         details={allDrinkDetails}

@@ -30,22 +30,17 @@ import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
 import reactDom from "react-dom";
 import ErrorComponent from "../../Error/Error";
-// import { useErrorHandler } from "react-error-boundary";
 
 const Home = () => {
   const [state] = useStateValue();
   const { t } = useTranslation();
-    // const handleError = useErrorHandler();
-
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [events, setEvents] = useState([]);
   const [todayBuffet, setTodayBuffet] = useState([]);
-  const prevScrollY = useRef(0);
-  const [scrolled, setScrolled] = useState(0);
   const [open, setOpen] = useState(false);
 
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [todaysFoodCategories, setTodaysFoodCategories] = useState([]);
@@ -55,26 +50,29 @@ const Home = () => {
   const [previewSelectedFood, setPreviewSelectedFood] = useState([]);
 
   const [info, setInfo] = useState([]);
-  
+
   useEffect(() => {
     const today = new Date();
-    
+
     let controller = new AbortController();
     setIsSpinnerLoading(true);
-    
+
     const exec = async () => {
       try {
         const dataaa = await fetchEventsFromDB(state.token);
         if (dataaa.error) {
-          // console.log(dataaa.error.msg);
           setErrorMessage(dataaa.error.msg);
-
           throw new Error(dataaa.error.msg);
         }
         const { myArr: eventArr } = await imageGetter(dataaa, "Events/");
 
         const arr = [];
 
+        if (eventArr === undefined || eventArr === null) {
+          let tmp_error = "User/Home/useEffect => Event Array Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
         eventArr.forEach((event) => {
           if (
             event.status &&
@@ -103,6 +101,11 @@ const Home = () => {
           state.token
         );
 
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         const currentDay = weekNamesAliases[today.getDay()];
 
         const allCategoriesObject = data[0][currentDay];
@@ -119,7 +122,18 @@ const Home = () => {
           state.token
         );
 
+        if (foodd.error) {
+          setErrorMessage(foodd.error.msg);
+          throw new Error(foodd.error.msg);
+        }
+
         const { myArr } = await imageGetter(foodd, "Food/");
+
+        if (myArr === undefined || myArr === null) {
+          let tmp_error = "User/Home/useEffect => Food Array Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
 
         myArr.forEach((f) => {
           arr2.push({ name: f, img: f.image });
@@ -128,9 +142,19 @@ const Home = () => {
         setTodaysFoodCategories(allCategoriesArray);
 
         const buffet = await fetchFoodTypesFromDB(state.token);
+
+        if (buffet.error) {
+          setErrorMessage(dataaa.error.msg);
+          throw new Error(dataaa.error.msg);
+        }
         setTodayBuffet(buffet);
 
         const featured_info = await fetchInfoTypesFromDB(state.token);
+
+        if (featured_info.error) {
+          setErrorMessage(featured_info.error.msg);
+          throw new Error(featured_info.error.msg);
+        }
         setInfo(featured_info);
 
         setTimeout(() => {
@@ -138,21 +162,13 @@ const Home = () => {
         }, 1000);
       } catch (err) {
         setError(true);
-        console.log(err);
       }
-
     };
     exec();
 
     controller = null;
     return () => controller?.abort();
   }, []);
-
-  const onScroll = (e) => {
-    const currentScrollX = e.target.scrollLeft;
-    prevScrollY.current = currentScrollX;
-    setScrolled(currentScrollX);
-  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -267,7 +283,6 @@ const Home = () => {
         className={`user-home-events-inner-wrapper ${
           events.length - 1 === i ? "final-element" : ""
         }`}
-        style={{ transform: `translateX(${scrolled})` }}
         key={i}
       >
         <div className="user-home-events-date">
@@ -341,9 +356,9 @@ const Home = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
+      {!error && isSpinnerLoading && <LoadingSpinner />}
       {error && <ErrorComponent errorMessage={errorMessage} />}
-      {!isSpinnerLoading && (
+      {!error && !isSpinnerLoading && (
         <div className="row">
           {todaysMenu}
           {open && previewSelectedFood.length >= 1 && previewFood}
@@ -355,10 +370,7 @@ const Home = () => {
             </div>
             {nextEvents.length > 1 ? (
               <>
-                <div
-                  className="user-home-events-scroller-outer-wrapper"
-                  onScroll={onScroll}
-                >
+                <div className="user-home-events-scroller-outer-wrapper">
                   <div className="user-home-events-scroller">{nextEvents}</div>
                 </div>
                 <Link to="/events/all" className="user-more-button">
