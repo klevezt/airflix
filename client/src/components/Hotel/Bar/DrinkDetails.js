@@ -23,20 +23,20 @@ function DrinkDetails() {
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   useEffect(() => {
-    let timer;
+    let controller = new AbortController();
+
     const exec = () => {
       fetchSingleDrinkFromDB({ alias: params.drinkAlias }, state.token).then(
         (data) => {
           setDrink(data[0]);
-          timer = setTimeout(() => {
-            setIsSpinnerLoading(false);
-          }, 750);
+          setIsSpinnerLoading(false);
         }
       );
     };
     exec();
+    controller = null;
     return () => {
-      clearTimeout(timer);
+      controller?.abort();
     };
   }, [params.drinkAlias]);
 

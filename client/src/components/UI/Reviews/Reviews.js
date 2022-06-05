@@ -27,8 +27,10 @@ const Reviews = (props) => {
   // const imagePath = process.env.REACT_APP_CLIENT_URL + "/assets/Images";
 
   useEffect(() => {
-    setIsSpinnerLoading(true);
+    let controller = new AbortController();
     let timer;
+    
+    setIsSpinnerLoading(true);
     const exec = () => {
       fetchReviewsFromDBWithParams({ reviewFor: id }, state.token).then(
         (data) => {
@@ -48,9 +50,8 @@ const Reviews = (props) => {
       );
     };
     exec();
-    return () => {
-      clearTimeout(timer);
-    };
+    controller = null;
+    return () => controller?.abort();
   }, [id]);
 
   const handleReviewSubmit = (e, rating, content) => {

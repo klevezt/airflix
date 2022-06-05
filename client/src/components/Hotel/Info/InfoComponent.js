@@ -29,7 +29,8 @@ const InfoComponent = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
   useEffect(() => {
-    let timer;
+    let controller = new AbortController();
+
     setIsSpinnerLoading(true);
     const exec = async () => {
       fetchInfoTypesFromDB(state.token).then((data) => {
@@ -38,8 +39,9 @@ const InfoComponent = () => {
       });
     };
     exec();
+    controller = null;
     return () => {
-      clearTimeout(timer);
+      controller?.abort();
     };
   }, []);
 

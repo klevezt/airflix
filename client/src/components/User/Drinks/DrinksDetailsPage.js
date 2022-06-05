@@ -19,6 +19,8 @@ const DrinksDetailsPage = (props) => {
   const [drinkDetails, setDrinkDetails] = useState([]);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     setIsSpinnerLoading(true);
     const exec = async () => {
       try{
@@ -44,14 +46,16 @@ const DrinksDetailsPage = (props) => {
         }
 
         setDrinkDetails(myArr);
-        setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 500);
+        setIsSpinnerLoading(false);
       }catch(err){
       setError(true);
     }
     };
     exec();
+    controller = null;
+    return () => {
+      controller?.abort();
+    };
   }, [params.type]);
 
   const allDrinkDetails = drinkDetails.map((drink, i) => {

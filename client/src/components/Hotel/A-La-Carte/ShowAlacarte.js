@@ -24,7 +24,6 @@ const ShowAlacarte = () => {
   useEffect(() => {
     let controller = new AbortController();
 
-    let timer;
     const exec = async () => {
       const arr = [];
       fetchAlacarteFromDB(state.token).then((data) => {
@@ -51,15 +50,12 @@ const ShowAlacarte = () => {
         });
         setList(arr_2);
         setIsSpinnerLoading(false);
-        timer = setTimeout(() => {
-          setIsGridLoading(false);
-        }, 1000);
+       
       });
     };
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, []);

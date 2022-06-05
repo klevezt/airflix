@@ -30,9 +30,7 @@ const AlacarteDetailsPage = () => {
       const { myArr } = await imageGetter(data, "Alacarte/");
 
       setAlacarteDetails(myArr);
-      setTimeout(() => {
-        setIsSpinnerLoading(false);
-      }, 500);
+      setIsSpinnerLoading(false);
     };
     exec();
     controller = null;

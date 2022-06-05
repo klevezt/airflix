@@ -3,7 +3,7 @@ import { actionTypes } from "../../reducer";
 import { useStateValue } from "../../StateProvider";
 import IconButton from "../UI/Buttons/IconButton";
 import ButtonLoadingSpinner from "../UI/Spinners/ButtonLoadingSpinner";
-import { loginUser, authenticateUserWithToken } from "../../api_requests/login";
+import { authenticateUserWithToken } from "../../api_requests/auth_requests";
 
 import "./LoginForm.css";
 

@@ -1,3 +1,22 @@
+import jwt from "jsonwebtoken";
+
+export const checkTokenExpiration = (token, refreshToken) => {
+  var isExpired = false;
+  var isRefreshExpired = false;
+
+  var decodedToken = jwt.decode(token, { complete: true });
+  var decodedRefreshToken = jwt.decode(refreshToken, {
+    complete: true,
+  });
+  var dateNow = new Date();
+
+  if (decodedToken.payload.exp * 1000 < dateNow.getTime()) isExpired = true;
+  if (decodedRefreshToken.payload.exp * 1000 < dateNow.getTime())
+    isRefreshExpired = true;
+
+  return { isExpired, isRefreshExpired };
+};
+
 export const removeUpperAccents = (text) => {
   return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 };
@@ -119,4 +138,4 @@ export const getCookie = (cname) => {
     }
   }
   return "";
-}
+};

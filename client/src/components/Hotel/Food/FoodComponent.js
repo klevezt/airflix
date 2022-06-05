@@ -64,7 +64,8 @@ const Food = () => {
   }, [tableMenu, isSpinnerLoading]);
 
   useEffect(() => {
-    let timer;
+    let controller = new AbortController();
+
     const exec = async () => {
       setIsSpinnerLoading(true);
       setMonthIsInitialized(false);
@@ -80,16 +81,15 @@ const Food = () => {
         })
         .then(() => {
           handleWeekMenu().then(() => {
-            timer = setTimeout(() => {
-              setIsSpinnerLoading(false);
-            }, 10);
+            setIsSpinnerLoading(false);
           });
         })
         .catch((err) => console.log(err));
     };
     exec();
+    controller = null;
     return () => {
-      clearTimeout(timer);
+      controller?.abort();
     };
   }, [month, year]);
 

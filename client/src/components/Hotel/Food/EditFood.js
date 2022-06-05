@@ -147,15 +147,12 @@ const EditFood = () => {
       });
       await fetchFoodTypesFromDB(state.token).then((data) => {
         setFoodTypes(data);
-        timer = setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 500);
+        setIsSpinnerLoading(false);
       });
     };
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, []);

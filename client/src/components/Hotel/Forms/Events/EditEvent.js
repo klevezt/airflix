@@ -33,7 +33,7 @@ const EditEvent = (props) => {
 
   useEffect(() => {
     let controller = new AbortController();
-    let timer;
+
     const exec = () => {
       fetchSingleEventFromDB({ alias: params.eventAlias }, state.token)
         .then((data) => {
@@ -49,7 +49,6 @@ const EditEvent = (props) => {
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, [params.eventAlias]);

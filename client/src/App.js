@@ -13,7 +13,7 @@ import User from "./components/User/UserComponent";
 import jwt from "jsonwebtoken";
 import { actionTypes } from "./reducer";
 import LoadingSpinner from "./components/UI/Spinners/LoadingSpinner";
-import { authenticateUserWithToken } from "./api_requests/login";
+import { authenticateUserWithToken } from "./api_requests/auth_requests";
 
 import "./App.css";
 import { getCookie } from "./Helpers/Functions/functions";

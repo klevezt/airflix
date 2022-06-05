@@ -23,8 +23,8 @@ const Staff = () => {
 
   useEffect(() => {
     let controller = new AbortController();
-
     let timer;
+    
     const exec = async () => {
       const arr = [];
       await fetchStaffFromDB(state.token).then((data) => {

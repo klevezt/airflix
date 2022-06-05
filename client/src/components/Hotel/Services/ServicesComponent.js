@@ -28,7 +28,8 @@ const ServicesComponent = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
   useEffect(() => {
-    let timer;
+    let controller = new AbortController();
+
     setIsSpinnerLoading(true);
     const exec = async () => {
       await fetchServicesTypesFromDB(state.token).then((data) => {
@@ -37,8 +38,9 @@ const ServicesComponent = () => {
       });
     };
     exec();
+    controller = null;
     return () => {
-      clearTimeout(timer);
+      controller?.abort();
     };
   }, []);
 

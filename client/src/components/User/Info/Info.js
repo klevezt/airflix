@@ -26,7 +26,6 @@ const Info = () => {
 
   useEffect(() => {
     let controller = new AbortController();
-    let timer;
 
     const exec = async () => {
       try {
@@ -47,7 +46,6 @@ const Info = () => {
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, []);

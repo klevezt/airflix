@@ -105,9 +105,7 @@ const BuffetLandingPage = () => {
         setFood(myArr);
         setTodaysFoodCategories(allCategoriesArray);
 
-        setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 500);
+        setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
       }

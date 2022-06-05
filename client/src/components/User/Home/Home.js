@@ -157,9 +157,7 @@ const Home = () => {
         }
         setInfo(featured_info);
 
-        setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 1000);
+        setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
       }

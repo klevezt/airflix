@@ -42,22 +42,18 @@ const EditDrink = () => {
   useEffect(() => {
     let controller = new AbortController();
 
-    let timer;
     const exec = async () => {
       await fetchDrinksFromDB(state.token).then((data) => {
         setDrinks(data);
       });
       await fetchDrinksTypesFromDB(state.token).then((data) => {
         setDrinkTypes(data);
-        timer = setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 500);
+        setIsSpinnerLoading(false);
       });
     };
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, []);

@@ -79,19 +79,15 @@ const EditDrinkType = () => {
 
   useEffect(() => {
     let controller = new AbortController();
-    let timer;
     const exec = async () => {
       fetchDrinksTypesFromDB(state.token).then((data) => {
         setDrinks(data);
-        timer = setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 500);
+        setIsSpinnerLoading(false);
       });
     };
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, []);

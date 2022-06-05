@@ -4,6 +4,7 @@ import reactDom from "react-dom";
 import { useStateValue } from "../../StateProvider";
 import { useTranslation } from "react-i18next";
 import IconButton from "../UI/Buttons/IconButton";
+import { ExitToApp } from "@mui/icons-material";
 
 import "./Error.css";
 
@@ -12,9 +13,6 @@ const Error = (props) => {
   const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
 
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -30,7 +28,6 @@ const Error = (props) => {
     })
       .then((data) => {
         window.location.reload(false);
-        console.log(data);
       })
       .catch((err) => console.log(err));
   };
@@ -41,7 +38,6 @@ const Error = (props) => {
       aria-describedby="transition-modal-description"
       className={"modalMenu"}
       open={open}
-      onClose={handleClose}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
@@ -50,14 +46,29 @@ const Error = (props) => {
     >
       <Fade in={open}>
         <div className="error-wrapper">
-          <p>{t("general_error")}</p>
+          {!props.loggout ? (
+            <p>{t("general_error")}</p>
+          ) : (
+            <p>{props.errorMessage}</p>
+          )}
+
           <form className="general-form">
-            <IconButton
-              className="btn error-btn"
-              onClick={submitHandler}
-              text="Ανανεώστε τη σελίδα"
-              variant="contained"
-            />
+            {!props.loggout ? (
+              <IconButton
+                className="btn error-btn"
+                onClick={submitHandler}
+                text="Ανανεώστε τη σελίδα"
+                variant="contained"
+              />
+            ) : (
+              <IconButton
+                text={t("exit")}
+                icon={<ExitToApp className="mr-2" />}
+                variant="contained"
+                className="btn error-btn"
+                onClick={props.handleClose}
+              />
+            )}
           </form>
         </div>
       </Fade>

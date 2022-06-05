@@ -48,9 +48,7 @@ const AlacarteLandingPage = () => {
 
         setCatalog(myArr);
 
-        setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 500);
+        setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
       }

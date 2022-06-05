@@ -40,15 +40,12 @@ const EditFoodType = () => {
     const exec = async () => {
       fetchFoodTypesFromDB(state.token).then((data) => {
         setFoodType(data);
-        timer = setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 500);
+        setIsSpinnerLoading(false);
       });
     };
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, []);
@@ -131,12 +128,14 @@ const EditFoodType = () => {
     handleEditFoodType,
   ]);
 
-  const handleUpdateFoodType = async (e, name,image) => {
+  const handleUpdateFoodType = async (e, name, image) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateFoodType(selectedFoodType._id, name,image, state.token).then(() => {
-      setEditFoodType(false);
-    });
+    await updateFoodType(selectedFoodType._id, name, image, state.token).then(
+      () => {
+        setEditFoodType(false);
+      }
+    );
     await fetchFoodTypesFromDB(state.token).then((food) => {
       setFoodType(food);
       foodTableRows();

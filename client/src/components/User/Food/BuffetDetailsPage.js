@@ -15,6 +15,8 @@ const BuffetDetailsPage = () => {
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     setIsSpinnerLoading(true);
     const exec = async () => {
       const data = await fetchBuffetWithParamasFromDB(
@@ -25,11 +27,13 @@ const BuffetDetailsPage = () => {
       const { myArr } = await imageGetter(data, "Food/");
 
       setBuffetDetails(myArr);
-      setTimeout(() => {
-        setIsSpinnerLoading(false);
-      }, 500);
+      setIsSpinnerLoading(false);
     };
     exec();
+    controller = null;
+    return () => {
+      controller?.abort();
+    };
   }, [params.type]);
 
   const allBuffetDetails = buffetDetails.map((buffet, i) => {

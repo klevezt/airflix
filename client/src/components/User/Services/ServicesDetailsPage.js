@@ -23,6 +23,8 @@ const ServicesDetailsPage = () => {
   const params = useParams();
 
   useEffect(() => {
+    let controller = new AbortController();
+
     setIsSpinnerLoading(true);
     const exec = async () => {
 
@@ -57,6 +59,10 @@ const ServicesDetailsPage = () => {
         }
         };
     exec();
+    controller = null;
+    return () => {
+      controller?.abort();
+    };
   }, [params.type]);
 
   const allServiceDetails = serviceDetails.map((serviceDetail, i) => {

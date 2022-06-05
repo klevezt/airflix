@@ -24,8 +24,8 @@ const ShowDrinks = () => {
 
   useEffect(() => {
     let controller = new AbortController();
-
     let timer;
+    
     const exec = async () => {
       const arr = [];
       await fetchDrinksFromDB(state.token).then((data) => {
@@ -60,7 +60,6 @@ const ShowDrinks = () => {
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, []);

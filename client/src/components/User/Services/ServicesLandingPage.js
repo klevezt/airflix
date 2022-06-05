@@ -7,8 +7,9 @@ import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import { actionTypes } from "../../../reducer";
-import jwt from "jsonwebtoken";
 import ErrorComponent from "../../Error/Error";
+import { checkTokenExpiration } from "../../../Helpers/Functions/functions";
+import { issueNewToken } from "../../../api_requests/auth_requests";
 
 const ServicesLandingPage = () => {
   const { t } = useTranslation();
@@ -21,29 +22,20 @@ const ServicesLandingPage = () => {
   const [state, dispatch] = useStateValue();
 
   useEffect(() => {
+    let controller = new AbortController();
+
     setIsSpinnerLoading(true);
     const exec = async () => {
       try {
-        var isExpired = false;
-        var decodedToken = jwt.decode(state.token, { complete: true });
-        var dateNow = new Date();
+        const { isExpired } = checkTokenExpiration(
+          state.token,
+          state.refreshToken
+        );
 
-        if (decodedToken.payload.exp * 1000 < dateNow.getTime())
-          isExpired = true;
-
-        var services;
+        let services;
 
         if (isExpired) {
-          const dataaa = await fetch(
-            process.env.REACT_APP_SERVER_URL + "/auth/token",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "x-access-token": state.refreshToken,
-              },
-            }
-          ).then((data) => data.json());
+          const dataaa = await issueNewToken(state.refreshToken);
 
           // ---- Error Handler ---- //
           if (dataaa.error) {
@@ -91,7 +83,7 @@ const ServicesLandingPage = () => {
           setErrorMessage(tmp_error);
           throw new Error(tmp_error);
         }
-        
+
         setCatalog(myArr);
 
         setIsSpinnerLoading(false);
@@ -100,6 +92,10 @@ const ServicesLandingPage = () => {
       }
     };
     exec();
+    controller = null;
+    return () => {
+      controller?.abort();
+    };
   }, []);
 
   const allServices = catalog.map((service, i) => {

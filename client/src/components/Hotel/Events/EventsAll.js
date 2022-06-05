@@ -15,7 +15,6 @@ const EventsAll = () => {
 
   useEffect(() => {
     let controller = new AbortController();
-    let timer;
 
     const exec = async () => {
       const arr = [];
@@ -40,7 +39,6 @@ const EventsAll = () => {
     exec();
     controller = null;
     return () => {
-      clearTimeout(timer);
       controller?.abort();
     };
   }, []);
