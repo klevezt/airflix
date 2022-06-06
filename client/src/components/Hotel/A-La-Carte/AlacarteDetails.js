@@ -9,8 +9,6 @@ import IconButton from "../../UI/Buttons/IconButton";
 import { useTranslation } from "react-i18next";
 import { useStateValue } from "../../../StateProvider";
 
-import Reviews from "../../UI/Reviews/Reviews";
-
 import "./AlacarteDetails.css";
 
 function AlacarteDetails() {
@@ -85,7 +83,6 @@ function AlacarteDetails() {
               />
             </div>
           </div>
-          {/* <hr /> */}
           {/* <Reviews data={alacarte} /> */}
         </div>
       )}

@@ -12,8 +12,8 @@ const AlacarteDetailsPage = () => {
   const params = useParams();
   const [state] = useStateValue();
 
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [alacarteDetails, setAlacarteDetails] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
@@ -23,14 +23,32 @@ const AlacarteDetailsPage = () => {
 
     setIsSpinnerLoading(true);
     const exec = async () => {
-      const data = await fetchAlacarteWithParamasFromDB(
-        "type=" + params.type,
-        state.token
-      );
-      const { myArr } = await imageGetter(data, "Alacarte/");
+      try {
+        const data = await fetchAlacarteWithParamasFromDB(
+          "type=" + params.type,
+          state.token
+        );
 
-      setAlacarteDetails(myArr);
-      setIsSpinnerLoading(false);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+        const { myArr } = await imageGetter(data, "Alacarte/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "User/AlacarteDetailPage/useEffect => Alacarte imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setAlacarteDetails(myArr);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+      }
     };
     exec();
     controller = null;
@@ -61,11 +79,14 @@ const AlacarteDetailsPage = () => {
 
   return (
     <>
-      <BookContent
-        contentHeadline={params.type}
-        details={allDrinkDetails}
-        loading={isSpinnerLoading}
-      />
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && (
+        <BookContent
+          contentHeadline={params.type}
+          details={allDrinkDetails}
+          loading={isSpinnerLoading}
+        />
+      )}
     </>
   );
 };

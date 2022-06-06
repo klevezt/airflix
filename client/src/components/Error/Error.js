@@ -9,10 +9,12 @@ import { ExitToApp } from "@mui/icons-material";
 import "./Error.css";
 
 const Error = (props) => {
-  const [open, setOpen] = useState(true);
-  const [state, dispatch] = useStateValue();
+  const [open] = useState(true);
+  const [state] = useStateValue();
   const { t } = useTranslation();
 
+  const [networkError, setNetworkError] = useState(false);
+  const [networkErrorMessage, setNetworkErrorMessage] = useState();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -27,9 +29,10 @@ const Error = (props) => {
       }),
     })
       .then((data) => {
+        if (props.onClick) return props.onClick();
         window.location.reload(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => err);
   };
 
   return reactDom.createPortal(
@@ -46,23 +49,23 @@ const Error = (props) => {
     >
       <Fade in={open}>
         <div className="error-wrapper">
-          {!props.loggout ? (
-            <p>{t("general_error")}</p>
-          ) : (
-            <p>{props.errorMessage}</p>
-          )}
+          <p>{props.errorMessage}</p>
 
           <form className="general-form">
             {!props.loggout ? (
               <IconButton
                 className="btn error-btn"
                 onClick={submitHandler}
-                text="Ανανεώστε τη σελίδα"
+                text={
+                  props.errorButtonText
+                    ? props.errorButtonText
+                    : "Ανανεώστε τη σελίδα"
+                }
                 variant="contained"
               />
             ) : (
               <IconButton
-                text={t("exit")}
+                text={props.errorButtonText ? props.errorButtonText : t("exit")}
                 icon={<ExitToApp className="mr-2" />}
                 variant="contained"
                 className="btn error-btn"

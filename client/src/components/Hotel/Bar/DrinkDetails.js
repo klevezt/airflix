@@ -7,7 +7,6 @@ import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../UI/Buttons/IconButton";
 
 import "./DrinkDetails.css";
-import Reviews from "../../UI/Reviews/Reviews";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
@@ -92,7 +91,6 @@ function DrinkDetails() {
               />
             </div>
           </div>
-          {/* <hr /> */}
           {/* <Reviews data={drink} /> */}
         </div>
       )}
