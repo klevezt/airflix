@@ -5,6 +5,8 @@ import {
   fetchDrinksTypesFromDB,
 } from "../../../api_requests/hotel_requests";
 
+import ErrorComponent from "../../Error/Error";
+
 import "./ShowDrinks.css";
 import ImageGrid from "../../UI/ImageGrid/ImageGrid";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
@@ -19,16 +21,25 @@ const ShowDrinks = () => {
   const [filter, setFilter] = useState("Όλα");
   const [list, setList] = useState([]);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [isGridLoading, setIsGridLoading] = useState(true);
 
   useEffect(() => {
     let controller = new AbortController();
-    let timer;
-    
+
     const exec = async () => {
       const arr = [];
-      await fetchDrinksFromDB(state.token).then((data) => {
+      try {
+        const data = await fetchDrinksFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         data.forEach((drink) => {
           if (drink.status)
             arr.push({
@@ -44,24 +55,31 @@ const ShowDrinks = () => {
         });
         setDrinks(arr);
         setFilteredDrinks(arr);
-      });
-      const arr_2 = ["Όλα"];
-      await fetchDrinksTypesFromDB(state.token).then((data) => {
-        data.forEach((type) => {
+        const arr_2 = ["Όλα"];
+        
+        const drinkTypes = await fetchDrinksTypesFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (drinkTypes.error) {
+          setErrorMessage(drinkTypes.error.msg);
+          throw new Error(drinkTypes.error.msg);
+        }
+
+        drinkTypes.forEach((type) => {
           if (type.status) arr_2.push(type.name);
         });
         setList(arr_2);
         setIsSpinnerLoading(false);
-        timer = setTimeout(() => {
+        setTimeout(() => {
           setIsGridLoading(false);
-        }, 1000);
-      });
+        }, 500);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   useEffect(() => {
@@ -92,9 +110,9 @@ const ShowDrinks = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="d-flex justify-content-start">
           {drinkListing}
           <div className="row margin-left-40 w-100">

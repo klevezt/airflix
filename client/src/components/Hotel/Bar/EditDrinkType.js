@@ -4,6 +4,7 @@ import { MDBDataTableV5 } from "mdbreact";
 import { drinkTypesColumns } from "../../../Helpers/Const/constants";
 import EditDrinkTypeForm from "../Forms/Drinks/EditDrinkType";
 import FadeUpLong from "../../hoc/FadeUpLong";
+import ErrorComponent from "../../Error/Error";
 
 import {
   setDrinkTypeStatus,
@@ -27,6 +28,9 @@ const EditDrinkType = () => {
   const history = useHistory();
   const [drinks, setDrinks] = useState([]);
   const [selectedDrinkType, setSelectedDrinkType] = useState();
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [editDrinkType, setEditDrinkType] = useState(false);
@@ -80,16 +84,24 @@ const EditDrinkType = () => {
   useEffect(() => {
     let controller = new AbortController();
     const exec = async () => {
-      fetchDrinksTypesFromDB(state.token).then((data) => {
+      try {
+        const data = fetchDrinksTypesFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         setDrinks(data);
         setIsSpinnerLoading(false);
-      });
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   useEffect(() => {
@@ -100,63 +112,105 @@ const EditDrinkType = () => {
 
   const handleDrinkTypeStatus = async (id, status, type) => {
     setIsSpinnerLoading(true);
-    await setDrinkTypeStatus(id, status, state.token);
-    if (!status) await updateDrinksOfDrinkType_Status(type, state.token);
-    await fetchDrinksTypesFromDB(state.token).then((drinks) => {
+    try {
+      await setDrinkTypeStatus(id, status, state.token);
+      if (!status) await updateDrinksOfDrinkType_Status(type, state.token);
+      const drinks = await fetchDrinksTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (drinks.error) {
+        setErrorMessage(drinks.error.msg);
+        throw new Error(drinks.error.msg);
+      }
+
       setDrinks(drinks);
       drinkTableRows();
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleEditDrinkType = async (id) => {
     setIsSpinnerLoading(true);
-    await getDrinkTypeEdit(id, state.token).then((drinkType) => {
+    try {
+      const drinkType = await getDrinkTypeEdit(id, state.token);
+      // ---- Error Handler ---- //
+      if (drinkType.error) {
+        setErrorMessage(drinkType.error.msg);
+        throw new Error(drinkType.error.msg);
+      }
+
       setSelectedDrinkType(drinkType);
       setEditDrinkType(true);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleDeleteDrinkType = async (id, name) => {
     setIsSpinnerLoading(true);
-    await deleteDrinkType(id, state.token);
-    await updateDrinksOfDrinkType(name, state.token);
-    await fetchDrinksTypesFromDB(state.token).then((drink) => {
+    try {
+      await deleteDrinkType(id, state.token);
+      await updateDrinksOfDrinkType(name, state.token);
+      const drink = await fetchDrinksTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (drink.error) {
+        setErrorMessage(drink.error.msg);
+        throw new Error(drink.error.msg);
+      }
+
       setDrinks(drink);
       setIsSpinnerLoading(false);
-    });
-    history.push("/bar/edit-drink-type");
+      history.push("/bar/edit-drink-type");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleUpdateDrinkType = async (e, name, image) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateDrinkType(selectedDrinkType._id, name, image, state.token).then(
-      () => {
+    try {
+      await updateDrinkType(
+        selectedDrinkType._id,
+        name,
+        image,
+        state.token
+      ).then(() => {
         setEditDrinkType(false);
+      });
+      const drinks = await fetchDrinksTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (drinks.error) {
+        setErrorMessage(drinks.error.msg);
+        throw new Error(drinks.error.msg);
       }
-    );
-    await fetchDrinksTypesFromDB(state.token).then((drinks) => {
+
       setDrinks(drinks);
       drinkTableRows();
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleBackButton = () => {
     setIsSpinnerLoading(true);
-    setTimeout(() => {
-      setEditDrinkType((s) => !s);
-      setIsSpinnerLoading(false);
-    }, 0);
+    setEditDrinkType((s) => !s);
+    setIsSpinnerLoading(false);
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
       <FadeUpLong>
-        {!isSpinnerLoading && !editDrinkType && (
+        {!error && !isSpinnerLoading && !editDrinkType && (
           <MDBDataTableV5
             hover
             entriesOptions={[10, 20, 25]}
@@ -168,7 +222,7 @@ const EditDrinkType = () => {
           />
         )}
 
-        {!isSpinnerLoading && editDrinkType && (
+        {!error && !isSpinnerLoading && editDrinkType && (
           <EditDrinkTypeForm
             selectedDrinkType={selectedDrinkType}
             handleUpdateDrinkType={handleUpdateDrinkType}

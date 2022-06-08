@@ -8,6 +8,7 @@ import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../UI/Buttons/IconButton";
 import { useTranslation } from "react-i18next";
 import { useStateValue } from "../../../StateProvider";
+import ErrorComponent from "../../Error/Error";
 
 import "./AlacarteDetails.css";
 
@@ -17,26 +18,47 @@ function AlacarteDetails() {
   const history = useHistory();
   const { t } = useTranslation();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [alacarte, setAlacarte] = useState();
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     setIsSpinnerLoading(true);
-    fetchSingleAlacarteFromDB(
-      { alias: params.alacarteAlias },
-      state.token
-    ).then((data) => {
-      setAlacarte(data[0]);
-      setIsSpinnerLoading(false);
-    });
+    const exec = async () => {
+      try {
+        const data = await fetchSingleAlacarteFromDB(
+          { alias: params.alacarteAlias },
+          state.token
+        );
+        
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
+        setAlacarte(data[0]);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+      }
+    };
+    exec();
+    controller = null;
+    return () => controller?.abort();
   }, [params.alacarteAlias]);
 
   const imagePath = process.env.REACT_APP_IMAGES_URL + "/Images";
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="d-flex align-items-center flex-wrap flex-direction-column">
           <div className="row w-100 mb-3">
             <IconButton

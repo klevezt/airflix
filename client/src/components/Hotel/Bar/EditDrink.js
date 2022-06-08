@@ -5,6 +5,7 @@ import { MDBDataTableV5 } from "mdbreact";
 import { drinksTable } from "../../../Helpers/Const/constants";
 import FadeUpLong from "../../hoc/FadeUpLong";
 import EditDrinkForm from "../Forms/Drinks/EditDrink";
+import ErrorComponent from "../../Error/Error";
 
 import {
   setDrinkStatus,
@@ -29,6 +30,9 @@ const EditDrink = () => {
   const [drinkTypes, setDrinkTypes] = useState([]);
   const [selectedDrink, setSelectedDrink] = useState();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [editDrink, setEditDrink] = useState(false);
   const [menu, setMenu] = useState([]);
@@ -43,49 +47,92 @@ const EditDrink = () => {
     let controller = new AbortController();
 
     const exec = async () => {
-      await fetchDrinksFromDB(state.token).then((data) => {
-        setDrinks(data);
-      });
-      await fetchDrinksTypesFromDB(state.token).then((data) => {
+      try {
+        const drinks = await fetchDrinksFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (drinks.error) {
+          setErrorMessage(drinks.error.msg);
+          throw new Error(drinks.error.msg);
+        }
+
+        setDrinks(drinks);
+
+        const data = await fetchDrinksTypesFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         setDrinkTypes(data);
         setIsSpinnerLoading(false);
-      });
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   /* Status Handler */
 
   const handleDrinkStatus = useCallback(async (id, status) => {
     setIsSpinnerLoading(true);
-    await setDrinkStatus(id, status, state.token);
-    await fetchDrinksFromDB(state.token).then((drinks) => {
+    try {
+      await setDrinkStatus(id, status, state.token);
+      const drinks = await fetchDrinksFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (drinks.error) {
+        setErrorMessage(drinks.error.msg);
+        throw new Error(drinks.error.msg);
+      }
       setDrinks(drinks);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   }, []);
 
   const handleEditDrink = async (id) => {
     setIsSpinnerLoading(true);
-    await getDrinkEdit(id, state.token).then((drink) => {
+    try {
+      const drink = await getDrinkEdit(id, state.token);
+      // ---- Error Handler ---- //
+      if (drink.error) {
+        setErrorMessage(drink.error.msg);
+        throw new Error(drink.error.msg);
+      }
+
       setSelectedDrink(drink);
       setEditDrink(true);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleDeleteDrink = useCallback(
     async (id) => {
       setIsSpinnerLoading(true);
-      await deleteDrink(id, state.token);
-      await fetchDrinksFromDB(state.token).then((drink) => {
+      try {
+        await deleteDrink(id, state.token);
+        const drink = await fetchDrinksFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (drink.error) {
+          setErrorMessage(drink.error.msg);
+          throw new Error(drink.error.msg);
+        }
+
         setDrinks(drink);
         setIsSpinnerLoading(false);
-      });
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     },
     [t]
   );
@@ -101,30 +148,38 @@ const EditDrink = () => {
   ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateDrink(
-      selectedDrink._id,
-      name,
-      type,
-      image,
-      description,
-      price,
-      ingredients,
-      state.token
-    ).then(() => {
-      setEditDrink(false);
-    });
-    await fetchDrinksFromDB(state.token).then((drinks) => {
+    try {
+      await updateDrink(
+        selectedDrink._id,
+        name,
+        type,
+        image,
+        description,
+        price,
+        ingredients,
+        state.token
+      ).then(() => {
+        setEditDrink(false);
+      });
+      const drinks = await fetchDrinksFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (drinks.error) {
+        setErrorMessage(drinks.error.msg);
+        throw new Error(drinks.error.msg);
+      }
+
       setDrinks(drinks);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const toggleEditDrink = () => {
     setIsSpinnerLoading(true);
-    setTimeout(() => {
-      setEditDrink((s) => !s);
-      setIsSpinnerLoading(false);
-    }, 0);
+    setEditDrink((s) => !s);
+    setIsSpinnerLoading(false);
   };
 
   const drinkTableRows = useCallback(() => {
@@ -171,9 +226,10 @@ const EditDrink = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
       <FadeUpLong>
-        {!isSpinnerLoading && !editDrink && (
+        {!error && !isSpinnerLoading && !editDrink && (
           <MDBDataTableV5
             hover
             entriesOptions={[10, 20, 25]}
@@ -185,7 +241,7 @@ const EditDrink = () => {
           />
         )}
 
-        {!isSpinnerLoading && editDrink && (
+        {!error && !isSpinnerLoading && editDrink && (
           <EditDrinkForm
             selectedDrink={selectedDrink}
             drinkTypes={drinkTypes}

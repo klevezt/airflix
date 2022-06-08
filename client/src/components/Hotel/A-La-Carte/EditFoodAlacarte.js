@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { MDBDataTableV5 } from "mdbreact";
 import { menuFoodColumns } from "../../../Helpers/Const/constants";
 import FadeUpLong from "../../hoc/FadeUpLong";
+import ErrorComponent from "../../Error/Error";
 
 import {
   setAlacarteStatus,
@@ -29,6 +30,9 @@ const EditFoodAlacarte = () => {
   const [alacarteTypes, setFoodAlacarteTypes] = useState([]);
   const [selectedAlacarte, setSelectedAlacarte] = useState();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [editAlacarte, setEditAlacarte] = useState(false);
   const [menu, setMenu] = useState([]);
@@ -40,21 +44,42 @@ const EditFoodAlacarte = () => {
 
   const handleAlacarteStatus = useCallback(async (id, status) => {
     setIsSpinnerLoading(true);
-    await setAlacarteStatus(id, status, state.token);
-    await fetchAlacarteFromDB(state.token).then((alacarte) => {
+    try {
+      await setAlacarteStatus(id, status, state.token);
+      const alacarte = await fetchAlacarteFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (alacarte.error) {
+        setErrorMessage(alacarte.error.msg);
+        throw new Error(alacarte.error.msg);
+      }
+
       setAlacarte(alacarte);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   }, []);
 
   const handleDeleteAlacarte = useCallback(
     async (id) => {
       setIsSpinnerLoading(true);
-      await deleteAlacarte(id, state.token);
-      await fetchAlacarteFromDB(state.token).then((alacarte) => {
+      try {
+        await deleteAlacarte(id, state.token);
+
+        const alacarte = await fetchAlacarteFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (alacarte.error) {
+          setErrorMessage(alacarte.error.msg);
+          throw new Error(alacarte.error.msg);
+        }
+
         setAlacarte(alacarte);
         setIsSpinnerLoading(false);
-      });
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     },
     [t]
   );
@@ -101,13 +126,30 @@ const EditFoodAlacarte = () => {
     let controller = new AbortController();
 
     const exec = async () => {
-      await fetchAlacarteFromDB(state.token).then((data) => {
+      try {
+        const data = await fetchAlacarteFromDB(state.token);
+
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         setAlacarte(data);
-      });
-      await fetchFoodTypesAlacarteFromDB(state.token).then((data) => {
-        setFoodAlacarteTypes(data);
+        const alacarte = await fetchFoodTypesAlacarteFromDB(state.token);
+
+        // ---- Error Handler ---- //
+        if (alacarte.error) {
+          setErrorMessage(alacarte.error.msg);
+          throw new Error(alacarte.error.msg);
+        }
+
+        setFoodAlacarteTypes(alacarte);
         setIsSpinnerLoading(false);
-      });
+      } catch (err) {
+        setIsSpinnerLoading(false);
+        setError(true);
+      }
     };
     exec();
     controller = null;
@@ -122,11 +164,21 @@ const EditFoodAlacarte = () => {
 
   const handleEditAlacarte = async (id) => {
     setIsSpinnerLoading(true);
-    await getAlacarteEdit(id, state.token).then((alacarte) => {
+    try {
+      const alacarte = await getAlacarteEdit(id, state.token);
+      // ---- Error Handler ---- //
+      if (alacarte.error) {
+        setErrorMessage(alacarte.error.msg);
+        throw new Error(alacarte.error.msg);
+      }
+
       setSelectedAlacarte(alacarte);
       setEditAlacarte(true);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setIsSpinnerLoading(false);
+      setError(true);
+    }
   };
 
   const handleUpdateAlacarte = async (
@@ -140,40 +192,61 @@ const EditFoodAlacarte = () => {
   ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateAlacarte(
-      selectedAlacarte._id,
-      name,
-      type,
-      image,
-      description,
-      price,
-      ingredients,
-      state.token
-    ).then(() => {
-      setEditAlacarte(false);
-    });
-    await fetchAlacarteFromDB(state.token).then((alacarte) => {
+    try {
+      await updateAlacarte(
+        selectedAlacarte._id,
+        name,
+        type,
+        image,
+        description,
+        price,
+        ingredients,
+        state.token
+      ).then(() => {
+        setEditAlacarte(false);
+      });
+      const alacarte = await fetchAlacarteFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (alacarte.error) {
+        setErrorMessage(alacarte.error.msg);
+        throw new Error(alacarte.error.msg);
+      }
+
       setAlacarte(alacarte);
       alacarteTableRows();
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setIsSpinnerLoading(false);
+      setError(true);
+    }
   };
 
   const toggleEditAlacarte = async () => {
     setEditAlacarte((s) => !s);
     setIsSpinnerLoading(true);
-    await fetchAlacarteFromDB(state.token).then((alacarte) => {
+    try {
+      const alacarte = await fetchAlacarteFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (alacarte.error) {
+        setErrorMessage(alacarte.error.msg);
+        throw new Error(alacarte.error.msg);
+      }
+
       setAlacarte(alacarte);
       alacarteTableRows();
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setIsSpinnerLoading(false);
+      setError(true);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
       <FadeUpLong>
-        {!isSpinnerLoading && !editAlacarte && (
+        {!error && !isSpinnerLoading && !editAlacarte && (
           <MDBDataTableV5
             hover
             entriesOptions={[10, 20, 25]}
@@ -185,7 +258,7 @@ const EditFoodAlacarte = () => {
           />
         )}
 
-        {!isSpinnerLoading && editAlacarte && (
+        {!error && !isSpinnerLoading && editAlacarte && (
           <EditAlacarte
             selected={selectedAlacarte}
             alacarteTypes={alacarteTypes}

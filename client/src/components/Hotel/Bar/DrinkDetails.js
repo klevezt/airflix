@@ -6,6 +6,8 @@ import { Chip } from "@mui/material";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../UI/Buttons/IconButton";
 
+import ErrorComponent from "../../Error/Error";
+
 import "./DrinkDetails.css";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
@@ -18,33 +20,45 @@ function DrinkDetails() {
 
   const history = useHistory();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [drink, setDrink] = useState();
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   useEffect(() => {
     let controller = new AbortController();
 
-    const exec = () => {
-      fetchSingleDrinkFromDB({ alias: params.drinkAlias }, state.token).then(
-        (data) => {
-          setDrink(data[0]);
-          setIsSpinnerLoading(false);
+    const exec = async () => {
+      try {
+        const data = await fetchSingleDrinkFromDB(
+          { alias: params.drinkAlias },
+          state.token
+        );
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
         }
-      );
+        setDrink(data[0]);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, [params.drinkAlias]);
 
   const imagePath = process.env.REACT_APP_IMAGES_URL + "/Images";
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="d-flex align-items-center flex-wrap flex-direction-column">
           <div className="row w-100 mb-3">
             <IconButton
