@@ -6,6 +6,7 @@ import IconButton from "../../../UI/Buttons/IconButton";
 import { addStaffPosition } from "../../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
+import ErrorComponent from "../../../Error/Error";
 
 const AddNewStaffPositionForm = (props) => {
   const [state] = useStateValue();
@@ -15,19 +16,34 @@ const AddNewStaffPositionForm = (props) => {
   const stafPositionRef = useRef();
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+
   const handleSubmitForm = async (e) => {
     e.preventDefault();
-    const name = stafPositionRef.current.value;
+    try {
+      const name = stafPositionRef.current.value;
 
-    await addStaffPosition(name, state.token).then((data) => {
+      const res = await addStaffPosition(name, state.token);
+      // ---- Error Handler ---- //
+      if (res.error) {
+        setErrorMessage(res.error.msg);
+        throw new Error(res.error.msg);
+      }
+
       history.replace("/staff");
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <form
           method="post"
           className="general-form"
@@ -39,7 +55,7 @@ const AddNewStaffPositionForm = (props) => {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

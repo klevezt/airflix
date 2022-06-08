@@ -11,6 +11,7 @@ import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import AddIcon from "@mui/icons-material/Add";
 import { RemoveCircleOutline } from "@mui/icons-material";
 import { useStateValue } from "../../../../StateProvider";
+import ErrorComponent from "../../../Error/Error";
 
 const AddNewInfo = () => {
   const [state] = useStateValue();
@@ -19,6 +20,9 @@ const AddNewInfo = () => {
 
   // const [tableState, setTableState] = useState([]);
   // const [allInfoData, setAllInfoData] = useState([]);
+  
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [newInfo, setNewInfo] = useState([
     { newInfoName: "", newInfoDescription: "", newInfoStatus: true },
@@ -32,29 +36,41 @@ const AddNewInfo = () => {
   useEffect(() => {
     let controller = new AbortController();
     setIsSpinnerLoading(true);
-    fetchInfoTypesFromDB(state.token).then((data) => {
+    const exec = async () => {
+      const res = await fetchInfoTypesFromDB(state.token);
       // setAllInfoData(data);
       // setTableState(data[0].content);
+      // ---- Error Handler ---- //
+      if (res.error) {
+        setErrorMessage(res.error.msg);
+        throw new Error(res.error.msg);
+      }
       setIsSpinnerLoading(false);
-    });
+    };
+    exec();
     controller = null;
     return () => controller?.abort();
   }, []);
 
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
+    try {
+      const name = infoNameRef.current.value;
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
+      const images = infoImageRef.current.files;
 
-    const name = infoNameRef.current.value;
-    const alias = name.replace(/\s+/g, "-").toLowerCase();
-    const images = infoImageRef.current.files;
+      const res = await addInfo(name, images, newInfo, alias, state.token);
+      // ---- Error Handler ---- //
+      if (res.error) {
+        setErrorMessage(res.error.msg);
+        throw new Error(res.error.msg);
+      }
 
-    addInfo(name, images, newInfo, alias, state.token)
-      .then(() => {
-        history.replace("/info");
-      })
-      .catch((e) => {
-        alert(e);
-      });
+      history.replace("/info");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleChangeDescription = (i, e) => {
@@ -83,8 +99,9 @@ const AddNewInfo = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <form
           method="post"
           encType="multipart/form-data"
@@ -97,7 +114,7 @@ const AddNewInfo = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

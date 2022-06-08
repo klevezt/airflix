@@ -41,7 +41,8 @@ const EditDrinkType = () => {
     rows: menu,
   };
 
-  const drinkTableRows = () =>
+  const drinkTableRows = () =>{
+  try {
     drinks.forEach((item) => {
       menu.push({
         name: item.name,
@@ -80,6 +81,10 @@ const EditDrinkType = () => {
         ),
       });
     });
+  } catch (err) {
+    setError(true);
+    setIsSpinnerLoading(false);
+  }}
 
   useEffect(() => {
     let controller = new AbortController();

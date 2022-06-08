@@ -6,43 +6,55 @@ import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
+import ErrorComponent from "../../../Error/Error";
 
 const AddNewDrinkType = () => {
   const [state] = useStateValue();
   const { t } = useTranslation();
   const history = useHistory();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const nameRef = useRef("");
   const imageRef = useRef("");
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsSpinnerLoading(false);
-    }, 100);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setIsSpinnerLoading(false);
+  //   }, 100);
+  // }, []);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    const name = nameRef.current.value;
-    const image = imageRef.current.files;
-
     setIsSpinnerLoading(true);
-    addDrinkType(name, image,state.token)
-      .then(() => {
-        history.replace("/bar/edit-drink-type");
-      })
-      .catch(() => {
-        history.replace("/bar/edit-drink-type");
-      });
+
+    try {
+      const name = nameRef.current.value;
+      const image = imageRef.current.files;
+
+      const res = await addDrinkType(name, image, state.token);
+      // ---- Error Handler ---- //
+      if (res.error) {
+        setErrorMessage(res.error.msg);
+        throw new Error(res.error.msg);
+      }
+
+      setIsSpinnerLoading(false);
+      history.replace("/bar/edit-drink-type");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <form
           method="POST"
           encType="multipart/form-data"
@@ -55,7 +67,7 @@ const AddNewDrinkType = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

@@ -5,6 +5,8 @@ import Button from "@mui/material/Button";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 
+import ErrorComponent from "../../Error/Error";
+
 import "./InfoComponent.css";
 import {
   deleteInfo,
@@ -27,41 +29,73 @@ const InfoComponent = () => {
   const [selectedInfo, setSelectedInfo] = useState();
   const [showEdit, setShowEdit] = useState(false);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
+
   useEffect(() => {
     let controller = new AbortController();
 
     setIsSpinnerLoading(true);
     const exec = async () => {
-      fetchInfoTypesFromDB(state.token).then((data) => {
+      try {
+        const data = await fetchInfoTypesFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         setInfo(data);
         setIsSpinnerLoading(false);
-      });
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   const handleDeleteInfo = async (id) => {
     setIsSpinnerLoading(true);
-    await deleteInfo(id, state.token);
-    fetchInfoTypesFromDB(state.token).then((data) => {
+    try {
+      await deleteInfo(id, state.token);
+      const data = await fetchInfoTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setInfo(data);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleUpdateInfo = async (e) => {
     setIsSpinnerLoading(true);
-    // await updateInfo(name, type, content).then(() => {});
-    fetchInfoTypesFromDB(state.token).then((data) => {
+    try {
+      // await updateInfo(name, type, content).then(() => {});
+      const data = await fetchInfoTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setInfo(data);
       setShowEdit((s) => !s);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleEditInfo = (selectedInfo) => {
@@ -71,11 +105,25 @@ const InfoComponent = () => {
 
   const handleChangeFeatured = async (selectedInfo) => {
     setIsSpinnerLoading(true);
-    await setInfoStatus(selectedInfo._id, !selectedInfo.featured, state.token);
-    fetchInfoTypesFromDB(state.token).then((data) => {
+    try {
+      await setInfoStatus(
+        selectedInfo._id,
+        !selectedInfo.featured,
+        state.token
+      );
+      const data = await fetchInfoTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setInfo(data);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
   const allInfo = info.map((inf, i) => {
     return (
@@ -124,8 +172,9 @@ const InfoComponent = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && !showEdit && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && !showEdit && (
         <section className="info-wrapper">
           <div className="row mb-5">
             <Link to="/info/add" className="text-center">
@@ -143,7 +192,7 @@ const InfoComponent = () => {
           <div className={`col-12 info-box`}>{allInfo}</div>
         </section>
       )}
-      {!isSpinnerLoading && showEdit && (
+      {!error && !isSpinnerLoading && showEdit && (
         <EditInfo
           handleUpdateInfo={handleUpdateInfo}
           handleBackButton={() => setShowEdit((s) => !s)}

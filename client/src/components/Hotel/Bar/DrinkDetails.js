@@ -40,6 +40,7 @@ function DrinkDetails() {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
+        
         setDrink(data[0]);
         setIsSpinnerLoading(false);
       } catch (err) {
@@ -66,7 +67,7 @@ function DrinkDetails() {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

@@ -82,7 +82,7 @@ const AddNewCustomerForm = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="room" className="col-sm-4 col-form-label">
-            {t("Αριθμός Δωματίου")}
+            {t("room_number")}
           </label>
           <div className="col-sm-8">
             <input
@@ -99,7 +99,7 @@ const AddNewCustomerForm = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="room_type" className="col-sm-4 col-form-label">
-            {t("Τύπος Δωματίου")}
+            {t("room_type")}
           </label>
           <div className="col-sm-8">
             <select
@@ -123,7 +123,7 @@ const AddNewCustomerForm = (props) => {
         <div className="row ">
           <div className="offset-sm-4 offset-0 col-sm-4 col-12">
             <button type="submit" className="btn btn-primary-theme ">
-              ΠΡΟΣΘΗΚΗ
+              {t("add")}
             </button>
           </div>
         </div>

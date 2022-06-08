@@ -184,40 +184,45 @@ const EditDrink = () => {
 
   const drinkTableRows = useCallback(() => {
     const tempArray = [];
-    drinks.forEach((item) => {
-      tempArray.push({
-        name: item.name,
-        type: item.type,
-        status: (
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              checked={item.status ? true : false}
-              onChange={() => handleDrinkStatus(item._id, !item.status)}
-              autoComplete="off"
-            />
-          </div>
-        ),
-        actions: (
-          <div>
-            <Link to="/bar/edit" onClick={() => handleEditDrink(item._id)}>
-              <Edit />
-            </Link>
-            <Link
-              to="/bar/edit"
-              onClick={() => {
-                window.confirm(`${t("confirm_delete_drink")}`) &&
-                  handleDeleteDrink(item._id);
-              }}
-            >
-              <DeleteForeverSharp />
-            </Link>
-          </div>
-        ),
+    try {
+      drinks.forEach((item) => {
+        tempArray.push({
+          name: item.name,
+          type: item.type,
+          status: (
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={item.status ? true : false}
+                onChange={() => handleDrinkStatus(item._id, !item.status)}
+                autoComplete="off"
+              />
+            </div>
+          ),
+          actions: (
+            <div>
+              <Link to="/bar/edit" onClick={() => handleEditDrink(item._id)}>
+                <Edit />
+              </Link>
+              <Link
+                to="/bar/edit"
+                onClick={() => {
+                  window.confirm(`${t("confirm_delete_drink")}`) &&
+                    handleDeleteDrink(item._id);
+                }}
+              >
+                <DeleteForeverSharp />
+              </Link>
+            </div>
+          ),
+        });
       });
-    });
-    setMenu(tempArray);
+      setMenu(tempArray);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   }, [drinks, handleDrinkStatus, handleDeleteDrink]);
 
   useEffect(() => {

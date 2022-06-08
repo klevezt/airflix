@@ -36,7 +36,7 @@ const MobileSidebarComponent = (props) => {
   };
 
   useEffect(() => {
-    document.body.style.overflow = "scroll";
+    // document.body.style.overflow = "scroll";
   }, []);
 
   const logoutHandler = () => {

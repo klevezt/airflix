@@ -14,6 +14,7 @@ import jwt from "jsonwebtoken";
 import { actionTypes } from "./reducer";
 import LoadingSpinner from "./components/UI/Spinners/LoadingSpinner";
 import { authenticateUserWithToken } from "./api_requests/auth_requests";
+import ErrorComponent from "./components/Error/Error";
 
 import "./App.css";
 import { getCookie } from "./Helpers/Functions/functions";
@@ -21,6 +22,9 @@ import { getCookie } from "./Helpers/Functions/functions";
 const App = () => {
   const [state, dispatch] = useStateValue();
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     var fact = true;
@@ -84,8 +88,9 @@ const App = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <BrowserRouter>
           <Header />
           {!state.authenticated ? (

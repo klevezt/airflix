@@ -4,12 +4,16 @@ import { fetchEventsFromDB } from "../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
+import ErrorComponent from "../../Error/Error";
 
 const EventsAll = () => {
   const { t } = useTranslation();
 
   const [state] = useStateValue();
   const [events, setEvents] = useState([]);
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
@@ -18,7 +22,14 @@ const EventsAll = () => {
 
     const exec = async () => {
       const arr = [];
-      await fetchEventsFromDB(state.token).then((data) => {
+      try {
+        const data = await fetchEventsFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         data.forEach((event) => {
           if (event.status)
             arr.push({
@@ -31,16 +42,18 @@ const EventsAll = () => {
               time: event.time,
               description: event.description,
             });
+
+          setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+          setIsSpinnerLoading(false);
         });
-        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+      } catch (err) {
+        setError(true);
         setIsSpinnerLoading(false);
-      });
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   const allEvents = events.map((event, i) => {
@@ -74,8 +87,9 @@ const EventsAll = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="row justify-content-center kp-events">
           <h2 className="text-center mt-3 mb-3">{t("all_events")}</h2>
           {allEvents}

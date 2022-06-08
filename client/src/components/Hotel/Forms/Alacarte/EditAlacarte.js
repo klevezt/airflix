@@ -77,7 +77,7 @@ const EditAlacarte = (props) => {
             onClick={() => {
               props.toggleEditAlacarte();
             }}
-            text="Επιστροφη"
+            text={t("Επιστροφη")}
             icon={<UndoIcon />}
             color="warning"
             variant="contained"
@@ -137,7 +137,7 @@ const EditAlacarte = (props) => {
             <div className="col-sm-10 offset-sm-2">
               <div className="row">
                 <label htmlFor="ingr" className="col-sm-12 col-form-label">
-                  Συστατικά:
+                  {t("ingredients")}:
                   {ingredients.map((ingredient, i) => {
                     return (
                       <Chip
@@ -217,7 +217,7 @@ const EditAlacarte = (props) => {
 
           <div className="row mb-3">
             <label htmlFor="drink_price" className="col-sm-2 col-form-label">
-              Τιμή (€)
+              {t("price")} (€)
             </label>
             <div className="mb-3 col-sm-10">
               <input

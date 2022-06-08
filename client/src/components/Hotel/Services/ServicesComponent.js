@@ -15,6 +15,8 @@ import { useTranslation } from "react-i18next";
 import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 import EditServiceType from "../Forms/Services/EditServiceType";
 import { useStateValue } from "../../../StateProvider";
+import ErrorComponent from "../../Error/Error";
+
 
 const ServicesComponent = () => {
   const [state] = useStateValue();
@@ -27,42 +29,75 @@ const ServicesComponent = () => {
   const [showEdit, setShowEdit] = useState(false);
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
+
+  const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     let controller = new AbortController();
 
     setIsSpinnerLoading(true);
     const exec = async () => {
-      await fetchServicesTypesFromDB(state.token).then((data) => {
+      try {
+        const data = await fetchServicesTypesFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         setServices(data);
         setIsSpinnerLoading(false);
-      });
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
+    
   }, []);
 
   const handleDeleteServiceType = async (id) => {
     setIsSpinnerLoading(true);
-    await deleteServiceType(id, state.token);
-    fetchServicesTypesFromDB(state.token).then((data) => {
+    try {
+      await deleteServiceType(id, state.token);
+      const data = await fetchServicesTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setServices(data);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleUpdateServiceType = async (e, id, serviceTypeName) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    const alias = serviceTypeName.replace(/\s+/g, "-").toLowerCase();
-    await updateServiceType(id, serviceTypeName, alias, state.token);
-    fetchServicesTypesFromDB(state.token).then((data) => {
+    try {
+      const alias = serviceTypeName.replace(/\s+/g, "-").toLowerCase();
+      await updateServiceType(id, serviceTypeName, alias, state.token);
+      const data = await fetchServicesTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setServices(data);
       setShowEdit((s) => !s);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleEditServiceType = (selectedServiceType) => {
@@ -111,8 +146,9 @@ const ServicesComponent = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && !showEdit && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && !showEdit && (
         <section className="info-wrapper">
           <div className="row mb-5">
             <Link to="/serviceType/add" className="text-center">
@@ -130,7 +166,7 @@ const ServicesComponent = () => {
           <div className={`col-12 info-box`}>{allServices}</div>
         </section>
       )}
-      {!isSpinnerLoading && showEdit && (
+      {!error && !isSpinnerLoading && showEdit && (
         <EditServiceType
           handleUpdateServiceType={handleUpdateServiceType}
           handleBackButton={() => setShowEdit((s) => !s)}

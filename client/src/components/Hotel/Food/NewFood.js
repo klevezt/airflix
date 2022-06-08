@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { addFood } from "../../../api_requests/hotel_requests";
 
+import ErrorComponent from "../../Error/Error";
+
 import {
   fetchFoodFromDB,
   fetchFoodTypesFromDB,
@@ -16,6 +18,9 @@ const NewFood = () => {
   const [tableFoodTypeState, setTableFoodTypeState] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   let history = useHistory();
 
   const handleAddNewFood = async (
@@ -28,34 +33,61 @@ const NewFood = () => {
     newFoodDescription
   ) => {
     e.preventDefault();
-    console.log(newFoodSpecialFeatures);
     setIsSpinnerLoading(true);
-    await addFood(
-      newFoodName,
-      newFoodType,
-      newFoodImages,
-      newFoodIngredients,
-      newFoodSpecialFeatures,
-      newFoodDescription,
-      state.token
-    );
-    await fetchFoodFromDB(state.token).then((food) => {
+    try {
+      await addFood(
+        newFoodName,
+        newFoodType,
+        newFoodImages,
+        newFoodIngredients,
+        newFoodSpecialFeatures,
+        newFoodDescription,
+        state.token
+      );
+      const food = await fetchFoodFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (food.error) {
+        setErrorMessage(food.error.msg);
+        throw new Error(food.error.msg);
+      }
+
       history.replace("/food/edit");
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   useEffect(() => {
-    setIsSpinnerLoading(true);
-    fetchFoodTypesFromDB(state.token).then((data) => {
-      setTableFoodTypeState(data);
-      setIsSpinnerLoading(false);
-    });
+    let controller = new AbortController();
+    const exec = async () => {
+      setIsSpinnerLoading(true);
+      try {
+        const data = fetchFoodTypesFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
+        setTableFoodTypeState(data);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+    exec();
+    controller = null;
+    return () => controller?.abort();
   }, []);
 
   return (
     <>
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error &&!isSpinnerLoading && (
         <AddNewFoodForm
           closeAddNewFoodForm={() => {
             history.replace("/food");
@@ -64,8 +96,6 @@ const NewFood = () => {
           tableFoodTypeState={tableFoodTypeState}
         />
       )}
-
-      {isSpinnerLoading && <LoadingSpinner />}
     </>
   );
 };

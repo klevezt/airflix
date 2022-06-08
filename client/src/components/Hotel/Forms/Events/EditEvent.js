@@ -15,6 +15,7 @@ import {
   updateEvent,
 } from "../../../../api_requests/hotel_requests";
 import { useStateValue } from "../../../../StateProvider";
+import ErrorComponent from "../../../Error/Error";
 
 const EditEvent = (props) => {
   const { t } = useTranslation();
@@ -29,22 +30,30 @@ const EditEvent = (props) => {
   const [eventImage, setEventImage] = useState("");
   const [imageChange, setImageChange] = useState(false);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   useEffect(() => {
     let controller = new AbortController();
 
-    const exec = () => {
-      fetchSingleEventFromDB({ alias: params.eventAlias }, state.token)
-        .then((data) => {
-          setEventId(data[0]._id);
-          setEventName(data[0].name);
-          setEventTime(data[0].time);
-          setEventDescription(data[0].description);
-          setEventImage(data[0].images);
-          setIsSpinnerLoading(false);
-        })
-        .catch((err) => console.log(err));
+    const exec = async () => {
+      const data = await fetchSingleEventFromDB(
+        { alias: params.eventAlias },
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+      setEventId(data[0]._id);
+      setEventName(data[0].name);
+      setEventTime(data[0].time);
+      setEventDescription(data[0].description);
+      setEventImage(data[0].images);
+      setIsSpinnerLoading(false);
     };
     exec();
     controller = null;
@@ -90,8 +99,9 @@ const EditEvent = (props) => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <form
           method="post"
           encType="multipart/form-data"
@@ -104,7 +114,7 @@ const EditEvent = (props) => {
               // onClick={() => {
               //   props.toggleEditDrink();
               // }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

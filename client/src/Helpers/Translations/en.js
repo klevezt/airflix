@@ -89,6 +89,7 @@ const en = {
     quantity: "Quantity",
     payment_methods: "Payment Methods",
     room_number: "Room",
+    room_type: "Room type",
     promote: "Promote",
     Υπηρεσίες: "Services",
     Φαγητό: "Food",
@@ -104,9 +105,10 @@ const en = {
     your_name: "Full Name",
     thanks_for_the_rating: "Thank you for the rating!",
     feedback: "Feedback",
-    general_error: "The application has encountered an unknown error.Our technical staff have been automatically notified and will be looking into this with the utmost urgency.",
+    general_error:
+      "The application has encountered an unknown error.Our technical staff have been automatically notified and will be looking into this with the utmost urgency.",
     session_expired: "Your session is over. Please login again!",
-  
+    special_features: "Special Features",
   },
 };
 

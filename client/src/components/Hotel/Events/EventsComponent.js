@@ -5,6 +5,7 @@ import { ReadMore } from "@mui/icons-material";
 import IconButton from "../../UI/Buttons/IconButton";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
+import ErrorComponent from "../../Error/Error";
 
 import "./EventsComponent.css";
 import { truncateString } from "../../../Helpers/Functions/functions";
@@ -16,6 +17,9 @@ const EventsComponent = () => {
   const [state] = useStateValue();
   const [events, setEvents] = useState([]);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +27,14 @@ const EventsComponent = () => {
 
     const exec = async () => {
       const arr = [];
-      await fetchEventsFromDB(state.token).then((data) => {
+      try {
+        const data = await fetchEventsFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         data.forEach((event) => {
           if (
             event.status &&
@@ -39,16 +50,17 @@ const EventsComponent = () => {
               time: event.time,
               description: event.description,
             });
+          setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+          setIsSpinnerLoading(false);
         });
-        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+      } catch (err) {
+        setError(true);
         setIsSpinnerLoading(false);
-      });
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   const upcomingEvent = events.map((event, i) => {
@@ -119,8 +131,9 @@ const EventsComponent = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <>
           <div className="row justify-content-center kp-events">
             <h2 className="text-center mt-3 mb-3">Προσεχής Εκδήλωση</h2>

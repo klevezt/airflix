@@ -23,6 +23,8 @@ import AddNewService from "../Forms/Services/AddNewService";
 import EditService from "../Forms/Services/EditService";
 import { useStateValue } from "../../../StateProvider";
 
+import ErrorComponent from "../../Error/Error";
+
 const ServicesDetails = () => {
   const [state] = useStateValue();
 
@@ -38,19 +40,41 @@ const ServicesDetails = () => {
 
   const params = useParams();
 
-  const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   // All useEffect Hooks
   useEffect(() => {
     let controller = new AbortController();
-    setIsSpinnerLoading(true);
-    fetchServicesDetailsFromDB(params.alias, state.token).then((data) => {
-      setServiceType(data[0]);
-    });
-    fetchServiceFromDB(state.token).then((data) => {
-      setServices(data);
-      setIsSpinnerLoading(false);
-    });
+
+    const exec = async () => {
+      setIsSpinnerLoading(true);
+      try {
+        const data = fetchServicesDetailsFromDB(params.alias, state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
+        setServiceType(data[0]);
+        const services = await fetchServiceFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (services.error) {
+          setErrorMessage(services.error.msg);
+          throw new Error(services.error.msg);
+        }
+
+        setServices(services);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+    exec();
     controller = null;
     return () => controller?.abort();
   }, []);
@@ -58,12 +82,22 @@ const ServicesDetails = () => {
   // All handle events
   const handleDeleteService = async (id) => {
     setIsSpinnerLoading(true);
-    await deleteService(id, state.token);
-    fetchServiceFromDB(state.token).then((data) => {
+    try {
+      await deleteService(id, state.token);
+      const data = await fetchServiceFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setServices(data);
       setAddNewService(false);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleSubmitAddNewService = async (
@@ -77,31 +111,51 @@ const ServicesDetails = () => {
   ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    const alias = name.replace(/\s+/g, "-").toLowerCase();
+    try {
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
 
-    await addService(
-      name,
-      serviceType.name,
-      image,
-      alias,
-      phone,
-      email,
-      location,
-      description,
-      state.token
-    );
-    fetchServiceFromDB(state.token).then((data) => {
+      await addService(
+        name,
+        serviceType.name,
+        image,
+        alias,
+        phone,
+        email,
+        location,
+        description,
+        state.token
+      );
+      const data = await fetchServiceFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+      
       setServices(data);
       setAddNewService(false);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleSubmitEditService = (id) => {
-    getServiceEdit(id, state.token).then((data) => {
+    try {
+      const data = getServiceEdit(id, state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       customEditServices(data);
       setEditService(true);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleUpdateService = async (
@@ -115,25 +169,35 @@ const ServicesDetails = () => {
   ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    const alias = name.replace(/\s+/g, "-").toLowerCase();
+    try {
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
 
-    await updateService(
-      editService._id,
-      name,
-      serviceType.name,
-      alias,
-      image,
-      phone,
-      email,
-      location,
-      description,
-      state.token
-    );
-    fetchServiceFromDB(state.token).then((data) => {
+      await updateService(
+        editService._id,
+        name,
+        serviceType.name,
+        alias,
+        image,
+        phone,
+        email,
+        location,
+        description,
+        state.token
+      );
+      const data = fetchServiceFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setServices(data);
       setEditService(false);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const allServices = services.map((service, i) => {
@@ -190,22 +254,24 @@ const ServicesDetails = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {showAddNewService && !showEditService && !isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+
+      {!error && showAddNewService && !showEditService && !isSpinnerLoading && (
         <AddNewService
           handleSubmitAddNewService={handleSubmitAddNewService}
           serviceType={serviceType}
           goBack={() => setAddNewService(false)}
         />
       )}
-      {!showAddNewService && showEditService && !isSpinnerLoading && (
+      {!error && !showAddNewService && showEditService && !isSpinnerLoading && (
         <EditService
           goBack={() => setEditService(false)}
           handleUpdateService={handleUpdateService}
           editService={editService}
         />
       )}
-      {!showAddNewService && !showEditService && !isSpinnerLoading && (
+      {!error && !showAddNewService && !showEditService && !isSpinnerLoading && (
         <>
           <div className="service-wrapper">
             <IconButton
@@ -213,7 +279,7 @@ const ServicesDetails = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<Undo />}
               color="warning"
               variant="contained"

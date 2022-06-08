@@ -9,6 +9,7 @@ import { useStateValue } from "../../../StateProvider";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import CubeSpinner from "../../UI/Spinners/CubeSpinner";
 import FadeUpLong from "../../hoc/FadeUpLong";
+import ErrorComponent from "../../Error/Error";
 
 const Staff = () => {
   const [state] = useStateValue();
@@ -18,16 +19,25 @@ const Staff = () => {
   const [filter, setFilter] = useState("Όλα");
   const [list, setList] = useState([]);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [isGridLoading, setIsGridLoading] = useState(true);
 
   useEffect(() => {
     let controller = new AbortController();
-    let timer;
-    
+
     const exec = async () => {
       const arr = [];
-      await fetchStaffFromDB(state.token).then((data) => {
+      try {
+        const data = await fetchStaffFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         data.forEach((staff) => {
           if (staff.status)
             arr.push({
@@ -44,25 +54,32 @@ const Staff = () => {
         });
         setDrinks(arr);
         setFilteredStaff(arr);
-      });
-      const arr_2 = ["Όλα"];
-      await fetchStaffPositionFromDB(state.token).then((data) => {
-        data.forEach((type) => {
+
+        const arr_2 = ["Όλα"];
+        const staffPosition = await fetchStaffPositionFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (staffPosition.error) {
+          setErrorMessage(staffPosition.error.msg);
+          throw new Error(staffPosition.error.msg);
+        }
+
+        staffPosition.forEach((type) => {
           if (type.status) arr_2.push(type.name);
+
+          setList(arr_2);
+          setIsSpinnerLoading(false);
+          setTimeout(() => {
+            setIsGridLoading(false);
+          }, 500);
         });
-        setList(arr_2);
+      } catch (err) {
+        setError(true);
         setIsSpinnerLoading(false);
-        timer = setTimeout(() => {
-          setIsGridLoading(false);
-        }, 1000);
-      });
+      }
     };
     exec();
     controller = null;
-    return () => {
-      clearTimeout(timer);
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   useEffect(() => {
@@ -118,9 +135,9 @@ const Staff = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <div className="d-flex justify-content-start filter-content-container">
           {staffListing}
           <div className="row margin-left-40 w-100">

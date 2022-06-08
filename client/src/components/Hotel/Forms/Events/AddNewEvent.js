@@ -14,6 +14,7 @@ import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { useStateValue } from "../../../../StateProvider";
+import ErrorComponent from "../../../Error/Error";
 
 import "./AddNewEvent.css";
 
@@ -23,6 +24,9 @@ const AddNewEvent = () => {
 
   const history = useHistory();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const nameRef = useRef("");
   const imageRef = useRef("");
   const descriptionRef = useRef("");
@@ -31,32 +35,61 @@ const AddNewEvent = () => {
   const [value, setValue] = React.useState(new Date());
 
   useEffect(() => {
-    fetchDrinksTypesFromDB(state.token).then((data) => {
-      setIsSpinnerLoading(false);
-    });
+    let controller = new AbortController();
+
+    const exec = async () => {
+      try {
+        const res = await fetchDrinksTypesFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (res.error) {
+          setErrorMessage(res.error.msg);
+          throw new Error(res.error.msg);
+        }
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+    exec();
+    controller = null;
+    return () => controller?.abort();
   }, []);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const name = nameRef.current.value;
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
+      const time = value;
+      const images = imageRef.current.files;
+      const description = descriptionRef.current.value;
+      const res = await addEvent(
+        name,
+        alias,
+        time,
+        images,
+        description,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (res.error) {
+        setErrorMessage(res.error.msg);
+        throw new Error(res.error.msg);
+      }
 
-    const name = nameRef.current.value;
-    const alias = name.replace(/\s+/g, "-").toLowerCase();
-    const time = value;
-    const images = imageRef.current.files;
-    const description = descriptionRef.current.value;
-    addEvent(name, alias, time, images, description, state.token)
-      .then(() => {
-        history.replace("/events");
-      })
-      .catch(() => {
-        history.replace("/events");
-      });
+      history.replace("/events");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <form
           method="POST"
           encType="multipart/form-data"

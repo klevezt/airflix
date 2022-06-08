@@ -9,6 +9,7 @@ import { addAlacarte } from "../../../../api_requests/hotel_requests";
 import { fetchFoodTypesAlacarteFromDB } from "../../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
+import ErrorComponent from "../../../Error/Error";
 
 const AddNewFoodForm = () => {
   const [state] = useStateValue();
@@ -23,44 +24,69 @@ const AddNewFoodForm = () => {
   const priceRef = useRef("");
   const newIngredientRef = useRef("");
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   const [ingredients, setIngredients] = useState([]);
   const [alacartType, setAlacarteTypes] = useState();
 
   useEffect(() => {
-    fetchFoodTypesAlacarteFromDB(state.token).then((data) => {
-      setAlacarteTypes(data);
-      setIsSpinnerLoading(false);
-    });
+    let controller = new AbortController();
+
+    const exec = async () => {
+      try {
+        const data = await fetchFoodTypesAlacarteFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
+        setAlacarteTypes(data);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+    exec();
+    controller = null;
+    return () => controller?.abort();
   }, []);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const name = nameRef.current.value;
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
+      const type = typeRef.current.value;
+      const images = imageRef.current.files;
+      const description = descriptionRef.current.value;
+      const price = priceRef.current.value;
 
-    const name = nameRef.current.value;
-    const alias = name.replace(/\s+/g, "-").toLowerCase();
-    const type = typeRef.current.value;
-    const images = imageRef.current.files;
-    const description = descriptionRef.current.value;
-    const price = priceRef.current.value;
+      const res = await addAlacarte(
+        name,
+        alias,
+        type,
+        images,
+        description,
+        price,
+        ingredients,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (res.error) {
+        setErrorMessage(res.error.msg);
+        throw new Error(res.error.msg);
+      }
 
-    addAlacarte(
-      name,
-      alias,
-      type,
-      images,
-      description,
-      price,
-      ingredients,
-      state.token
-    )
-      .then(() => {
-        history.replace("/alacarte");
-      })
-      .catch(() => {
-        history.replace("/alacarte");
-      });
+      history.replace("/alacarte");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleNewIngredient = () => {
@@ -79,8 +105,9 @@ const AddNewFoodForm = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <form
           method="post"
           encType="multipart/form-data"
@@ -93,7 +120,7 @@ const AddNewFoodForm = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -151,7 +178,7 @@ const AddNewFoodForm = () => {
               <div className="col-sm-10 offset-sm-2">
                 <div className="row">
                   <label className="col-sm-12 col-form-label">
-                    Συστατικά:
+                    {t("ingredients")}:
                     {ingredients.map((ingredient, i) => {
                       return (
                         <Chip
@@ -217,7 +244,7 @@ const AddNewFoodForm = () => {
             </div>
             <div className="row mb-3">
               <label htmlFor="drink_price" className="col-sm-2 col-form-label">
-                Τιμή (€)
+                {t("price")} (€)
               </label>
               <div className="mb-3 col-sm-10">
                 <input

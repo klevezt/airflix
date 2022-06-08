@@ -7,19 +7,40 @@ import {
 import AddNewFoodTypeForm from "../Forms/Food/AddNewFoodType";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
+import ErrorComponent from "../../Error/Error";
 
 const NewFood = () => {
   const [state] = useStateValue();
   const [tableFoodTypeState, setTableFoodTypeState] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   let history = useHistory();
 
   useEffect(() => {
-    fetchFoodTypesFromDB(state.token).then((data) => {
-      setTableFoodTypeState(data);
-      setIsSpinnerLoading(false);
-    });
+    let controller = new AbortController();
+
+    const exec = async () => {
+      try {
+        const data = fetchFoodTypesFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
+        setTableFoodTypeState(data);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+    exec();
+    controller = null;
+    return () => controller?.abort();
   }, []);
 
   const handleAddNewFoodType = async (
@@ -30,27 +51,34 @@ const NewFood = () => {
   ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await addFoodType(
-      newFoodTypeName,
-      newFoodTypeProperty,
-      newFoodTypeImg,
-      state.token
-    );
-    await fetchFoodTypesFromDB(state.token)
-      .then((foodType) => {
-        setTableFoodTypeState(foodType);
-        setIsSpinnerLoading(false);
-        history.replace("/food/edit-food-type");
-      })
-      .catch(() => {
-        history.replace("/food/edit-food-type");
-      });
+    try {
+      await addFoodType(
+        newFoodTypeName,
+        newFoodTypeProperty,
+        newFoodTypeImg,
+        state.token
+      );
+      const foodType = await fetchFoodTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (foodType.error) {
+        setErrorMessage(foodType.error.msg);
+        throw new Error(foodType.error.msg);
+      }
+
+      setTableFoodTypeState(foodType);
+      setIsSpinnerLoading(false);
+      history.replace("/food/edit-food-type");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <AddNewFoodTypeForm handleAddNewFoodType={handleAddNewFoodType} />
       )}
     </>

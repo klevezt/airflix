@@ -68,7 +68,7 @@ const AddNewUserForm = (props) => {
         </div>
 
         <button type="submit" className="btn btn-primary-theme">
-          ΠΡΟΣΘΗΚΗ
+          {t("add")}
         </button>
       </div>
     </form>

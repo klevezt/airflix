@@ -6,11 +6,15 @@ import IconButton from "../../../UI/Buttons/IconButton";
 import { addServiceType } from "../../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
+import ErrorComponent from "../../../Error/Error";
 
 const AddNewServiceType = (props) => {
   const [state] = useStateValue();
   const { t } = useTranslation();
   const history = useHistory();
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [newService, setNewService] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
@@ -18,26 +22,31 @@ const AddNewServiceType = (props) => {
   const serviceTypeNameRef = useRef();
   const serviceTypeImageRef = useRef("");
 
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
+    try {
+      const name = serviceTypeNameRef.current.value;
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
+      const images = serviceTypeImageRef.current.files;
 
-    const name = serviceTypeNameRef.current.value;
-    const alias = name.replace(/\s+/g, "-").toLowerCase();
-    const images = serviceTypeImageRef.current.files;
-
-    addServiceType(name, images, alias, state.token)
-      .then(() => {
-        history.replace("/services");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      const res = await addServiceType(name, images, alias, state.token);
+      // ---- Error Handler ---- //
+      if (res.error) {
+        setErrorMessage(res.error.msg);
+        throw new Error(res.error.msg);
+      }
+      history.replace("/services");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <form
           method="post"
           encType="multipart/form-data"
@@ -50,7 +59,7 @@ const AddNewServiceType = (props) => {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

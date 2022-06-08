@@ -75,7 +75,7 @@ const AddNewFoodForm = (props) => {
           onClick={() => {
             history.goBack();
           }}
-          text="Επιστροφη"
+          text={t("Επιστροφη")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -135,7 +135,7 @@ const AddNewFoodForm = (props) => {
         <div className="col-sm-10 offset-sm-2">
           <div className="row">
             <label htmlFor="ingr" className="col-sm-12 col-form-label">
-              Συστατικά:
+              {t("ingredients")}:
               {ingredients.map((ingredient, i) => {
                 return (
                   <Chip
@@ -175,7 +175,7 @@ const AddNewFoodForm = (props) => {
         <div className="col-sm-10 offset-sm-2">
           <div className="row">
             <label htmlFor="feature" className="col-sm-12 col-form-label">
-              Ιδιαίτερα Χαρακτηριστικά:
+              {t("special_features")}:
               {specialFeatures.map((feature, i) => {
                 return (
                   <Chip

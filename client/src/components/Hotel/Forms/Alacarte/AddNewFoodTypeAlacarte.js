@@ -8,6 +8,7 @@ import { addFoodTypeAlacarte } from "../../../../api_requests/hotel_requests";
 import { fetchFoodTypesAlacarteFromDB } from "../../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
+import ErrorComponent from "../../../Error/Error";
 
 const AddNewFoodTypeFormAlacarte = () => {
   const [state] = useStateValue();
@@ -17,31 +18,46 @@ const AddNewFoodTypeFormAlacarte = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const newFoodTypeName = useRef("");
   const imageRef = useRef("");
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
+    try {
+      const name = newFoodTypeName.current.value;
+      const image = imageRef.current.files;
 
-    const name = newFoodTypeName.current.value;
-    const image = imageRef.current.files;
+      const res1 = await addFoodTypeAlacarte(name, image, state.token);
+      // ---- Error Handler ---- //
+      if (res1.error) {
+        setErrorMessage(res1.error.msg);
+        throw new Error(res1.error.msg);
+      }
 
-    await addFoodTypeAlacarte(name, image, state.token);
-    await fetchFoodTypesAlacarteFromDB(state.token)
-      .then(() => {
-        setIsSpinnerLoading(false);
-        history.replace("/alacarte/edit-food-type");
-      })
-      .catch(() => {
-        history.replace("/alacarte/edit-food-type");
-      });
+      const res2 = await fetchFoodTypesAlacarteFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (res2.error) {
+        setErrorMessage(res2.error.msg);
+        throw new Error(res2.error.msg);
+      }
+
+      setIsSpinnerLoading(false);
+      history.replace("/alacarte/edit-food-type");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <form
           method="post"
           className="general-form"
@@ -53,7 +69,7 @@ const AddNewFoodTypeFormAlacarte = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

@@ -105,7 +105,7 @@ const EditCustomerForm = (props) => {
       <div className="container">
         <div className="row mb-3">
           <label htmlFor="edit_uname" className="col-sm-4 col-form-label">
-            Username
+            {t("username")}
           </label>
           <div className="col-sm-8">
             <input
@@ -123,7 +123,7 @@ const EditCustomerForm = (props) => {
 
         <div className="row mb-3">
           <label htmlFor="edit_room" className="col-sm-4 col-form-label">
-            Αριθμός Δωματίου
+            {t("room_number")}
           </label>
           <div className="col-sm-8">
             <input
@@ -140,7 +140,7 @@ const EditCustomerForm = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="edit_room_type" className="col-sm-4 col-form-label">
-            Τύπος Δωματίου
+            {t("room_type")}
           </label>
           <div className="col-sm-8">
             <select
@@ -252,7 +252,7 @@ const EditCustomerForm = (props) => {
         <div className="row ">
           <div className="offset-sm-4 offset-0 col-sm-4 col-12">
             <button type="submit" className="btn btn-primary-theme ">
-              Ανανέωση Στοιχείων
+              {t("update")}
             </button>
           </div>
         </div>

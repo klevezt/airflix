@@ -39,7 +39,7 @@ const EditFoodFormType = (props) => {
           onClick={() => {
             props.handleBackButton();
           }}
-          text="Επιστροφη"
+          text={t("Επιστροφη")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -51,7 +51,7 @@ const EditFoodFormType = (props) => {
       <div className="container">
         <div className="row mb-3">
           <label htmlFor="food_type_name" className="col-sm-2 col-form-label">
-            Τύπος Φαγητού
+            {t("food_type")}
           </label>
           <div className="col-sm-10">
             <input

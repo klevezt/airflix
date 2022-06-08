@@ -13,9 +13,9 @@ const AddNewInfoDetailsForm = (props) => {
   const [newInfo, setNewInfo] = useState([...props.info]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
-  useEffect(() => {
-    // console.log(newInfo);
-  }, []);
+  // useEffect(() => {
+  //   // console.log(newInfo);
+  // }, []);
 
   const handleChangeDescription = (i, e) => {
     let newFormValues = [...newInfo];
@@ -57,7 +57,7 @@ const AddNewInfoDetailsForm = (props) => {
               onClick={() => {
                 props.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

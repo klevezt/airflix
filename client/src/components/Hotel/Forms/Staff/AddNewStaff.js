@@ -7,6 +7,7 @@ import { addStaff } from "../../../../api_requests/hotel_requests";
 import { fetchStaffPositionFromDB } from "../../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
+import ErrorComponent from "../../../Error/Error";
 
 const AddNewStaffForm = (props) => {
   const [state] = useStateValue();
@@ -21,35 +22,67 @@ const AddNewStaffForm = (props) => {
   const staffImageRef = useRef("");
   const staffDescriptionRef = useRef();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
-    fetchStaffPositionFromDB(state.token).then((data) => {
-      setDrinkTypes(data);
-      setIsSpinnerLoading(false);
-    });
+    let controller = new AbortController();
+    const exec = async () => {
+      try {
+        const data = await fetchStaffPositionFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
+        setDrinkTypes(data);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+    exec();
+    controller = null;
+    return () => controller?.abort();
   }, []);
 
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
+    try {
+      const name = staffNameRef.current.value;
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
+      const position = staffPositionRef.current.value;
+      const images = staffImageRef.current.files;
+      const description = staffDescriptionRef.current.value;
 
-    const name = staffNameRef.current.value;
-    const alias = name.replace(/\s+/g, "-").toLowerCase();
-    const position = staffPositionRef.current.value;
-    const images = staffImageRef.current.files;
-    const description = staffDescriptionRef.current.value;
+      const res = await addStaff(
+        name,
+        alias,
+        position,
+        images,
+        description,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (res.error) {
+        setErrorMessage(res.error.msg);
+        throw new Error(res.error.msg);
+      }
 
-    addStaff(name, alias, position, images, description, state.token)
-      .then(() => {
-        history.replace("/staff");
-      })
-      .catch(() => {
-        history.replace("/staff");
-      });
+      history.replace("/staff");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <form
           method="post"
           encType="multipart/form-data"
@@ -62,7 +95,7 @@ const AddNewStaffForm = (props) => {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

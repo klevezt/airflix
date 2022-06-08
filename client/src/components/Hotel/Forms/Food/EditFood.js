@@ -90,7 +90,7 @@ const EditFoodForm = (props) => {
           onClick={() => {
             props.handleBackButton();
           }}
-          text="Επιστροφη"
+          text={t("Επιστροφη")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -102,7 +102,7 @@ const EditFoodForm = (props) => {
       <div className="container">
         <div className="row mb-3">
           <label htmlFor="food_name" className="col-sm-2 col-form-label">
-            Ονομασία Φαγητού
+            {t("food_name")}
           </label>
           <div className="col-sm-10">
             <input
@@ -119,7 +119,7 @@ const EditFoodForm = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="food_type" className="col-sm-2 col-form-label">
-            Τύπος Φαγητού
+            {t("food_type")}
           </label>
           <div className="col-sm-10">
             <select
@@ -149,7 +149,7 @@ const EditFoodForm = (props) => {
           <div className="col-sm-10 offset-sm-2">
             <div className="row">
               <label htmlFor="ing" className="col-sm-12 col-form-label">
-                Συστατικά:
+                {t("ingredients")}:
                 {ingredients.map((ingredient, i) => {
                   return (
                     <Chip
@@ -188,7 +188,7 @@ const EditFoodForm = (props) => {
           <div className="col-sm-10 offset-sm-2">
             <div className="row">
               <label htmlFor="feature" className="col-sm-12 col-form-label">
-                Ιδιαίτερα χαρακτηριστικά:
+                {t("special_features")}:
                 {specialFeatures.map((features, i) => {
                   return (
                     <Chip
@@ -252,7 +252,7 @@ const EditFoodForm = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="food_desc" className="col-sm-2 col-form-label">
-            Περιγραφή Φαγητού
+            {t("description")}
           </label>
           <div className="col-sm-10">
             <textarea

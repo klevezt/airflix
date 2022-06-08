@@ -40,7 +40,7 @@ const SettingsForm = (props) => {
           onClick={() => {
             history.goBack();
           }}
-          text="Επιστροφη"
+          text={t("Επιστροφη")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"

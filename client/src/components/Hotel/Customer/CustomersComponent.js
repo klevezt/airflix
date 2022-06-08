@@ -12,6 +12,8 @@ import {
   fetchCustomersFromDB,
 } from "../../../api_requests/hotel_requests";
 
+import ErrorComponent from "../../Error/Error";
+
 import AddIcon from "@mui/icons-material/Add";
 import { Cancel, DeleteForeverSharp, Edit } from "@mui/icons-material";
 import { useStateValue } from "../../../StateProvider";
@@ -30,6 +32,9 @@ const Customers = () => {
   const [tableState, setTableState] = useState([]);
   const [showModal, setShow] = useState(false);
   const [showEditUser, setShowEditUser] = useState(false);
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [editUsername, setEditUsername] = useState("");
   const [editPassword, setEditPassword] = useState("");
@@ -86,12 +91,25 @@ const Customers = () => {
   // All useEffect Hooks
   useEffect(() => {
     let controller = new AbortController();
-    setIsSpinnerLoading(true);
+    const exec = async () => {
+      setIsSpinnerLoading(true);
+      try {
+        const users = await fetchCustomersFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (users.error) {
+          setErrorMessage(users.error.msg);
+          throw new Error(users.error.msg);
+        }
 
-    fetchCustomersFromDB(state.token).then((users) => {
-      setTableState(users);
-      setIsSpinnerLoading(false);
-    });
+        setTableState(users);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+
+    exec();
     controller = null;
     return () => controller?.abort();
   }, []);
@@ -140,49 +158,91 @@ const Customers = () => {
   ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await setCustomer(
-      new_username,
-      new_password,
-      room_number,
-      room_type,
-      state.token
-    );
-    await fetchCustomersFromDB(state.token).then((users) => {
+    try {
+      await setCustomer(
+        new_username,
+        new_password,
+        room_number,
+        room_type,
+        state.token
+      );
+      const users = await fetchCustomersFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (users.error) {
+        setErrorMessage(users.error.msg);
+        throw new Error(users.error.msg);
+      }
+
       setTableState(users);
       setIsSpinnerLoading(false);
-    });
-    setShow(false);
+      setShow(false);
+    } catch (err) {
+      setError(true);
+      setShow(false);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleEditUser = async (id) => {
     setIsSpinnerLoading(true);
-    await getCustomerEdit(id, state.token).then((user) => {
+    try {
+      const user = await getCustomerEdit(id, state.token);
+      // ---- Error Handler ---- //
+      if (user.error) {
+        setErrorMessage(user.error.msg);
+        throw new Error(user.error.msg);
+      }
+
       setEditUsername(user.username);
       setEditPassword(user.password);
       setEditRoom(user.room_number);
       setEditRoomType(user.room_type);
       setIsSpinnerLoading(false);
-    });
-    setEditUserId(id);
-    setShowEditUser(true);
+
+      setEditUserId(id);
+      setShowEditUser(true);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleUserStatus = async (id, stat) => {
     setIsSpinnerLoading(true);
-    await setUserStatus(id, stat, state.token);
-    await fetchCustomersFromDB(state.token).then((users) => {
+    try {
+      await setUserStatus(id, stat, state.token);
+      const users = await fetchCustomersFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (users.error) {
+        setErrorMessage(users.error.msg);
+        throw new Error(users.error.msg);
+      }
+
       setTableState(users);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleDeleteUser = async (id) => {
     setIsSpinnerLoading(true);
-    await deleteCustomer(id, state.token);
-    await fetchCustomersFromDB(state.token).then((users) => {
+    try {
+      await deleteCustomer(id, state.token);
+      const users = await fetchCustomersFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (users.error) {
+        setErrorMessage(users.error.msg);
+        throw new Error(users.error.msg);
+      }
+
       setTableState(users);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleSubmitEditCustomer = async (
@@ -194,24 +254,35 @@ const Customers = () => {
   ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateCustomer(
-      editUserId,
-      editUsername,
-      editPassword,
-      editRoom,
-      editRoomType,
-      state.token
-    );
-    await fetchCustomersFromDB(state.token).then((users) => {
+    try {
+      await updateCustomer(
+        editUserId,
+        editUsername,
+        editPassword,
+        editRoom,
+        editRoomType,
+        state.token
+      );
+      const users = await fetchCustomersFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (users.error) {
+        setErrorMessage(users.error.msg);
+        throw new Error(users.error.msg);
+      }
+
       setTableState(users);
       setIsSpinnerLoading(false);
-    });
-    setShowEditUser(false);
+
+      setShowEditUser(false);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (
-    <div>
-      {!showModal && !showEditUser && !isSpinnerLoading && (
+    <>
+      {!error && !showModal && !showEditUser && !isSpinnerLoading && (
         <Button
           variant="contained"
           color="primary"
@@ -222,7 +293,7 @@ const Customers = () => {
           {translate(t("Προσθήκη Πελάτη"))}
         </Button>
       )}
-      {showModal && !isSpinnerLoading && (
+      {!error && showModal && !isSpinnerLoading && (
         <Button
           variant="contained"
           color="primary"
@@ -233,7 +304,7 @@ const Customers = () => {
           {translate(t("Ακύρωση"))}
         </Button>
       )}
-      {showEditUser && !isSpinnerLoading && (
+      {!error && showEditUser && !isSpinnerLoading && (
         <Button
           variant="contained"
           color="primary"
@@ -244,7 +315,7 @@ const Customers = () => {
           {translate(t("Ακύρωση"))}
         </Button>
       )}
-      {showEditUser && !isSpinnerLoading && (
+      {!error && showEditUser && !isSpinnerLoading && (
         <EditCustomerForm
           handleSubmitEditCustomer={handleSubmitEditCustomer}
           editUsername={editUsername}
@@ -253,7 +324,7 @@ const Customers = () => {
           editRoomType={editRoomType}
         />
       )}
-      {!showModal && !showEditUser && !isSpinnerLoading && (
+      {!error && !showModal && !showEditUser && !isSpinnerLoading && (
         <MDBDataTableV5
           hover
           entriesOptions={[10, 20, 25]}
@@ -264,11 +335,12 @@ const Customers = () => {
           barReverse
         />
       )}
-      {isSpinnerLoading && <LoadingSpinner />}
-      {showModal && !showEditUser && !isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && showModal && !showEditUser && !isSpinnerLoading && (
         <AddNewCustomerForm handleAddNewUser={handleAddNewUser} />
       )}
-    </div>
+    </>
   );
 };
 

@@ -13,6 +13,8 @@ import {
   updateInfoContent,
 } from "../../../api_requests/hotel_requests";
 
+import ErrorComponent from "../../Error/Error";
+
 import { Edit, Undo } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
@@ -29,6 +31,9 @@ const InfoDetails = () => {
   const history = useHistory();
 
   const translate = (text) => removeUpperAccents(t(text));
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [tableState, setTableState] = useState([]);
   const [allInfoData, setAllInfoData] = useState([]);
@@ -66,17 +71,32 @@ const InfoDetails = () => {
   // All useEffect Hooks
   useEffect(() => {
     let controller = new AbortController();
-    setIsSpinnerLoading(true);
-    fetchInfoDetailsFromDB(params.alias, state.token).then((data) => {
-      setAllInfoData(data);
-      setTableState(data[0].content);
-      setIsSpinnerLoading(false);
-    });
+    const exec = async () => {
+      setIsSpinnerLoading(true);
+      try {
+        const data = fetchInfoDetailsFromDB(params.alias, state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
+        setAllInfoData(data);
+        setTableState(data[0].content);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+    exec();
     controller = null;
     return () => controller?.abort();
   }, []);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     tableState.forEach((info) => {
       tableRows.push({
         name: info.newInfoName,
@@ -96,70 +116,113 @@ const InfoDetails = () => {
         ),
       });
     });
+    controller = null;
+    return () => controller?.abort();
   }, [showAddMoreInfoDetails, isSpinnerLoading, tableState]);
 
   // All handle events
 
   const handleEditUser = async (id) => {
     setIsSpinnerLoading(true);
-    await getCustomerEdit(id, state.token).then((user) => {
+    try {
+      const result = await getCustomerEdit(id, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
       setIsSpinnerLoading(false);
-    });
-    setEditUserId(id);
-    setShowAddMoreInfoDetails(true);
+
+      setEditUserId(id);
+      setShowAddMoreInfoDetails(true);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
-  const handleAddNewInfoDetails = async () => {
+  const handleAddNewInfoDetails = () => {
     setShowAddMoreInfoDetails(true);
     setIsSpinnerLoading(false);
   };
 
   const handleInfoStatus = async (name, stat) => {
     setIsSpinnerLoading(true);
-    tableState.forEach((info) => {
-      if (info.newInfoName === name) {
-        info.newInfoStatus = stat;
+    try {
+      tableState.forEach((info) => {
+        if (info.newInfoName === name) {
+          info.newInfoStatus = stat;
+        }
+      });
+      await setInfoContentStatus(allInfoData[0]._id, tableState, state.token);
+      const info = await fetchInfoDetailsFromDB(params.alias, state.token);
+      // ---- Error Handler ---- //
+      if (info.error) {
+        setErrorMessage(info.error.msg);
+        throw new Error(info.error.msg);
       }
-    });
-    await setInfoContentStatus(allInfoData[0]._id, tableState, state.token);
-    await fetchInfoDetailsFromDB(params.alias, state.token).then((info) => {
+
       setTableState(info[0].content);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleDeleteUser = async (id) => {
     setIsSpinnerLoading(true);
-    await deleteCustomer(id, state.token);
-    await fetchCustomersFromDB(state.token).then((users) => {
+    try {
+      await deleteCustomer(id, state.token);
+      const users = await fetchCustomersFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (users.error) {
+        setErrorMessage(users.error.msg);
+        throw new Error(users.error.msg);
+      }
+
       setTableState(users);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleSubmitForm = async (e, newInfo) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateInfoContent(params.alias, newInfo, state.token);
-    await fetchInfoDetailsFromDB(params.alias, state.token).then((data) => {
+    try {
+      await updateInfoContent(params.alias, newInfo, state.token);
+      const data = await fetchInfoDetailsFromDB(params.alias, state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setAllInfoData(data);
       setTableState(data[0].content);
       setIsSpinnerLoading(false);
       setShowAddMoreInfoDetails(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {showAddMoreInfoDetails && !isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && showAddMoreInfoDetails && !isSpinnerLoading && (
         <AddNewInfoDetailsForm
           info={tableState}
           handleSubmitForm={handleSubmitForm}
           goBack={() => setShowAddMoreInfoDetails(false)}
         />
       )}
-      {!showAddMoreInfoDetails && !isSpinnerLoading && (
+      {!error && !showAddMoreInfoDetails && !isSpinnerLoading && (
         <>
           <div className="info-wrapper">
             <IconButton
@@ -167,7 +230,7 @@ const InfoDetails = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text="Επιστροφη"
+              text={t("Επιστροφη")}
               icon={<Undo />}
               color="warning"
               variant="contained"

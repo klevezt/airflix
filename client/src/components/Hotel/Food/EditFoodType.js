@@ -3,6 +3,7 @@ import { MDBDataTableV5 } from "mdbreact";
 import { menuFoodTypesColumns } from "../../../Helpers/Const/constants";
 import FadeUpLong from "../../hoc/FadeUpLong";
 import EditFoodFormType from "../Forms/Food/EditFoodType";
+import ErrorComponent from "../../Error/Error";
 
 import {
   setFoodTypeStatus,
@@ -26,6 +27,9 @@ const EditFoodType = () => {
   const [editFoodType, setEditFoodType] = useState(false);
   const [selectedFoodType, setSelectedFoodType] = useState();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [menu, setMenu] = useState([]);
 
@@ -36,48 +40,86 @@ const EditFoodType = () => {
 
   useEffect(() => {
     let controller = new AbortController();
-    let timer;
+
     const exec = async () => {
-      fetchFoodTypesFromDB(state.token).then((data) => {
+      try {
+        const data = await fetchFoodTypesFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+
         setFoodType(data);
         setIsSpinnerLoading(false);
-      });
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   /* Status Handler */
 
   const handleFoodTypeStatus = useCallback(async (id, status, type) => {
     setIsSpinnerLoading(true);
-    await setFoodTypeStatus(id, status, state.token);
-    if (!status) await updateFoodOfFoodType_Status(type, state.token);
-    await fetchFoodTypesFromDB(state.token).then((food) => {
+    try {
+      await setFoodTypeStatus(id, status, state.token);
+      if (!status) await updateFoodOfFoodType_Status(type, state.token);
+      const food = await fetchFoodTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (food.error) {
+        setErrorMessage(food.error.msg);
+        throw new Error(food.error.msg);
+      }
+
       setFoodType(food);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   }, []);
 
   const handleEditFoodType = useCallback(async (id) => {
     setIsSpinnerLoading(true);
-    await getFoodTypeEdit(id, state.token).then((data) => {
+    try {
+      const data = await getFoodTypeEdit(id, state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setSelectedFoodType(data);
       setEditFoodType(true);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   }, []);
 
   const handleDeleteFoodType = useCallback(async (id) => {
     setIsSpinnerLoading(true);
-    await deleteFoodType(id, state.token);
-    await fetchFoodTypesFromDB(state.token).then((food) => {
+    try {
+      await deleteFoodType(id, state.token);
+      const food = await fetchFoodTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (food.error) {
+        setErrorMessage(food.error.msg);
+        throw new Error(food.error.msg);
+      }
+
       setFoodType(food);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   }, []);
 
   const foodTableRows = useCallback(() => {
@@ -131,16 +173,26 @@ const EditFoodType = () => {
   const handleUpdateFoodType = async (e, name, image) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateFoodType(selectedFoodType._id, name, image, state.token).then(
-      () => {
-        setEditFoodType(false);
+    try {
+      await updateFoodType(selectedFoodType._id, name, image, state.token).then(
+        () => {
+          setEditFoodType(false);
+        }
+      );
+      const food = await fetchFoodTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (food.error) {
+        setErrorMessage(food.error.msg);
+        throw new Error(food.error.msg);
       }
-    );
-    await fetchFoodTypesFromDB(state.token).then((food) => {
+
       setFoodType(food);
       foodTableRows();
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -153,9 +205,10 @@ const EditFoodType = () => {
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
       <FadeUpLong>
-        {!isSpinnerLoading && !editFoodType && (
+        {!error && !isSpinnerLoading && !editFoodType && (
           <MDBDataTableV5
             hover
             entriesOptions={[10, 20, 25]}
@@ -166,7 +219,7 @@ const EditFoodType = () => {
             barReverse
           />
         )}
-        {!isSpinnerLoading && editFoodType && (
+        {!error && !isSpinnerLoading && editFoodType && (
           <EditFoodFormType
             selectedFoodType={selectedFoodType}
             handleUpdateFoodType={handleUpdateFoodType}

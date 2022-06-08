@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
-import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import {
   PhoneAndroid,
   Email,
@@ -44,7 +43,7 @@ const AddNewService = (props) => {
           onClick={() => {
             props.goBack();
           }}
-          text="Επιστροφη"
+          text={t("Επιστροφη")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"

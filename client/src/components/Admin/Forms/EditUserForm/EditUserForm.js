@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const EditUserForm = (props) => {
+  const { t } = useTranslation();
+
   const [editUsername, setEditUsername] = useState(props.editUsername);
   const [editPassword, setEditPassword] = useState(props.editPassword);
   const [editRole, setEditRole] = useState(props.editRole);
@@ -19,7 +22,7 @@ const EditUserForm = (props) => {
     >
       <div className="container">
         <label htmlFor="edit_uname">
-          <b>Username</b>
+          <b>{t("username")}</b>
         </label>
         <input
           type="text"
@@ -61,7 +64,7 @@ const EditUserForm = (props) => {
         </select>
 
         <button type="submit" className="btn btn-primary-theme">
-          Ανανέωση Στοιχείων
+          {t("update")}
         </button>
       </div>
     </form>

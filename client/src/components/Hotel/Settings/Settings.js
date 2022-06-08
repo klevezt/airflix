@@ -7,9 +7,13 @@ import {
 } from "../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
+import ErrorComponent from "../../Error/Error";
 
 const Settings = (props) => {
   const [state] = useStateValue();
+
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
   const [user, setUser] = useState("");
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
@@ -17,16 +21,26 @@ const Settings = (props) => {
   const handleUpdateUserInfo = async (e, updateUsername, updatePassword) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateUserInfo(
-      props.user._id,
-      updateUsername,
-      updatePassword,
-      state.token
-    );
-    await fetchUserInfoFromDB(props.user._id, state.token).then((data) => {
+    try {
+      await updateUserInfo(
+        props.user._id,
+        updateUsername,
+        updatePassword,
+        state.token
+      );
+      const data = await fetchUserInfoFromDB(props.user._id, state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
       setUser(data);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -34,22 +48,26 @@ const Settings = (props) => {
 
     setIsSpinnerLoading(true);
     const exec = async () => {
-      await fetchUserInfoFromDB(props.user._id, state.token).then((data) => {
-        setUser(data);
-        setIsSpinnerLoading(false);
-      });
+      const data = await fetchUserInfoFromDB(props.user._id, state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
+      setUser(data);
+      setIsSpinnerLoading(false);
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   return (
     <>
-      {isSpinnerLoading && <LoadingSpinner />}
-      {!isSpinnerLoading && (
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && !isSpinnerLoading && (
         <SettingsForm user={user} handleUpdateUserInfo={handleUpdateUserInfo} />
       )}
     </>

@@ -17,8 +17,8 @@ const MobileBottomMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleOpenMenu = () => {
-    document.body.style.overflow =
-      document.body.style.overflow === "hidden" ? "scroll" : "hidden";
+    // document.body.style.overflow =
+      // document.body.style.overflow === "hidden" ? "scroll" : "hidden";
     setIsMenuOpen((s) => !s);
   };
 

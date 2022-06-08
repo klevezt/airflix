@@ -5,10 +5,13 @@ import IconButton from "../UI/Buttons/IconButton";
 import ButtonLoadingSpinner from "../UI/Spinners/ButtonLoadingSpinner";
 import { authenticateUserWithToken } from "../../api_requests/auth_requests";
 import ErrorComponent from "../Error/Error";
+import { useTranslation } from "react-i18next";
 
 import "./LoginForm.css";
 
 const LoginForm = () => {
+  const { t } = useTranslation();
+
   const [username, setUsername] = useState("");
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
@@ -102,7 +105,7 @@ const LoginForm = () => {
           <div className="container">
             <div className="row mb-3">
               <label htmlFor="uname" className="col-sm-2 col-form-label">
-                Username
+                {t("username")}
               </label>
               <div className="col-sm-10">
                 <input
