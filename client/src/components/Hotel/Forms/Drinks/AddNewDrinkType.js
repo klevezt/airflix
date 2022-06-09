@@ -67,7 +67,7 @@ const AddNewDrinkType = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("Επιστροφη")}
+              text={t("back")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -91,7 +91,7 @@ const AddNewDrinkType = () => {
               </div>
             </div>
             <div className="row mb-3">
-              <label className="col-sm-2 col-form-label">Εικόνα</label>
+              <label className="col-sm-2 col-form-label">{t("image")}</label>
               <div className="col-sm-10">
                 <input
                   className="form-control form-control-sm"

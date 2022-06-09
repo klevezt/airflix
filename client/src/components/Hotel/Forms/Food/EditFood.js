@@ -90,7 +90,7 @@ const EditFoodForm = (props) => {
           onClick={() => {
             props.handleBackButton();
           }}
-          text={t("Επιστροφη")}
+          text={t("back")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -166,7 +166,7 @@ const EditFoodForm = (props) => {
               <div className="col-sm-5">
                 <input
                   type="text"
-                  placeholder="Προσθήκη νέου συστατικού"
+                  placeholder={t("add_new_ingredient")}
                   className="form-control form-control-sm"
                   id="ingr"
                   autoComplete="off"
@@ -205,7 +205,7 @@ const EditFoodForm = (props) => {
               <div className="col-sm-5">
                 <input
                   type="text"
-                  placeholder="Προσθήκη νέου χαρακτηριστικού"
+                  placeholder={t("add_new_feature")}
                   className="form-control form-control-sm"
                   id="feature"
                   autoComplete="off"
@@ -227,7 +227,7 @@ const EditFoodForm = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="drink_images" className="col-sm-2 col-form-label">
-            {t("Αλλαγή εικόνων")}
+            {t("change_images")}
           </label>
           <div className="col-sm-10 align-self-center">
             <input

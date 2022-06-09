@@ -1,26 +1,44 @@
 const router = require("express").Router();
 
 let Food = require("../models/food.model");
-const { validateToken } = require("./auth");
 
-// router.all("*", [validateToken]);
-router.route("/").get((req, res) => {
+router.route("/").get((req, res, next) => {
   Food.find(req.query)
     .then((food) => {
-      res.json(food);
+      if (!food) {
+        const error = new Error("Could not find food.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(food);
     })
-    .catch((err) => res.status(400).json("Error: " + err));
-});
-
-router.route("/:id").get((req, res) => {
-  Food.findById(req.params.id)
-    .then((food) => res.json(food))
     .catch((err) => {
-      console.log(err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 });
 
-router.route("/add").post((req, res) => {
+router.route("/:id").get((req, res, next) => {
+  Food.findById(req.params.id)
+    .then((food) => {
+      if (!food) {
+        const error = new Error("Could not find food.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(food);
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+});
+
+router.route("/add").post((req, res, next) => {
   const name = req.body.name;
   const type = req.body.type;
   const images = req.body.images;
@@ -39,60 +57,100 @@ router.route("/add").post((req, res) => {
 
   newFood
     .save()
-    .then(() => res.json("Food added!"))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not add food.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(201).json({ message: "Food successfully added!" });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
-router.route("/status/:id").put((req, res) => {
+router.route("/status/:id").put((req, res, next) => {
   Food.findByIdAndUpdate(
     req.params.id,
     req.body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors
-      if (err) return res.status(500).send(err);
-      return res.send(todo);
+      if (err) {
+        const error = new Error("Food database error.");
+        throw error;
+      }
+      res.status(200).json({ message: "Food status successfully updated!" });
     }
   ).catch((err) => {
-    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   });
 });
 
-router.route("/update-food-type-statuses").put((req, res) => {
+router.route("/update-food-type-statuses").put((req, res, next) => {
   const myFilterQuery = { type: req.body.type };
 
   const changeValuesTo = { $set: { status: req.body.status } };
   Food.updateMany(myFilterQuery, changeValuesTo, () => {})
-    .then(() => {
-      res.json("Food Successfully Updated!!!!");
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not find food.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: "Food successfully updated!" });
     })
     .catch((err) => {
-      console.log(err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 });
 
-router.route("/update/:id").put((req, res) => {
+router.route("/update/:id").put((req, res, next) => {
   Food.findByIdAndUpdate(
     req.params.id,
     req.body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors
-      if (err) return res.status(500).send(err);
-      return res.send(todo);
+      if (err) {
+        const error = new Error("Food database error.");
+        throw error;
+      }
+      res.status(200).json({ message: "Food successfully updated!" });
     }
   ).catch((err) => {
-    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   });
 });
 
-router.route("/delete/:id").delete((req, res) => {
+router.route("/delete/:id").delete((req, res, next) => {
   Food.findByIdAndDelete(req.params.id)
-    .then(() => {
-      res.json("Food Successfully Deleted!!!!");
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not find food.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: "Food successfully deleted!" });
     })
     .catch((err) => {
-      console.log(err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 });
 

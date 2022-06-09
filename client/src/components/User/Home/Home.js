@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
@@ -166,7 +166,7 @@ const Home = () => {
 
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -309,7 +309,7 @@ const Home = () => {
   });
 
   const todaysMenu = todayBuffet.map((_, i) => {
-    if (i !== 0) return;
+    if (i !== 0) return "";
     return (
       <div className={`mt-3 ${!isThereFoodToday ? "mb-5" : ""}`} key={i}>
         <div className="user-home-general-headline-wrapper">
@@ -321,14 +321,14 @@ const Home = () => {
           </div>
         )}
         {!isThereFoodToday && (
-          <p className="kp-warning">Δεν υπάρχουν καταχωρημένα φαγητά</p>
+          <p className="kp-warning">{t("no_registered_food")}</p>
         )}
       </div>
     );
   });
 
   const featuredInfo = info.map((inf, i) => {
-    if (!inf.featured) return;
+    if (!inf.featured) return "";
     return (
       <div className="mb-3 kp-each-info" key={i}>
         <h6>{t(inf.name)}</h6>

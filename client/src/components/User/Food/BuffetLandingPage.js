@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import ReactDOM from "react-dom";
 import IconButton from "../../UI/Buttons/IconButton";
 import { Search, Close } from "@mui/icons-material";
@@ -15,7 +15,7 @@ import { fetchTodaysMenuFromDB } from "../../../api_requests/user_requests";
 import { useTranslation } from "react-i18next";
 import {
   fetchFoodFromDBWithParams,
-  fetchFoodTypesFromDB,
+  // fetchFoodTypesFromDB,
 } from "../../../api_requests/hotel_requests";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";

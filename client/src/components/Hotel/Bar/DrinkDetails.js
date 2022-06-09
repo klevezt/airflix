@@ -67,7 +67,7 @@ function DrinkDetails() {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("Επιστροφη")}
+              text={t("back")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

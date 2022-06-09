@@ -87,7 +87,7 @@ const EditDrink = (props) => {
           onClick={() => {
             props.toggleEditDrink();
           }}
-          text={t("Επιστροφη")}
+          text={t("back")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -120,7 +120,7 @@ const EditDrink = (props) => {
           </label>
           <div className="col-sm-10">
             <select
-              className="form-select  mt-2 mb-3"
+              className="form-select mt-2 mb-3"
               name="drink_type"
               id="drink_type"
               defaultValue={editDrinkType}
@@ -164,7 +164,7 @@ const EditDrink = (props) => {
                 <div className="col-sm-5">
                   <input
                     type="text"
-                    placeholder="Προσθήκη νέου συστατικού"
+                    placeholder={t("add_new_ingredient")}
                     className="form-control form-control-sm"
                     id="ingr"
                     autoComplete="off"
@@ -187,7 +187,7 @@ const EditDrink = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="drink_images" className="col-sm-2 col-form-label">
-            {t("Αλλαγή εικόνων")}
+            {t("change_images")}
           </label>
           <div className="col-sm-10 align-self-center">
             <input

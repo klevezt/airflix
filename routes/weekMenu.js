@@ -1,17 +1,25 @@
 const router = require("express").Router();
 
 let weekMenu = require("../models/weekMenu.model");
-const { validateToken } = require("./auth");
 
-// router.all("*", [validateToken]);
 router.route("/").get((req, res) => {
   const obj = req.query;
   weekMenu
     .find({ month: obj.month, year: obj.year })
     .then((week) => {
-      res.json(week);
+      if (!week) {
+        const error = new Error("Could not find week.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(week);
     })
-    .catch((err) => res.status(400).json("Error: " + err));
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
 router.route("/getFullDay").get((req, res) => {
@@ -19,9 +27,19 @@ router.route("/getFullDay").get((req, res) => {
   weekMenu
     .find({ week: obj.week, month: obj.month, year: obj.year })
     .then((week) => {
-      res.json(week);
+      if (!week) {
+        const error = new Error("Could not find week.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(week);
     })
-    .catch((err) => res.status(400).json("Error: " + err));
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
 router.route("/add").post((req, res) => {
@@ -29,8 +47,20 @@ router.route("/add").post((req, res) => {
 
   week
     .save()
-    .then(() => res.json("Week added!"))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not add week.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(201).json({ message: "Week successfully added!" });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
 router.route("/update").put((req, res) => {
@@ -42,13 +72,18 @@ router.route("/update").put((req, res) => {
       { new: true },
       (err, todo) => {
         // Handle any possible database errors
-        if (err) return res.status(500).send(err);
-        return res.send(todo);
+        if (err) {
+          const error = new Error("Week database error.");
+          throw error;
+        }
+        res.status(200).json({ message: "Week status successfully updated!" });
       }
     )
-    // .then((i) => console.log(i))
     .catch((err) => {
-      console.log("Error" + err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 });
 

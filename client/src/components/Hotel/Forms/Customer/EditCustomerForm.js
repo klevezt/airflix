@@ -100,7 +100,7 @@ const EditCustomerForm = (props) => {
       }}
     >
       <div className="form-header">
-        <h2 className="form-headline">{t("Νέος Πελάτης")}</h2>
+        <h2 className="form-headline">{t("new_customer")}</h2>
       </div>
       <div className="container">
         <div className="row mb-3">
@@ -164,7 +164,7 @@ const EditCustomerForm = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="changePSW" className="col-sm-4 col-form-label">
-            {t("Αλλαγή Κωδικού")}
+            {t("change_password")}
           </label>
           <div className="col-sm-8 align-self-center">
             <input
@@ -181,7 +181,7 @@ const EditCustomerForm = (props) => {
           <>
             <div className="row mb-3">
               <label htmlFor="psw" className="col-sm-4 col-form-label">
-                {t("Νέος Κωδικός")}
+                {t("new_password")}
               </label>
               <div className="col-sm-8 input-password-wrapper">
                 <input
@@ -200,7 +200,6 @@ const EditCustomerForm = (props) => {
                 />
                 <div className="toggle-visibility-wrapper">
                   <IconButton
-                    className=""
                     onClick={togglePassword}
                     icon={
                       !passwordShown ? <Visibility /> : <VisibilityOffIcon />
@@ -213,7 +212,7 @@ const EditCustomerForm = (props) => {
             </div>
             <div className="row mb-3">
               <label htmlFor="psw_confirm" className="col-sm-4 col-form-label">
-                {t("Επιβεβαίωση Νέου Κωδικού")}
+                {t("verify_new_password")}
               </label>
               <div className="col-sm-8 input-password-wrapper">
                 <input
@@ -232,7 +231,6 @@ const EditCustomerForm = (props) => {
                 />
                 <div className="toggle-visibility-wrapper">
                   <IconButton
-                    className=""
                     onClick={toggleConfirmPassword}
                     icon={
                       !passwordConfirmShown ? (
@@ -249,7 +247,7 @@ const EditCustomerForm = (props) => {
             </div>
           </>
         )}
-        <div className="row ">
+        <div className="row">
           <div className="offset-sm-4 offset-0 col-sm-4 col-12">
             <button type="submit" className="btn btn-primary-theme ">
               {t("update")}

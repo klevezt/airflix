@@ -95,7 +95,7 @@ const AddNewStaffForm = (props) => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("Επιστροφη")}
+              text={t("back")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -123,7 +123,7 @@ const AddNewStaffForm = (props) => {
               </div>
             </div>
             <div className="row mb-3">
-              <label className="col-sm-2 col-form-label">Εικόνες</label>
+              <label className="col-sm-2 col-form-label">{t("image")}</label>
               <div className="col-sm-10">
                 <input
                   className="form-control form-control-sm"
@@ -139,7 +139,7 @@ const AddNewStaffForm = (props) => {
                 htmlFor="staff_position"
                 className="col-sm-2 col-form-label"
               >
-                {t("Πόστο")}
+                {t("staff_position")}
               </label>
               <div className="col-sm-10">
                 <select

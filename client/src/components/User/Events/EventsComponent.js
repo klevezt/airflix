@@ -75,7 +75,7 @@ const EventsComponent = () => {
   }, []);
 
   const upcomingEvent = events.map((event, i) => {
-    if (i !== 0) return;
+    if (i !== 0) return "";
     return (
       <Fragment key={i}>
         <div className="col-lg-6" key={i}>
@@ -107,7 +107,7 @@ const EventsComponent = () => {
   });
 
   const recentEvents = events.map((event, i) => {
-    if (i === 0) return;
+    if (i === 0) return "";
     return (
       <div className="col-lg-4" key={i}>
         <div className="user-home-events latest-post-box">

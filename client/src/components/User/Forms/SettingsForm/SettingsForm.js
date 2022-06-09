@@ -108,7 +108,7 @@ const SettingsForm = (props) => {
             htmlFor="changePSW"
             className="col-10 col-sm-5 col-md-4 col-form-label"
           >
-            {t("Αλλαγή Κωδικού")}
+            {t("change_password")}
           </label>
           <div className="col-1 col-md-8 align-self-center">
             <input
@@ -125,7 +125,7 @@ const SettingsForm = (props) => {
           <>
             <div className="row mb-3">
               <label htmlFor="psw" className="col-sm-4 col-form-label">
-                {t("Νέος Κωδικός")}
+                {t("new_password")}
               </label>
               <div className="col-sm-8 input-password-wrapper">
                 <input
@@ -155,7 +155,7 @@ const SettingsForm = (props) => {
             </div>
             <div className="row mb-3">
               <label htmlFor="psw_confirm" className="col-sm-4 col-form-label">
-                {t("Επιβεβαίωση Νέου Κωδικού")}
+                {t("verify_new_password")}
               </label>
               <div className="col-sm-8 input-password-wrapper">
                 <input

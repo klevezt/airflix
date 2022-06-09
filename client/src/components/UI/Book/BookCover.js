@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Search } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 import "./BookCover.css";
 
 const BookCover = (props) => {
+  const { t } = useTranslation();
   const [myArray, setArr] = useState([]);
 
   useEffect(() => {
@@ -37,7 +39,7 @@ const BookCover = (props) => {
         <>
           {myArray.length === 0 ? (
             <h2 className="text-center color-white h-fit-content">
-              Δεν υπάρχουν καταχωρημένα φαγητά
+              {t("no_registered_food")}
             </h2>
           ) : (
             props.catalog

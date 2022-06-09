@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Rating } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const ReviewDetails = (props) => {
+  const { t } = useTranslation();
+
   const [reviewRating, setReviewRating] = useState(props.review.rating);
   const [reviewContent, setReviewContent] = useState(props.review.content);
 
@@ -34,7 +37,7 @@ const ReviewDetails = (props) => {
             htmlFor="review_desc"
             className="col-sm-12 col-form-label text-center"
           >
-            Σχόλια
+            {t("comments")}
           </label>
           <div className="col-sm-12">
             <textarea
@@ -53,7 +56,7 @@ const ReviewDetails = (props) => {
             htmlFor="food_type"
             className="col-sm-12 col-form-label text-center"
           >
-            Βαθμολογία!
+            {t("score")}
           </label>
           <div className="col-sm-12 text-center">
             <Rating

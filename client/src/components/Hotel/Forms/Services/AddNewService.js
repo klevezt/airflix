@@ -43,13 +43,13 @@ const AddNewService = (props) => {
           onClick={() => {
             props.goBack();
           }}
-          text={t("Επιστροφη")}
+          text={t("back")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
         />
 
-        <h2 className="form-headline">{t("Νέα Υπηρεσία")}</h2>
+        <h2 className="form-headline">{t("new_service")}</h2>
         <hr className="m-0" />
       </div>
       <div className="container">
@@ -65,7 +65,7 @@ const AddNewService = (props) => {
               name="service_name"
               id="service_name"
               ref={serviceNameRef}
-              placeholder="Ονομασία Υπηρεσίας"
+              placeholder={t("new_service")}
               autoComplete="off"
               required
             />
@@ -73,7 +73,7 @@ const AddNewService = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="service_image" className="col-sm-2 col-form-label">
-            Εικόνα
+            {t("image")}
           </label>
           <div className="col-sm-10">
             <input
@@ -100,7 +100,7 @@ const AddNewService = (props) => {
               className="form-control form-control-sm"
               id="service_phone"
               name="service_phone"
-              placeholder="Τηλέφωνο Επικοινωνίας"
+              placeholder={t("contact_number")}
               ref={servicePhoneRef}
               autoComplete="off"
               required
@@ -137,7 +137,7 @@ const AddNewService = (props) => {
               className="form-control form-control-sm"
               id="service_location"
               name="service_location"
-              placeholder="Σύνδεσμος Χάρτη"
+              placeholder={t("map_link")}
               ref={serviceLocationRef}
               autoComplete="off"
               required
@@ -157,7 +157,7 @@ const AddNewService = (props) => {
               className="form-control form-control-sm"
               id="service_description"
               name="service_description"
-              placeholder="Μια σύντομη περιγραφή..."
+              placeholder={t("short_description")}
               ref={serviceDescription}
               autoComplete="off"
               required

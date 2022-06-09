@@ -2,34 +2,64 @@ const router = require("express").Router();
 
 let Err = require("../models/error.model");
 
-router.route("/").get((req, res) => {
+router.route("/").get((req, res, next) => {
   Err.find(req.query)
-    .then((food) => {
-      res.json(food);
+    .then((customError) => {
+      if (!customError) {
+        const error = new Error("Could not find error.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(customError);
     })
-    .catch((err) => res.status(400).json("Error: " + err));
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
-router.route("/add").post((req, res) => {
+router.route("/add").post((req, res, next) => {
   const content = req.body.content;
 
   const newError = new Err({
-    content
+    content,
   });
 
   newError
     .save()
-    .then(() => res.json("Error added!"))
-    .catch((err) => res.status(400).json("Error: " + err));
-});
-
-router.route("/delete/:id").delete((req, res) => {
-  Err.findByIdAndDelete(req.params.id)
-    .then(() => {
-      res.json("Error Successfully Deleted!!!!");
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not add error.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json("Error added!");
     })
     .catch((err) => {
-      console.log(err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+});
+
+router.route("/delete/:id").delete((req, res, next) => {
+  Err.findByIdAndDelete(req.params.id)
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not find error.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: "Error successfully deleted!" });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 });
 

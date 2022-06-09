@@ -35,6 +35,11 @@ const Error = (props) => {
       .catch((err) => err);
   };
 
+  const message = props.errorMessage ? props.errorMessage : t("general_error");
+  const btnText = props.errorButtonText
+    ? props.errorButtonText
+    : "Ανανεώστε τη σελίδα";
+
   return reactDom.createPortal(
     <Modal
       aria-labelledby="transition-modal-title"
@@ -49,29 +54,15 @@ const Error = (props) => {
     >
       <Fade in={open}>
         <div className="error-wrapper">
-          <p>{props.errorMessage}</p>
-
+          <p>{message}</p>
           <form className="general-form">
-            {!props.loggout ? (
-              <IconButton
-                className="btn error-btn"
-                onClick={submitHandler}
-                text={
-                  props.errorButtonText
-                    ? props.errorButtonText
-                    : "Ανανεώστε τη σελίδα"
-                }
-                variant="contained"
-              />
-            ) : (
-              <IconButton
-                text={props.errorButtonText ? props.errorButtonText : t("exit")}
-                icon={<ExitToApp className="mr-2" />}
-                variant="contained"
-                className="btn error-btn"
-                onClick={props.handleClose}
-              />
-            )}
+            <IconButton
+              text={btnText}
+              icon={props.loggout && <ExitToApp className="mr-2" />}
+              variant="contained"
+              className="btn error-btn"
+              onClick={props.loggout ? props.handleClose : submitHandler}
+            />
           </form>
         </div>
       </Fade>

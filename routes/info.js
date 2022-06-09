@@ -1,25 +1,44 @@
 const router = require("express").Router();
-const { validateToken } = require("./auth");
 
 let Info = require("../models/info.model");
 
-// router.all("*", [validateToken]);
-
-router.route("/").get((req, res) => {
+router.route("/").get((req, res, next) => {
   Info.find(req.query)
     .then((info) => {
-      res.json(info);
+      if (!info) {
+        const error = new Error("Could not find info.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(info);
     })
-    .catch((err) => res.status(400).json("Error: " + err));
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
-router.route("/:id").get((req, res) => {
+router.route("/:id").get((req, res, next) => {
   Info.findById(req.params.id)
-    .then((info) => res.json(info))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((info) => {
+      if (!info) {
+        const error = new Error("Could not find info.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(info);
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
-router.route("/add").post((req, res) => {
+router.route("/add").post((req, res, next) => {
   const name = req.body.name;
   const image = req.body.image;
   const content = req.body.content;
@@ -34,62 +53,100 @@ router.route("/add").post((req, res) => {
 
   newInfo
     .save()
-    .then(() => res.json("Info added!"))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not add info.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(201).json({ message: "Info successfully added!" });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
-router.route("/status/:id").put((req, res) => {
+router.route("/status/:id").put((req, res, next) => {
   Info.findByIdAndUpdate(
     req.params.name,
     req.body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors
-      if (err) return res.status(500).send(err);
-      return res.send(todo);
+      if (err) {
+        const error = new Error("Info database error.");
+        throw error;
+      }
+      res.status(200).json({ message: "Info status successfully updated!" });
     }
   ).catch((err) => {
-    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   });
 });
 
-router.route("/update/:id").put((req, res) => {
+router.route("/update/:id").put((req, res, next) => {
   Info.findByIdAndUpdate(
     req.params.id,
     req.body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors
-      if (err) return res.status(500).send(err);
-      return res.send(todo);
+      if (err) {
+        const error = new Error("Info database error.");
+        throw error;
+      }
+      res.status(200).json({ message: "Info successfully updated!" });
     }
   ).catch((err) => {
-    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   });
 });
 
-router.route("/content/update/:alias").put((req, res) => {
+router.route("/content/update/:alias").put((req, res, next) => {
   Info.findOneAndUpdate(
     { alias: req.params.alias },
     req.body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors
-      if (err) return res.status(500).send(err);
-      return res.send(todo);
+      if (err) {
+        const error = new Error("Info database error.");
+        throw error;
+      }
+      res.status(200).json({ message: "Info content successfully updated!" });
     }
   ).catch((err) => {
-    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   });
 });
 
-router.route("/delete/:id").delete((req, res) => {
+router.route("/delete/:id").delete((req, res, next) => {
   Info.findByIdAndDelete(req.params.id)
-    .then(() => {
-      res.json("Info Successfully Deleted!!!!");
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not find info.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: "Info successfully deleted!" });
     })
     .catch((err) => {
-      console.log(err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 });
 

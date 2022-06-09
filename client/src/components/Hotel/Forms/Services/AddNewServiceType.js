@@ -59,13 +59,13 @@ const AddNewServiceType = (props) => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("Επιστροφη")}
+              text={t("back")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
             />
 
-            <h2 className="form-headline">{t("Νέα Υπηρεσία")}</h2>
+            <h2 className="form-headline">{t("new_service")}</h2>
             <hr className="m-0" />
           </div>
           <div className="container">
@@ -88,7 +88,7 @@ const AddNewServiceType = (props) => {
             </div>
             <div className="row mb-3">
               <label htmlFor="info_image" className="col-sm-2 col-form-label">
-                Εικόνα
+                {t("image")}
               </label>
               <div className="col-sm-10">
                 <input

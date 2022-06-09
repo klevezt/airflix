@@ -42,7 +42,7 @@ const EditAlacarteType = (props) => {
           onClick={() => {
             props.toggleEditAlacarteType();
           }}
-          text={t("Επιστροφη")}
+          text={t("back")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -72,7 +72,7 @@ const EditAlacarteType = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="drink_images" className="col-sm-2 col-form-label">
-            {t("Αλλαγή εικόνων")}
+            {t("change_images")}
           </label>
           <div className="col-sm-10 align-self-center">
             <input

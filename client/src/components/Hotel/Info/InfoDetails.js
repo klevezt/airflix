@@ -230,7 +230,7 @@ const InfoDetails = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("Επιστροφη")}
+              text={t("back")}
               icon={<Undo />}
               color="warning"
               variant="contained"

@@ -1,24 +1,44 @@
 const router = require("express").Router();
 
 let Service = require("../models/service.model");
-const { validateToken } = require("./auth");
 
-// router.all("*", [validateToken]);
-router.route("/").get((req, res) => {
+router.route("/").get((req, res, next) => {
   Service.find(req.query)
     .then((service) => {
-      res.json(service);
+      if (!service) {
+        const error = new Error("Could not find service.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(service);
     })
-    .catch((err) => res.status(400).json("Error: " + err));
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
-router.route("/:id").get((req, res) => {
+router.route("/:id").get((req, res, next) => {
   Service.findById(req.params.id)
-    .then((service) => res.json(service))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((service) => {
+      if (!service) {
+        const error = new Error("Could not find service.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(service);
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
-router.route("/add").post((req, res) => {
+router.route("/add").post((req, res, next) => {
   const name = req.body.name;
   const image = req.body.image;
   const type = req.body.type;
@@ -41,47 +61,79 @@ router.route("/add").post((req, res) => {
 
   newService
     .save()
-    .then(() => res.json("Service added!"))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not add service.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(201).json({ message: "Service successfully added!" });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
-router.route("/status/:id").put((req, res) => {
+router.route("/status/:id").put((req, res, next) => {
   Service.findByIdAndUpdate(
     req.params.name,
     req.body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors
-      if (err) return res.status(500).send(err);
-      return res.send(todo);
+      if (err) {
+        const error = new Error("Review database error.");
+        throw error;
+      }
+      res.status(200).json({ message: "Review successfully updated!" });
     }
   ).catch((err) => {
-    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   });
 });
 
-router.route("/update/:id").put((req, res) => {
+router.route("/update/:id").put((req, res, next) => {
   Service.findByIdAndUpdate(
     req.params.id,
     req.body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors
-      if (err) return res.status(500).send(err);
-      return res.send(todo);
+      if (err) {
+        const error = new Error("Review database error.");
+        throw error;
+      }
+      res.status(200).json({ message: "Review status successfully updated!" });
     }
   ).catch((err) => {
-    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   });
 });
 
-router.route("/delete/:id").delete((req, res) => {
+router.route("/delete/:id").delete((req, res, next) => {
   Service.findByIdAndDelete(req.params.id)
-    .then(() => {
-      res.json("Service Successfully Deleted!!!!");
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not find service.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: "Service successfully deleted!" });
     })
     .catch((err) => {
-      console.log(err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 });
 

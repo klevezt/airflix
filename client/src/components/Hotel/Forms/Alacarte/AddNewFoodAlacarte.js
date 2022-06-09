@@ -120,7 +120,7 @@ const AddNewFoodForm = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("Επιστροφη")}
+              text={t("back")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -195,7 +195,7 @@ const AddNewFoodForm = () => {
                   <div className="col-sm-5">
                     <input
                       type="text"
-                      placeholder="Προσθήκη νέου συστατικού"
+                      placeholder={t("add_new_ingredient")}
                       className="form-control form-control-sm"
                       id="alacarte-ingredients"
                       autoComplete="off"
@@ -217,7 +217,7 @@ const AddNewFoodForm = () => {
             </div>
 
             <div className="row mb-3">
-              <label className="col-sm-2 col-form-label">Εικόνες</label>
+              <label className="col-sm-2 col-form-label">{t("image")}</label>
               <div className="col-sm-10">
                 <input
                   className="form-control form-control-sm"
@@ -251,7 +251,7 @@ const AddNewFoodForm = () => {
                   type="text"
                   id="drink_price"
                   className="form-control"
-                  aria-label="Dollar amount (with dot and two decimal places)"
+                  aria-label="Euro amount (with dot and two decimal places)"
                   autoComplete="off"
                   ref={priceRef}
                 />

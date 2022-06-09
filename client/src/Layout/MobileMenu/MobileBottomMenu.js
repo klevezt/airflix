@@ -17,8 +17,6 @@ const MobileBottomMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleOpenMenu = () => {
-    // document.body.style.overflow =
-      // document.body.style.overflow === "hidden" ? "scroll" : "hidden";
     setIsMenuOpen((s) => !s);
   };
 
@@ -36,13 +34,13 @@ const MobileBottomMenu = () => {
         <li>
           <NavLink exact to="/drinks">
             <LocalBar className="mobile-menu-icon" />
-            <h5> {t("Ποτό")} </h5>
+            <h5> {t("sidebar_drinks")} </h5>
           </NavLink>
         </li>
         <li>
           <NavLink exact to="/food">
             <RestaurantMenu className="mobile-menu-icon" />
-            <h5> {t("Φαγητό")} </h5>
+            <h5> {t("sidebar_food")} </h5>
           </NavLink>
         </li>
 
@@ -60,7 +58,7 @@ const MobileBottomMenu = () => {
         </li>
         <li onClick={handleOpenMenu}>
           <Menu className="mobile-menu-icon" />
-          <h5> {t("Μενού")} </h5>
+          <h5> {t("menu")} </h5>
         </li>
       </ul>
     </div>

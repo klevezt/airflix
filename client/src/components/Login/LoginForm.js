@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { actionTypes } from "../../reducer";
 import { useStateValue } from "../../StateProvider";
 import IconButton from "../UI/Buttons/IconButton";
@@ -16,7 +16,6 @@ const LoginForm = () => {
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
-  // const [submitError, setSubmitError] = useState(false);
   const [isButtomSpinnerLoading, setIsButtonSpinnerLoading] = useState(false);
 
   const [error, setError] = useState(false);
@@ -50,7 +49,7 @@ const LoginForm = () => {
         });
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setError(true);
         setErrorMessage(
           "Υπάρχει πρόβλημα κατά την σύνδεση. Δοκιμάστε ξανά σε λίγο!"
@@ -104,10 +103,10 @@ const LoginForm = () => {
           </div>
           <div className="container">
             <div className="row mb-3">
-              <label htmlFor="uname" className="col-sm-2 col-form-label">
+              <label htmlFor="uname" className="col-sm-3 col-form-label">
                 {t("username")}
               </label>
-              <div className="col-sm-10">
+              <div className="col-sm-9">
                 <input
                   className={`form-control form-control-sm ${
                     usernameError ? "input-error" : ""
@@ -124,10 +123,10 @@ const LoginForm = () => {
               </div>
             </div>
             <div className="row mb-3">
-              <label htmlFor="psw" className="col-sm-2 col-form-label">
-                Password
+              <label htmlFor="psw" className="col-sm-3 col-form-label">
+                {t("password")}
               </label>
-              <div className="col-sm-10">
+              <div className="col-sm-9">
                 <input
                   className={`form-control form-control-sm ${
                     passwordError ? "input-error" : ""
@@ -165,13 +164,6 @@ const LoginForm = () => {
               />
             )}
           </div>
-          {/* {submitError && (
-              <div className="row mb-3 text-center">
-                <span style={{ color: "red" }}>
-                  Δεν είναι σωστά τα στοιχεία εισόδου
-                </span>
-              </div>
-            )} */}
         </form>
       </div>
     </>

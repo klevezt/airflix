@@ -94,7 +94,7 @@ const EventsComponent = () => {
         </Fragment>
       );
     }
-    return false;
+    return "";
   });
 
   const recentEvents = events.map((event, i) => {
@@ -126,7 +126,7 @@ const EventsComponent = () => {
         </div>
       );
     }
-    return false;
+    return "";
   });
 
   return (

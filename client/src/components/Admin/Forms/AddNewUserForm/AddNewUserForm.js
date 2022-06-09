@@ -28,7 +28,7 @@ const AddNewUserForm = (props) => {
       }
     >
       <div className="form-header">
-        <h2 className="form-headline">{t("Νέος Πελάτης")}</h2>
+        <h2 className="form-headline">{t("new_customer")}</h2>
       </div>
       <div className="container">
         <div className="row mb-3">

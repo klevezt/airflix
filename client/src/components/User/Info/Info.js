@@ -48,7 +48,7 @@ const Info = () => {
     return () => {
       controller?.abort();
     };
-  }, []);
+  }, [state.token]);
 
   const allInfo = info.map((inf, i) => {
     return (

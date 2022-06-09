@@ -45,8 +45,8 @@ const weekMenuRouter = require("./routes/weekMenu");
 const review = require("./routes/review");
 const alacarte = require("./routes/alacarte");
 const alacarteType = require("./routes/alacarteType");
-const staff = require("./routes/staff");
-const staffPosition = require("./routes/staffPosition");
+// const staff = require("./routes/staff");
+// const staffPosition = require("./routes/staffPosition");
 const events = require("./routes/events");
 const info = require("./routes/info");
 const service = require("./routes/service");
@@ -65,8 +65,8 @@ app.use("/weekMenu", authToken, weekMenuRouter);
 app.use("/review", authToken, review);
 app.use("/alacarte", authToken, alacarte);
 app.use("/alacarteType", authToken, alacarteType);
-app.use("/staff", authToken, staff);
-app.use("/staffPosition", authToken, staffPosition);
+// app.use("/staff", authToken, staff);
+// app.use("/staffPosition", authToken, staffPosition);
 app.use("/events", authToken, events);
 app.use("/info", authToken, info);
 app.use("/service", authToken, service);
@@ -75,6 +75,14 @@ app.use("/rate", authToken, rate);
 
 app.use("/auth", auth);
 app.use("/error", error);
+
+app.use((error, req, res, next) => {
+  // console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data });
+});
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));

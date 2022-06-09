@@ -119,7 +119,7 @@ const AddNewDrink = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("Επιστροφη")}
+              text={t("back")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -191,7 +191,7 @@ const AddNewDrink = () => {
                   <div className="col-sm-5">
                     <input
                       type="text"
-                      placeholder="Προσθήκη νέου συστατικού"
+                      placeholder={t("add_new_ingredient")}
                       className="form-control form-control-sm"
                       id="ingr"
                       autoComplete="off"
@@ -213,7 +213,7 @@ const AddNewDrink = () => {
             </div>
 
             <div className="row mb-3">
-              <label className="col-sm-2 col-form-label">Εικόνες</label>
+              <label className="col-sm-2 col-form-label">{t("image")}</label>
               <div className="col-sm-10">
                 <input
                   className="form-control form-control-sm"

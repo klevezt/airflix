@@ -6,7 +6,7 @@ import Sidebar from "../../Layout/Sidebar/SidebarComponent";
 import { useStateValue } from "../../StateProvider";
 import Events from "./Events/EventsComponent";
 import FoodLandingPage from "./Food/FoodLandingPage";
-import Settings from "./Settings/Settings";
+// import Settings from "./Settings/Settings";
 import MobileBottomMenu from "../../Layout/MobileMenu/MobileBottomMenu";
 
 import "./UserComponent.css";
@@ -15,18 +15,17 @@ import DrinksDetailsPage from "./Drinks/DrinksDetailsPage";
 import AlacarteLandingPage from "./Alacarte/AlacarteLandingPage";
 import AlacarteDetailsPage from "./Alacarte/AlacarteDetailsPage";
 import BuffetLandingPage from "./Food/BuffetLandingPage";
-import BuffetDetailsPage from "./Food/BuffetDetailsPage";
+// import BuffetDetailsPage from "./Food/BuffetDetailsPage";
 import ServicesLandingPage from "./Services/ServicesLandingPage";
 import ServicesDetailsPage from "./Services/ServicesDetailsPage";
 import Home from "./Home/Home";
 import EventsAll from "./Events/EventsAll";
 import EventsDetail from "./Events/EventsDetail";
 import Info from "./Info/Info";
-import jwt from "jsonwebtoken";
 import { actionTypes } from "../../reducer";
 import { Fade, Backdrop, Modal } from "@mui/material";
 import reactDom from "react-dom";
-import IconButton from "../UI/Buttons/IconButton";
+// import IconButton from "../UI/Buttons/IconButton";
 import { useTranslation } from "react-i18next";
 import ErrorComponent from "../Error/Error";
 import { checkTokenExpiration } from "../../Helpers/Functions/functions";
@@ -81,10 +80,8 @@ const User = () => {
       }
     }, 60000);
 
-    return () => {
-      fact = false;
-      clearInterval(intervalId);
-    };
+    fact = false;
+    return () => clearInterval(intervalId);
   }, [state.token]);
 
   const handleClose = () => {

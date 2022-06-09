@@ -25,14 +25,14 @@ const ReviewForm = (props) => {
       }
     >
       <div className="container">
-        <h2 className="text-center">Νέα Κριτική</h2>
+        <h2 className="text-center">{t("new_review")}</h2>
         <hr />
         <div className="row mb-3">
           <label
             htmlFor="review_desc"
             className="col-sm-12 col-form-label text-center"
           >
-            Σχόλια
+            {t("comments")}
           </label>
           <div className="col-sm-12">
             <textarea
@@ -49,7 +49,7 @@ const ReviewForm = (props) => {
             htmlFor="food_type"
             className="col-sm-12 col-form-label text-center"
           >
-            Βαθμολογήστε μας!
+            {t("score")}
           </label>
           <div className="col-sm-12 text-center">
             <Rating

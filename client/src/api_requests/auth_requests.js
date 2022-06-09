@@ -27,8 +27,5 @@ export const authenticateUserWithToken = (username, password) => {
       document.cookie = `refresh-token=${userWithToken.refreshToken};max-age=60;`;
       return userWithToken;
     })
-    .catch((err) => {
-      console.log(err);
-      return err;
-    });
+    .catch((err) => err);
 };

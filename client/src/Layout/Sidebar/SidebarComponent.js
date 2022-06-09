@@ -108,28 +108,28 @@ const SidebarComponent = () => {
               id="panel2a-header"
             >
               <LocalBar className="mr-10" />
-              <h5> Bar </h5>
+              <h5> {t("sidebar_bar")} </h5>
             </AccordionSummary>
             <AccordionDetails className="accordion-details">
               <NavLink exact to="/bar">
                 <BurstMode className="mr-10" />
-                Ποτά
+                {t("sidebar_drinks")}
               </NavLink>
               <NavLink exact to="/bar/edit">
                 <Edit className="mr-10" />
-                Επεξεργασία Ποτών
+                {t("edit_drinks")}
               </NavLink>
               <NavLink exact to="/bar/edit-drink-type">
                 <EditOutlined className="mr-10" />
-                Επεξεργασία Τύπου Ποτών
+                {t("edit_drink_type")}
               </NavLink>
               <NavLink exact to="/bar/add">
                 <Add className="mr-10" />
-                Προσθήκη Ποτού
+                {t("sidebar_add_drink")}
               </NavLink>
               <NavLink exact to="/bar/add-drink-type">
                 <AddCircle className="mr-10" />
-                Προσθήκη Τύπου Ποτού
+                {t("sidebar_add_drink_type")}
               </NavLink>
             </AccordionDetails>
           </Accordion>
@@ -142,7 +142,7 @@ const SidebarComponent = () => {
               id="panel3a-header"
             >
               <Flatware className="mr-10" />
-              <h5> À La Carte </h5>
+              <h5> {t("sidebar_alacarte")} </h5>
             </AccordionSummary>
             <AccordionDetails className="accordion-details">
               <NavLink exact to="/alacarte">
@@ -181,11 +181,11 @@ const SidebarComponent = () => {
               </NavLink>
               <NavLink exact to="/events">
                 <EventNote className="mr-10" />
-                Προσεχής εκδηλώσεις
+                {t("upcoming_events")}
               </NavLink>
               <NavLink exact to="/events/add">
                 <Add className="mr-10" />
-                Προσθήκη Εκδήλωσης
+                {t("add_event")}
               </NavLink>
             </AccordionDetails>
           </Accordion>

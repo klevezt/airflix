@@ -57,13 +57,13 @@ const AddNewInfoDetailsForm = (props) => {
               onClick={() => {
                 props.goBack();
               }}
-              text={t("Επιστροφη")}
+              text={t("back")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
             />
 
-            <h2 className="form-headline">{t("Νέες Πληροφορίες")}</h2>
+            <h2 className="form-headline">{t("new_info")}</h2>
             <hr className="m-0" />
           </div>
           <div className="container">

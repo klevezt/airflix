@@ -34,7 +34,7 @@ const AddNewCustomerForm = (props) => {
       }
     >
       <div className="form-header">
-        <h2 className="form-headline">{t("Νέος Πελάτης")}</h2>
+        <h2 className="form-headline">{t("new_customer")}</h2>
       </div>
       <div className="container">
         <div className="row mb-3">
@@ -62,7 +62,7 @@ const AddNewCustomerForm = (props) => {
             <input
               className="form-control mt-2 mb-2 "
               type={passwordShown ? "text" : "password"}
-              placeholder="Enter Password"
+              placeholder={t("password")}
               name="new_psw"
               id="new_psw"
               ref={passwordRef}
@@ -88,7 +88,7 @@ const AddNewCustomerForm = (props) => {
             <input
               className="form-control mt-2 mb-2 "
               type="text"
-              placeholder="Δωμάτιο"
+              placeholder={t("room")}
               name="room"
               id="room"
               ref={roomRef}

@@ -73,7 +73,7 @@ const EditService = (props) => {
           onClick={() => {
             props.goBack();
           }}
-          text={`${translate("back")}`}
+          text={translate("back")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -103,7 +103,7 @@ const EditService = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="changeImg" className="col-sm-3 col-form-label">
-            {t("Αλλαγή Εικόνας")}
+            {t("change_images")}
           </label>
           <div className="col-sm-3 align-self-center">
             <input
@@ -119,7 +119,7 @@ const EditService = (props) => {
         {addNewImage && (
           <div className="row mb-3">
             <label htmlFor="service_image" className="col-sm-3 col-form-label">
-              Νέα Εικόνα
+              {t("new_image")}
             </label>
             <div className="col-sm-9">
               <input

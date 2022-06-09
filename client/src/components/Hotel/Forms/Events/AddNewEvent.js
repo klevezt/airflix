@@ -152,7 +152,7 @@ const AddNewEvent = () => {
             </div>
 
             <div className="row mb-3">
-              <label className="col-sm-2 col-form-label">Εικόνες</label>
+              <label className="col-sm-2 col-form-label">{t("image")}</label>
               <div className="col-sm-10">
                 <input
                   className="form-control form-control-sm"

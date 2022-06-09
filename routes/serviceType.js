@@ -1,21 +1,41 @@
 const router = require("express").Router();
 
 let ServiceType = require("../models/serviceType.model");
-const { validateToken } = require("./auth");
 
-// router.all("*", [validateToken]);
 router.route("/").get((req, res) => {
   ServiceType.find(req.query)
     .then((service) => {
-      res.json(service);
+      if (!service) {
+        const error = new Error("Could not find service.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(service);
     })
-    .catch((err) => res.status(400).json("Error: " + err));
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
 router.route("/:id").get((req, res) => {
   ServiceType.findById(req.params.id)
-    .then((service) => res.json(service))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((service) => {
+      if (!service) {
+        const error = new Error("Could not find service.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(service);
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
 router.route("/add").post((req, res) => {
@@ -35,8 +55,20 @@ router.route("/add").post((req, res) => {
 
   newService
     .save()
-    .then(() => res.json("ServiceType added!"))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not add service type.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(201).json({ message: "Service type successfully added!" });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 });
 
 router.route("/status/:id").put((req, res) => {
@@ -46,11 +78,19 @@ router.route("/status/:id").put((req, res) => {
     { new: true },
     (err, todo) => {
       // Handle any possible database errors
-      if (err) return res.status(500).send(err);
-      return res.send(todo);
+      if (err) {
+        const error = new Error("Service type database error.");
+        throw error;
+      }
+      res
+        .status(200)
+        .json({ message: "Service type status successfully updated!" });
     }
   ).catch((err) => {
-    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   });
 });
 
@@ -61,21 +101,35 @@ router.route("/update/:id").put((req, res) => {
     { new: true },
     (err, todo) => {
       // Handle any possible database errors
-      if (err) return res.status(500).send(err);
-      return res.send(todo);
+      if (err) {
+        const error = new Error("Service type database error.");
+        throw error;
+      }
+      res.status(200).json({ message: "Service type successfully updated!" });
     }
   ).catch((err) => {
-    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   });
 });
 
 router.route("/delete/:id").delete((req, res) => {
   ServiceType.findByIdAndDelete(req.params.id)
-    .then(() => {
-      res.json("ServiceType Successfully Deleted!!!!");
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not find service type.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: "Service type successfully deleted!" });
     })
     .catch((err) => {
-      console.log(err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 });
 

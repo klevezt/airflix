@@ -114,7 +114,7 @@ const EditEvent = (props) => {
               // onClick={() => {
               //   props.toggleEditDrink();
               // }}
-              text={t("Επιστροφη")}
+              text={t("back")}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -166,7 +166,7 @@ const EditEvent = (props) => {
 
             <div className="row mb-3">
               <label htmlFor="event_image" className="col-sm-2 col-form-label">
-                {t("Αλλαγή εικόνας")}
+                {t("change_images")}
               </label>
               <div className="col-sm-10 align-self-center">
                 <input

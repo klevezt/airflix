@@ -40,7 +40,7 @@ const EditInfo = (props) => {
           onClick={() => {
             props.handleBackButton();
           }}
-          text={`${translate("back")}`}
+          text={translate("back")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -70,7 +70,7 @@ const EditInfo = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="changePSW" className="col-sm-2 col-form-label">
-            Νέα Εικόνα
+            {t("new_image")}
           </label>
           <div className="col-sm-10 align-self-center">
             <input
@@ -86,7 +86,7 @@ const EditInfo = (props) => {
         {imageChange && (
           <div className="row mb-3">
             <label htmlFor="info_image" className="col-sm-2 col-form-label">
-              Εικόνα
+              {t("image")}
             </label>
             <div className="col-sm-10">
               <input

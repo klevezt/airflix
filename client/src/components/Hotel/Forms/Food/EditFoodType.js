@@ -39,7 +39,7 @@ const EditFoodFormType = (props) => {
           onClick={() => {
             props.handleBackButton();
           }}
-          text={t("Επιστροφη")}
+          text={t("back")}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -57,7 +57,7 @@ const EditFoodFormType = (props) => {
             <input
               className="form-control form-control-sm"
               type="text"
-              placeholder="Εισάγετε την ονομασία του τύπου φαγητού"
+              placeholder={t("enter_new_food_name")}
               name="food_type_name"
               id="food_type_name"
               value={editFoodTypeName}
@@ -69,7 +69,7 @@ const EditFoodFormType = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="drink_images" className="col-sm-2 col-form-label">
-            {t("Αλλαγή εικόνων")}
+            {t("change_images")}
           </label>
           <div className="col-sm-10 align-self-center">
             <input
@@ -96,7 +96,7 @@ const EditFoodFormType = (props) => {
         <div className="row ">
           <div className="offset-sm-2 offset-0 col-sm-4 col-12">
             <button type="submit" className="btn btn-primary-theme ">
-              Ανανέωση
+              {t("update")}
             </button>
           </div>
         </div>
