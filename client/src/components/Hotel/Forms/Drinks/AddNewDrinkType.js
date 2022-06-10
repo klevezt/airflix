@@ -21,11 +21,11 @@ const AddNewDrinkType = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsSpinnerLoading(false);
-  //   }, 100);
-  // }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsSpinnerLoading(false);
+    }, 100);
+  }, []);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();

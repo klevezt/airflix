@@ -90,7 +90,7 @@ const EditDrinkType = () => {
     let controller = new AbortController();
     const exec = async () => {
       try {
-        const data = fetchDrinksTypesFromDB(state.token);
+        const data = await fetchDrinksTypesFromDB(state.token);
         // ---- Error Handler ---- //
         if (data.error) {
           setErrorMessage(data.error.msg);

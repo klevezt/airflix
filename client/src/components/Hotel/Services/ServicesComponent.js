@@ -37,6 +37,7 @@ const ServicesComponent = () => {
     let controller = new AbortController();
 
     setIsSpinnerLoading(true);
+
     const exec = async () => {
       try {
         const data = await fetchServicesTypesFromDB(state.token);
@@ -158,7 +159,7 @@ const ServicesComponent = () => {
                 className="button__addUser mb-3"
               >
                 <AddIcon />
-                {translate("Προσθήκη Υπηρεσίας")}
+                {translate("add_service")}
               </Button>
             </Link>
           </div>

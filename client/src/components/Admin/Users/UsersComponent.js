@@ -14,16 +14,23 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { Cancel, DeleteForeverSharp, Edit } from "@mui/icons-material";
 import { useStateValue } from "../../../StateProvider";
+import { useTranslation } from "react-i18next";
 
 import "./UsersComponent.css";
 import AddNewUserForm from "../Forms/AddNewUserForm/AddNewUserForm";
 import EditUserForm from "../Forms/EditUserForm/EditUserForm";
+import ErrorComponent from "../../Error/Error";
 
 const Users = () => {
+  const { t } = useTranslation();
+
   const [state] = useStateValue();
   const [tableState, setTableState] = useState([]);
   const [showModal, setShow] = useState(false);
   const [showEditUser, setShowEditUser] = useState(false);
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [editUsername, setEditUsername] = useState("");
   const [editPassword, setEditPassword] = useState("");
@@ -76,10 +83,22 @@ const Users = () => {
   // All useEffect Hooks
   useEffect(() => {
     let controller = new AbortController();
+    const exec = async () => {
+      try {
+        const users = await fetchUsersFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (users.error) {
+          setErrorMessage(users.error.msg);
+          throw new Error(users.error.msg);
+        }
 
-    fetchUsersFromDB(state.token).then((users) => {
-      setTableState(users);
-    });
+        setTableState(users);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+    exec();
     controller = null;
     return () => controller?.abort();
   }, []);
@@ -121,42 +140,106 @@ const Users = () => {
   const handleAddNewUser = async (e, new_username, new_password, new_role) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await setUser(new_username, new_password, new_role, state.token);
-    await fetchUsersFromDB(state.token).then((users) => {
+    try {
+      const result = await setUser(
+        new_username,
+        new_password,
+        new_role,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      const users = await fetchUsersFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (users.error) {
+        setErrorMessage(users.error.msg);
+        throw new Error(users.error.msg);
+      }
+
       setTableState(users);
       setIsSpinnerLoading(false);
-    });
-    setShow(false);
+      setShow(false);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+      setShow(false);
+    }
   };
 
   const handleEditUser = async (id) => {
     setIsSpinnerLoading(true);
-    await getUserEdit(id, state.token).then((user) => {
+    try {
+      const user = await getUserEdit(id, state.token);
+      // ---- Error Handler ---- //
+      if (user.error) {
+        setErrorMessage(user.error.msg);
+        throw new Error(user.error.msg);
+      }
       setEditUsername(user.username);
       setEditPassword(user.password);
       setEditRole(user.role);
       setIsSpinnerLoading(false);
-    });
-    setEditUserId(id);
-    setShowEditUser(true);
+
+      setEditUserId(id);
+      setShowEditUser(true);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+      setShowEditUser(true);
+    }
   };
 
   const handleUserStatus = async (id, stat) => {
     setIsSpinnerLoading(true);
-    await setUserStatus(id, stat, state.token);
-    await fetchUsersFromDB(state.token).then((users) => {
+    try {
+      const result = await setUserStatus(id, stat, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      const users = await fetchUsersFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (users.error) {
+        setErrorMessage(users.error.msg);
+        throw new Error(users.error.msg);
+      }
       setTableState(users);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleDeleteUser = async (id) => {
     setIsSpinnerLoading(true);
-    await deleteUser(id, state.token);
-    setIsSpinnerLoading(false);
-    await fetchUsersFromDB(state.token).then((users) => {
+    try {
+      const result = await deleteUser(id, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      setIsSpinnerLoading(false);
+      const users = await fetchUsersFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (users.error) {
+        setErrorMessage(users.error.msg);
+        throw new Error(users.error.msg);
+      }
+
       setTableState(users);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleSubmitEditUser = async (
@@ -167,23 +250,42 @@ const Users = () => {
   ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateUser(
-      editUserId,
-      editUsername,
-      editPassword,
-      editRole,
-      state.token
-    );
-    await fetchUsersFromDB(state.token).then((users) => {
+    try {
+      const result = await updateUser(
+        editUserId,
+        editUsername,
+        editPassword,
+        editRole,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      const users = await fetchUsersFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (users.error) {
+        setErrorMessage(users.error.msg);
+        throw new Error(users.error.msg);
+      }
+
       setTableState(users);
       setIsSpinnerLoading(false);
-    });
-    setShowEditUser(false);
+      setShowEditUser(false);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+      setShowEditUser(false);
+    }
   };
 
   return (
-    <div>
-      {!showModal && !showEditUser && !isSpinnerLoading && (
+    <>
+      {error && <ErrorComponent errorMessage={errorMessage} />}
+      {!error && isSpinnerLoading && <LoadingSpinner />}
+      {!error && !showModal && !showEditUser && !isSpinnerLoading && (
         <Button
           variant="contained"
           color="primary"
@@ -191,10 +293,10 @@ const Users = () => {
           onClick={openNewUserForm}
         >
           <AddIcon />
-          Προσθήκη Χρήστη
+          {t("add_user")}
         </Button>
       )}
-      {showModal && !isSpinnerLoading && (
+      {!error && showModal && !isSpinnerLoading && (
         <Button
           variant="contained"
           color="primary"
@@ -202,10 +304,10 @@ const Users = () => {
           onClick={closeNewUserForm}
         >
           <Cancel />
-          Ακύρωση
+          {t("cancel")}
         </Button>
       )}
-      {showEditUser && !isSpinnerLoading && (
+      {!error && showEditUser && !isSpinnerLoading && (
         <Button
           variant="contained"
           color="primary"
@@ -213,10 +315,10 @@ const Users = () => {
           onClick={closeEditUserForm}
         >
           <Cancel />
-          Ακύρωση
+          {t("cancel")}
         </Button>
       )}
-      {showEditUser && !isSpinnerLoading && (
+      {!error && showEditUser && !isSpinnerLoading && (
         <EditUserForm
           handleSubmitEditUser={handleSubmitEditUser}
           editUsername={editUsername}
@@ -224,7 +326,7 @@ const Users = () => {
           editRole={editRole}
         />
       )}
-      {!showModal && !showEditUser && !isSpinnerLoading && (
+      {!error && !showModal && !showEditUser && !isSpinnerLoading && (
         <MDBDataTableV5
           hover
           entriesOptions={[10, 20, 25]}
@@ -235,11 +337,10 @@ const Users = () => {
           barReverse
         />
       )}
-      {isSpinnerLoading && <LoadingSpinner />}
-      {showModal && !showEditUser && !isSpinnerLoading && (
+      {!error && showModal && !showEditUser && !isSpinnerLoading && (
         <AddNewUserForm handleAddNewUser={handleAddNewUser} />
       )}
-    </div>
+    </>
   );
 };
 

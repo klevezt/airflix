@@ -44,12 +44,12 @@ router.route("/login").post(async (req, res) => {
 
   // Send JWT access token
   const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
-    expiresIn: "100s",
+    expiresIn: "500s",
   });
 
   // Refresh token
   const refreshToken = await JWT.sign({ username }, process.env.REFRESH_KEY, {
-    expiresIn: "600s",
+    expiresIn: "6000s",
   });
 
   // Set refersh token in refreshTokens array
@@ -84,7 +84,7 @@ router.route("/token").post(async (req, res) => {
     const user = await JWT.verify(refreshToken, process.env.REFRESH_KEY);
     const { username } = user;
     const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
-      expiresIn: "100s",
+      expiresIn: "500s",
     });
     res.status(200).json({ accessToken });
   } catch (error) {

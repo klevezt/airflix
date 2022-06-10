@@ -68,9 +68,11 @@ const ShowAlacarte = () => {
         });
         setList(arr_2);
         setIsSpinnerLoading(false);
+        setIsGridLoading(false);
       } catch (err) {
         setError(true);
         setIsSpinnerLoading(false);
+        setIsGridLoading(false);
       }
     };
     exec();

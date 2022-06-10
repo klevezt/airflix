@@ -74,7 +74,8 @@ const InfoDetails = () => {
     const exec = async () => {
       setIsSpinnerLoading(true);
       try {
-        const data = fetchInfoDetailsFromDB(params.alias, state.token);
+        const data = await fetchInfoDetailsFromDB(params.alias, state.token);
+
         // ---- Error Handler ---- //
         if (data.error) {
           setErrorMessage(data.error.msg);

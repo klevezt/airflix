@@ -52,7 +52,10 @@ const ServicesDetails = () => {
     const exec = async () => {
       setIsSpinnerLoading(true);
       try {
-        const data = fetchServicesDetailsFromDB(params.alias, state.token);
+        const data = await fetchServicesDetailsFromDB(
+          params.alias,
+          state.token
+        );
         // ---- Error Handler ---- //
         if (data.error) {
           setErrorMessage(data.error.msg);
@@ -131,7 +134,7 @@ const ServicesDetails = () => {
         setErrorMessage(data.error.msg);
         throw new Error(data.error.msg);
       }
-      
+
       setServices(data);
       setAddNewService(false);
       setIsSpinnerLoading(false);
@@ -141,9 +144,9 @@ const ServicesDetails = () => {
     }
   };
 
-  const handleSubmitEditService = (id) => {
+  const handleSubmitEditService = async (id) => {
     try {
-      const data = getServiceEdit(id, state.token);
+      const data = await getServiceEdit(id, state.token);
       // ---- Error Handler ---- //
       if (data.error) {
         setErrorMessage(data.error.msg);
@@ -184,7 +187,7 @@ const ServicesDetails = () => {
         description,
         state.token
       );
-      const data = fetchServiceFromDB(state.token);
+      const data = await fetchServiceFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {
         setErrorMessage(data.error.msg);
@@ -291,7 +294,7 @@ const ServicesDetails = () => {
               onClick={() => setAddNewService((s) => !s)}
             >
               <Add />
-              {translate("Προσθήκη Υπηρεσίας")}
+              {translate("add_service")}
             </Button>
           </div>
           {allServices}

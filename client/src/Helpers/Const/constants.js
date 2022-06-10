@@ -90,14 +90,14 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
     try {
       menu.push({
         week: (
-          <h6 className="d-flex justify-content-center pt-2" key={i}>
+          <h6 className="d-flex justify-content-center pt-2" custom_key={i}>
             {week}
           </h6>
         ),
         day1: (
           <>
             {checkDay(i, 7, 0, start, end) ? (
-              <Card empty />
+              <Card empty custom_key={i} />
             ) : (
               <Card
                 day="monday"
@@ -111,6 +111,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
                 weekNumber={i + 1}
                 yearNumber={year}
                 monthNumber={month}
+                custom_key={i}
               />
             )}
           </>
@@ -118,7 +119,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
         day2: (
           <>
             {checkDay(i, 6, 1, start, end) ? (
-              <Card empty />
+              <Card empty custom_key={i} />
             ) : (
               <Card
                 day="tuesday"
@@ -132,6 +133,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
                 weekNumber={i + 1}
                 yearNumber={year}
                 monthNumber={month}
+                custom_key={i}
               />
             )}
           </>
@@ -139,7 +141,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
         day3: (
           <>
             {checkDay(i, 5, 2, start, end) ? (
-              <Card empty />
+              <Card empty custom_key={i} />
             ) : (
               <Card
                 day="wednesday"
@@ -153,6 +155,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
                 weekNumber={i + 1}
                 yearNumber={year}
                 monthNumber={month}
+                custom_key={i}
               />
             )}
           </>
@@ -160,7 +163,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
         day4: (
           <>
             {checkDay(i, 4, 3, start, end) ? (
-              <Card empty />
+              <Card empty custom_key={i} />
             ) : (
               <Card
                 day="thursday"
@@ -174,6 +177,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
                 weekNumber={i + 1}
                 yearNumber={year}
                 monthNumber={month}
+                custom_key={i}
               />
             )}
           </>
@@ -181,7 +185,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
         day5: (
           <>
             {checkDay(i, 3, 4, start, end) ? (
-              <Card empty />
+              <Card empty custom_key={i} />
             ) : (
               <Card
                 day="friday"
@@ -195,6 +199,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
                 weekNumber={i + 1}
                 yearNumber={year}
                 monthNumber={month}
+                custom_key={i}
               />
             )}
           </>
@@ -202,7 +207,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
         day6: (
           <>
             {checkDay(i, 2, 5, start, end) ? (
-              <Card empty />
+              <Card empty custom_key={i} />
             ) : (
               <Card
                 day="saturday"
@@ -216,6 +221,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
                 weekNumber={i + 1}
                 yearNumber={year}
                 monthNumber={month}
+                custom_key={i}
               />
             )}
           </>
@@ -223,7 +229,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
         day7: (
           <>
             {checkDay(i, 1, 6, start, end) ? (
-              <Card empty />
+              <Card empty custom_key={i} />
             ) : (
               <Card
                 day="sunday"
@@ -237,13 +243,14 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
                 weekNumber={i + 1}
                 yearNumber={year}
                 monthNumber={month}
+                custom_key={i}
               />
             )}
           </>
         ),
       });
     } catch (error) {
-      // console.log("Error: " + error);
+      console.log("Error: " + error);
     }
   });
 };

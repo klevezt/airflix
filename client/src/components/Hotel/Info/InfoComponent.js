@@ -184,7 +184,7 @@ const InfoComponent = () => {
                 className="button__addUser mb-3"
               >
                 <AddIcon />
-                {translate("Προσθήκη Πληροφοριών")}
+                {translate("add_information")}
               </Button>
             </Link>
           </div>

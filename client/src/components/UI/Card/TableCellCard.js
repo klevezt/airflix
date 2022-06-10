@@ -50,9 +50,9 @@ const TableCellCard = (props) => {
 
   useEffect(() => {
     let controller = new AbortController();
-    const today = new Date();
-
+    
     const exec = async () => {
+      const today = new Date();
       try {
         setIsTodaysCard(
           today.getDay() + "" === props.dayNumber ? "isTodaysCard" : ""
@@ -149,139 +149,137 @@ const TableCellCard = (props) => {
     setData((state) => ({ ...state, [foodType]: array }));
   };
 
+  const popup = ReactDOM.createPortal(
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      className={"modalMenu"}
+      open={open}
+      onClose={handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={open}>
+        <div className="modalMenu-container">
+          <h2 style={{ marginBottom: 10, padding: 20 }}>
+            {t(props.day)} {props.week}
+          </h2>
+          <hr />
+
+          <div className="modalMenu-content">
+            {foodTypeKeys.map((food, key) => {
+              return (
+                <div className="food-table-card-container" key={key}>
+                  <div className="food-table-card-header">
+                    <h5>{t(food)}</h5>
+                  </div>
+
+                  {!editClicked && (
+                    <ul className="list-group">
+                      {data[food] !== undefined && data[food].length !== 0 ? (
+                        data[food].map((item, i) => {
+                          return (
+                            <li
+                              className="list-group-item list-group-item-theme-color"
+                              key={i}
+                            >
+                              {item}
+                            </li>
+                          );
+                        })
+                      ) : (
+                        <li className="list-group-item list-group-item-secondary">
+                          {t("no_food_exists")}
+                        </li>
+                      )}
+                    </ul>
+                  )}
+                  {editClicked && (
+                    <div className="food-table-card-input">
+                      {data !== undefined &&
+                        data[food] !== undefined &&
+                        data[food].map((item, i) => {
+                          return (
+                            <div className="basic-flex mt-2" key={i}>
+                              <CardSelectDropdown
+                                onChange={(e) => handleSelectChange(e, i, food)}
+                                index={i}
+                                food={food}
+                                item={item}
+                                optionsSelect={optionsSelect}
+                              />
+
+                              <IconButton2
+                                onClick={() => handleDeleteInputField(i, food)}
+                                size="small"
+                                component="span"
+                                color="error"
+                              >
+                                <RemoveCircleOutline />
+                              </IconButton2>
+                            </div>
+                          );
+                        })}
+                      <IconButton2
+                        onClick={() => handleAddNewInputField(food)}
+                        size="small"
+                        component="span"
+                        style={{ color: "#52b202" }}
+                      >
+                        <AddCircleOutline />
+                      </IconButton2>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <div className="modalMenu-footer">
+            <IconButton
+              onClick={editClicked ? handleSave : handleEdit}
+              icon={
+                editClicked ? (
+                  <Save className="mr-10" />
+                ) : (
+                  <Edit className="mr-10" />
+                )
+              }
+              size="medium"
+              text={editClicked ? t("save") : t("edit")}
+            />
+            <IconButton
+              onClick={editClicked ? handleEdit : handleClose}
+              icon={<CancelPresentation className="mr-10" />}
+              size="medium"
+              text={editClicked ? t("cancel") : t("close")}
+            />
+          </div>
+        </div>
+      </Fade>
+    </Modal>,
+    document.getElementById("modal-root")
+  );
+
   return (
     <>
       {error && (
-        <Card className="card-container-empty">
+        <Card className="card-container-empty" key={props.custom_key}>
           <CardContent></CardContent>
         </Card>
       )}
+      {!error && popup }
       {!error && (
         <Card
+          key={props.custom_key}
           className={
             !props.empty
               ? `card-container ${isTodaysCard}`
               : "card-container-empty"
           }
         >
-          {ReactDOM.createPortal(
-            <Modal
-              aria-labelledby="transition-modal-title"
-              aria-describedby="transition-modal-description"
-              className={"modalMenu"}
-              open={open}
-              onClose={handleClose}
-              closeAfterTransition
-              BackdropComponent={Backdrop}
-              BackdropProps={{
-                timeout: 500,
-              }}
-            >
-              <Fade in={open}>
-                <div className="modalMenu-container">
-                  <h2 style={{ marginBottom: 10, padding: 20 }}>
-                    {t(props.day)} {props.week}
-                  </h2>
-                  <hr />
-
-                  <div className="modalMenu-content">
-                    {foodTypeKeys.map((food, key) => {
-                      return (
-                        <div className="food-table-card-container" key={key}>
-                          <div className="food-table-card-header">
-                            <h5>{t(food)}</h5>
-                          </div>
-
-                          {!editClicked && (
-                            <ul className="list-group">
-                              {data[food] !== undefined &&
-                              data[food].length !== 0 ? (
-                                data[food].map((item, i) => {
-                                  return (
-                                    <li
-                                      className="list-group-item list-group-item-theme-color"
-                                      key={i}
-                                    >
-                                      {item}
-                                    </li>
-                                  );
-                                })
-                              ) : (
-                                <li className="list-group-item list-group-item-secondary">
-                                  {t("no_food_exists")}
-                                </li>
-                              )}
-                            </ul>
-                          )}
-                          {editClicked && (
-                            <div className="food-table-card-input">
-                              {data !== undefined &&
-                                data[food] !== undefined &&
-                                data[food].map((item, i) => {
-                                  return (
-                                    <div className="basic-flex mt-2" key={i}>
-                                      <CardSelectDropdown
-                                        onChange={(e) =>
-                                          handleSelectChange(e, i, food)
-                                        }
-                                        index={i}
-                                        food={food}
-                                        item={item}
-                                        optionsSelect={optionsSelect}
-                                      />
-
-                                      <IconButton2
-                                        onClick={() =>
-                                          handleDeleteInputField(i, food)
-                                        }
-                                        size="small"
-                                        component="span"
-                                        color="error"
-                                      >
-                                        <RemoveCircleOutline />
-                                      </IconButton2>
-                                    </div>
-                                  );
-                                })}
-                              <IconButton2
-                                onClick={() => handleAddNewInputField(food)}
-                                size="small"
-                                component="span"
-                                style={{ color: "#52b202" }}
-                              >
-                                <AddCircleOutline />
-                              </IconButton2>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div className="modalMenu-footer">
-                    <IconButton
-                      onClick={editClicked ? handleSave : handleEdit}
-                      icon={
-                        editClicked ? (
-                          <Save className="mr-10" />
-                        ) : (
-                          <Edit className="mr-10" />
-                        )
-                      }
-                      size="medium"
-                      text={editClicked ? t("save") : t("edit")}
-                    />
-                    <IconButton
-                      onClick={editClicked ? handleEdit : handleClose}
-                      icon={<CancelPresentation className="mr-10" />}
-                      size="medium"
-                      text={editClicked ? t("cancel") : t("close")}
-                    />
-                  </div>
-                </div>
-              </Fade>
-            </Modal>,
-            document.getElementById("modal-root")
-          )}
           {!props.empty && (
             <>
               <CardContent>

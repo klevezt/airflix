@@ -36,11 +36,11 @@ const EditUserForm = (props) => {
         />
 
         <label htmlFor="psw">
-          <b>Password</b>
+          <b>{t("password")}</b>
         </label>
         <input
           type="text"
-          placeholder="Enter Password"
+          placeholder={t("password")}
           name="psw"
           value={editPassword}
           onChange={handleEditPasswordInput}
@@ -49,7 +49,7 @@ const EditUserForm = (props) => {
         />
 
         <label htmlFor="role">
-          <b>Role</b>
+          <b>{t("role")}</b>
         </label>
         <select
           className="form-select form-select-lg mt-2 mb-3"

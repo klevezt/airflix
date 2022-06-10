@@ -61,16 +61,16 @@ const Customers = () => {
         field: "room",
       },
       {
-        label: "Room Type",
+        label: t("room_type"),
         field: "room_type",
       },
       {
-        label: "Actions",
+        label: t("actions"),
         field: "actions",
       },
 
       {
-        label: "Status",
+        label: t("status"),
         field: "status",
       },
     ],
@@ -290,7 +290,7 @@ const Customers = () => {
           onClick={openNewUserForm}
         >
           <AddIcon />
-          {translate(t("Προσθήκη Πελάτη"))}
+          {translate("add_customer")}
         </Button>
       )}
       {!error && showModal && !isSpinnerLoading && (
@@ -301,7 +301,7 @@ const Customers = () => {
           onClick={closeNewUserForm}
         >
           <Cancel />
-          {translate(t("Ακύρωση"))}
+          {translate("cancel")}
         </Button>
       )}
       {!error && showEditUser && !isSpinnerLoading && (
@@ -312,7 +312,7 @@ const Customers = () => {
           onClick={closeEditUserForm}
         >
           <Cancel />
-          {translate(t("Ακύρωση"))}
+          {translate("cancel")}
         </Button>
       )}
       {!error && showEditUser && !isSpinnerLoading && (

@@ -381,7 +381,7 @@ const Home = () => {
                 </Link>
               </>
             ) : (
-              <p className="kp-warning">Δεν υπάρχουν εκδηλώσεις</p>
+              <p className="kp-warning">{t("no_events")}</p>
             )}
           </div>
           <div className="mt-3 mb-5 user-home-info-section">

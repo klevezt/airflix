@@ -59,22 +59,22 @@ const Food = () => {
     return () => controller?.abort();
   }, []);
 
-  const handleWeekMenu = async () => {
-    try {
-      const week = await fetchWeekFromDB(month, year, state.token);
-      // ---- Error Handler ---- //
-      if (week.error) {
-        setErrorMessage(week.error.msg);
-        throw new Error(week.error.msg);
-      }
+  // const handleWeekMenu = async () => {
+  //   try {
+  //     const week = await fetchWeekFromDB(month, year, state.token);
+  //     // ---- Error Handler ---- //
+  //     if (week.error) {
+  //       setErrorMessage(week.error.msg);
+  //       throw new Error(week.error.msg);
+  //     }
 
-      const menu_week = assignWeeksToTable(year, month, week);
-      setTableMenu(menu_week);
-    } catch (err) {
-      setError(true);
-      setIsSpinnerLoading(false);
-    }
-  };
+  //     const menu_week = assignWeeksToTable(year, month, week);
+  //     setTableMenu(menu_week);
+  //   } catch (err) {
+  //     setError(true);
+  //     setIsSpinnerLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     monthTableRow(year, month, menu, tableMenu);
@@ -99,7 +99,9 @@ const Food = () => {
           w.month === month && w.year === year ? (fact = true) : (fact = false);
         });
         fact ? setMonthIsInitialized(true) : setMonthIsInitialized(false);
-        handleWeekMenu();
+        // handleWeekMenu();
+        const menu_week = assignWeeksToTable(year, month, week);
+        setTableMenu(menu_week);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);

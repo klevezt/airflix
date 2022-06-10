@@ -11,9 +11,26 @@ function Table() {
   const [tableState, setTableState] = useState([]);
 
   useEffect(() => {
-    fetchUsersFromDB(state.token).then((users) => {
-      setTableState(users);
-    });
+    let controller = new AbortController();
+
+    const exec = async () => {
+      try {
+        const users = await fetchUsersFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (users.error) {
+          setErrorMessage(users.error.msg);
+          throw new Error(users.error.msg);
+        }
+
+        setTableState(users);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
+    exec();
+    controller = null;
+    return () => controller?.abort();
   }, []);
 
   useEffect(() => {

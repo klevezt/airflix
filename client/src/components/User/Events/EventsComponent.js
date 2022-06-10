@@ -146,26 +146,26 @@ const EventsComponent = () => {
             <div className="mt-4">
               <div className="user-home-general-headline-wrapper">
                 <h2 className="user-home-general-headline">
-                  Προσεχής Εκδήλωση
+                  {t("upcoming_event")}
                 </h2>
               </div>
               {upcomingEvent}
               {events.length < 1 && (
                 <p className="text-center kp-warning">
-                  Δεν υπάρχουν προσεχής εκδηλώσεις
+                  {t("no_upcoming_events_message")}
                 </p>
               )}
             </div>
             <div className="mt-4">
               <div className="user-home-general-headline-wrapper">
                 <h2 className="user-home-general-headline">
-                  Επόμενες Εκδηλώσεις
+                  {t("next_events")}
                 </h2>
               </div>
               {recentEvents}
               {events.length <= 1 && (
                 <p className="text-center kp-warning">
-                  Δεν υπάρχουν εκδηλώσεις
+                  {t("no_events")}
                 </p>
               )}
             </div>

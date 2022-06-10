@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { StateProvider } from "./StateProvider";
 import reducer, { initialState } from "./reducer";
-// import "@fortawesome/fontawesome-free/css/all.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./index.css";
 import "./i18n";
 

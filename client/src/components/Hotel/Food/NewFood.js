@@ -64,7 +64,7 @@ const NewFood = () => {
     const exec = async () => {
       setIsSpinnerLoading(true);
       try {
-        const data = fetchFoodTypesFromDB(state.token);
+        const data = await fetchFoodTypesFromDB(state.token);
         // ---- Error Handler ---- //
         if (data.error) {
           setErrorMessage(data.error.msg);
