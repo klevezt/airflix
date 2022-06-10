@@ -60,14 +60,17 @@ const Home = () => {
     const exec = async () => {
       try {
         const dataaa = await fetchEventsFromDB(state.token);
+        // ---- Error Handler ---- //
         if (dataaa.error) {
           setErrorMessage(dataaa.error.msg);
           throw new Error(dataaa.error.msg);
         }
+
         const { myArr: eventArr } = await imageGetter(dataaa, "Events/");
 
         const arr = [];
 
+        // ---- Error Handler ---- //
         if (eventArr === undefined || eventArr === null) {
           let tmp_error = "User/Home/useEffect => Event Array Problem";
           setErrorMessage(tmp_error);
@@ -101,6 +104,7 @@ const Home = () => {
           state.token
         );
 
+        // ---- Error Handler ---- //
         if (data.error) {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
@@ -122,6 +126,7 @@ const Home = () => {
           state.token
         );
 
+        // ---- Error Handler ---- //
         if (foodd.error) {
           setErrorMessage(foodd.error.msg);
           throw new Error(foodd.error.msg);
@@ -129,6 +134,7 @@ const Home = () => {
 
         const { myArr } = await imageGetter(foodd, "Food/");
 
+        // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null) {
           let tmp_error = "User/Home/useEffect => Food Array Problem";
           setErrorMessage(tmp_error);
@@ -143,6 +149,7 @@ const Home = () => {
 
         const buffet = await fetchFoodTypesFromDB(state.token);
 
+        // ---- Error Handler ---- //
         if (buffet.error) {
           setErrorMessage(dataaa.error.msg);
           throw new Error(dataaa.error.msg);
@@ -151,6 +158,7 @@ const Home = () => {
 
         const featured_info = await fetchInfoTypesFromDB(state.token);
 
+        // ---- Error Handler ---- //
         if (featured_info.error) {
           setErrorMessage(featured_info.error.msg);
           throw new Error(featured_info.error.msg);
@@ -160,6 +168,7 @@ const Home = () => {
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
+        setIsSpinnerLoading(false);
       }
     };
     exec();

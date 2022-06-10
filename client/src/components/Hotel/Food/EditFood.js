@@ -46,7 +46,13 @@ const EditFood = () => {
   const handleFoodStatus = useCallback(async (id, status) => {
     setIsSpinnerLoading(true);
     try {
-      await setFoodStatus(id, status, state.token);
+      const result = await setFoodStatus(id, status, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const food = await fetchFoodFromDB(state.token);
       // ---- Error Handler ---- //
       if (food.error) {
@@ -64,21 +70,48 @@ const EditFood = () => {
 
   const handleEditFood = async (id) => {
     setIsSpinnerLoading(true);
-    await getFoodEdit(id, state.token).then((food) => {
+    try {
+      const food = await getFoodEdit(id, state.token);
+      // ---- Error Handler ---- //
+      if (food.error) {
+        setErrorMessage(food.error.msg);
+        throw new Error(food.error.msg);
+      }
+
       setSelectedFood(food);
       setEditFood(true);
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setEditFood(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const handleDeleteFood = useCallback(
     async (id) => {
       setIsSpinnerLoading(true);
-      await deleteFood(id, state.token);
-      await fetchFoodFromDB(state.token).then((food) => {
+      try {
+        const result = await deleteFood(id, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
+
+        const food = await fetchFoodFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (food.error) {
+          setErrorMessage(food.error.msg);
+          throw new Error(food.error.msg);
+        }
+
         setFood(food);
         setIsSpinnerLoading(false);
-      });
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     },
     [t]
   );
@@ -94,23 +127,39 @@ const EditFood = () => {
   ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
-    await updateFood(
-      selectedFood._id,
-      name,
-      type,
-      image,
-      description,
-      ingredients,
-      specialFeatures,
-      state.token
-    ).then(() => {
+    try {
+      const result = await updateFood(
+        selectedFood._id,
+        name,
+        type,
+        image,
+        description,
+        ingredients,
+        specialFeatures,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       setEditFood(false);
-    });
-    await fetchFoodFromDB(state.token).then((food) => {
+
+      const food = await fetchFoodFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (food.error) {
+        setErrorMessage(food.error.msg);
+        throw new Error(food.error.msg);
+      }
+
       setFood(food);
       foodTableRows();
       setIsSpinnerLoading(false);
-    });
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   const foodTableRows = useCallback(() => {
@@ -155,6 +204,8 @@ const EditFood = () => {
     let controller = new AbortController();
 
     const exec = async () => {
+      setIsSpinnerLoading(true);
+
       try {
         const food = await fetchFoodFromDB(state.token);
         // ---- Error Handler ---- //

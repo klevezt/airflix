@@ -32,7 +32,7 @@ const AddNewEvent = () => {
   const descriptionRef = useRef("");
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
-  const [value, setValue] = React.useState(new Date());
+  const [value, setValue] = useState(new Date());
 
   useEffect(() => {
     let controller = new AbortController();
@@ -51,7 +51,7 @@ const AddNewEvent = () => {
         setIsSpinnerLoading(false);
       }
     };
-    exec();
+    // exec();
     controller = null;
     return () => controller?.abort();
   }, []);
@@ -64,7 +64,7 @@ const AddNewEvent = () => {
       const time = value;
       const images = imageRef.current.files;
       const description = descriptionRef.current.value;
-      const res = await addEvent(
+      const result = await addEvent(
         name,
         alias,
         time,
@@ -73,9 +73,9 @@ const AddNewEvent = () => {
         state.token
       );
       // ---- Error Handler ---- //
-      if (res.error) {
-        setErrorMessage(res.error.msg);
-        throw new Error(res.error.msg);
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
       }
 
       history.replace("/events");

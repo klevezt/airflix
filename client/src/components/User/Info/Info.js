@@ -41,13 +41,12 @@ const Info = () => {
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
+        setIsSpinnerLoading(false);
       }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, [state.token]);
 
   const allInfo = info.map((inf, i) => {

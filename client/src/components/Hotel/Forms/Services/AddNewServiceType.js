@@ -24,18 +24,21 @@ const AddNewServiceType = (props) => {
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
+    setIsSpinnerLoading(true);
+
     try {
       const name = serviceTypeNameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();
       const images = serviceTypeImageRef.current.files;
 
-      const res = await addServiceType(name, images, alias, state.token);
+      const result = await addServiceType(name, images, alias, state.token);
       // ---- Error Handler ---- //
-      if (res.error) {
-        setErrorMessage(res.error.msg);
-        throw new Error(res.error.msg);
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
       }
       history.replace("/services");
+      setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
       setIsSpinnerLoading(false);

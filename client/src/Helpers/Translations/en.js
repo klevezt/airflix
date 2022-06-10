@@ -151,6 +151,7 @@ const en = {
     add_service: "Add service",
     add_information: "Add information",
     role: "Role",
+    location: "Location on the map",
   },
 };
 

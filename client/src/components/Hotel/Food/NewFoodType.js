@@ -52,12 +52,18 @@ const NewFood = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await addFoodType(
+      const result = await addFoodType(
         newFoodTypeName,
         newFoodTypeProperty,
         newFoodTypeImg,
         state.token
       );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const foodType = await fetchFoodTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (foodType.error) {

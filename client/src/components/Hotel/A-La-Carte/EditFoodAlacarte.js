@@ -45,7 +45,13 @@ const EditFoodAlacarte = () => {
   const handleAlacarteStatus = useCallback(async (id, status) => {
     setIsSpinnerLoading(true);
     try {
-      await setAlacarteStatus(id, status, state.token);
+      const result = await setAlacarteStatus(id, status, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const alacarte = await fetchAlacarteFromDB(state.token);
       // ---- Error Handler ---- //
       if (alacarte.error) {
@@ -65,7 +71,12 @@ const EditFoodAlacarte = () => {
     async (id) => {
       setIsSpinnerLoading(true);
       try {
-        await deleteAlacarte(id, state.token);
+        const result = await deleteAlacarte(id, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
 
         const alacarte = await fetchAlacarteFromDB(state.token);
         // ---- Error Handler ---- //
@@ -177,6 +188,7 @@ const EditFoodAlacarte = () => {
       setIsSpinnerLoading(false);
     } catch (err) {
       setIsSpinnerLoading(false);
+      setEditAlacarte(true);
       setError(true);
     }
   };
@@ -193,7 +205,7 @@ const EditFoodAlacarte = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await updateAlacarte(
+      const result = await updateAlacarte(
         selectedAlacarte._id,
         name,
         type,
@@ -202,9 +214,15 @@ const EditFoodAlacarte = () => {
         price,
         ingredients,
         state.token
-      ).then(() => {
-        setEditAlacarte(false);
-      });
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      setEditAlacarte(false);
+      
       const alacarte = await fetchAlacarteFromDB(state.token);
       // ---- Error Handler ---- //
       if (alacarte.error) {

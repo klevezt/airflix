@@ -63,6 +63,7 @@ const ServicesDetails = () => {
         }
 
         setServiceType(data[0]);
+        
         const services = await fetchServiceFromDB(state.token);
         // ---- Error Handler ---- //
         if (services.error) {
@@ -86,7 +87,13 @@ const ServicesDetails = () => {
   const handleDeleteService = async (id) => {
     setIsSpinnerLoading(true);
     try {
-      await deleteService(id, state.token);
+      const result = await deleteService(id, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const data = await fetchServiceFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {
@@ -117,7 +124,7 @@ const ServicesDetails = () => {
     try {
       const alias = name.replace(/\s+/g, "-").toLowerCase();
 
-      await addService(
+      const result = await addService(
         name,
         serviceType.name,
         image,
@@ -128,6 +135,12 @@ const ServicesDetails = () => {
         description,
         state.token
       );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const data = await fetchServiceFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {
@@ -145,6 +158,8 @@ const ServicesDetails = () => {
   };
 
   const handleSubmitEditService = async (id) => {
+    setIsSpinnerLoading(true);
+
     try {
       const data = await getServiceEdit(id, state.token);
       // ---- Error Handler ---- //
@@ -175,7 +190,7 @@ const ServicesDetails = () => {
     try {
       const alias = name.replace(/\s+/g, "-").toLowerCase();
 
-      await updateService(
+      const result = await updateService(
         editService._id,
         name,
         serviceType.name,
@@ -187,6 +202,12 @@ const ServicesDetails = () => {
         description,
         state.token
       );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const data = await fetchServiceFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {
@@ -246,7 +267,7 @@ const ServicesDetails = () => {
               className="ms-5"
             >
               <LocationOn />
-              Τοποθεσία στον χάρτη
+              {t("location")}
             </a>
           </div>
           <p>{truncateString(service.description, 500)}</p>

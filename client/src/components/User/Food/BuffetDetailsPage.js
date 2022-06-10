@@ -6,10 +6,14 @@ import "./BuffetDetailsPage.css";
 import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import ErrorComponent from "../../Error/Error";
 
 const BuffetDetailsPage = () => {
   const params = useParams();
   const [state] = useStateValue();
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [buffetDetails, setBuffetDetails] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
@@ -19,21 +23,37 @@ const BuffetDetailsPage = () => {
 
     setIsSpinnerLoading(true);
     const exec = async () => {
-      const data = await fetchBuffetWithParamasFromDB(
-        "type=" + params.type,
-        state.token
-      );
+      try {
+        const data = await fetchBuffetWithParamasFromDB(
+          "type=" + params.type,
+          state.token
+        );
 
-      const { myArr } = await imageGetter(data, "Food/");
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
 
-      setBuffetDetails(myArr);
-      setIsSpinnerLoading(false);
+        const { myArr } = await imageGetter(data, "Food/");
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "User/BuffetDetailsPage/useEffect => Food imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setBuffetDetails(myArr);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, [params.type]);
 
   const allBuffetDetails = buffetDetails.map((buffet, i) => {

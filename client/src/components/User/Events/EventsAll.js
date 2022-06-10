@@ -57,13 +57,12 @@ const EventsAll = () => {
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
+        setIsSpinnerLoading(false);
       }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   const allEvents = events.map((event, i) => {

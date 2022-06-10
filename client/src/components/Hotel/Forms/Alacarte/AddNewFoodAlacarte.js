@@ -36,6 +36,8 @@ const AddNewFoodForm = () => {
     let controller = new AbortController();
 
     const exec = async () => {
+      setIsSpinnerLoading(true);
+
       try {
         const data = await fetchFoodTypesAlacarteFromDB(state.token);
         // ---- Error Handler ---- //
@@ -58,6 +60,8 @@ const AddNewFoodForm = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setIsSpinnerLoading(true);
+
     try {
       const name = nameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();
@@ -66,7 +70,7 @@ const AddNewFoodForm = () => {
       const description = descriptionRef.current.value;
       const price = priceRef.current.value;
 
-      const res = await addAlacarte(
+      const result = await addAlacarte(
         name,
         alias,
         type,
@@ -77,12 +81,13 @@ const AddNewFoodForm = () => {
         state.token
       );
       // ---- Error Handler ---- //
-      if (res.error) {
-        setErrorMessage(res.error.msg);
-        throw new Error(res.error.msg);
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
       }
 
       history.replace("/alacarte");
+      setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
       setIsSpinnerLoading(false);

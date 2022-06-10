@@ -51,6 +51,7 @@ const AlacarteLandingPage = () => {
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
+        setIsSpinnerLoading(false);
       }
     };
     exec();

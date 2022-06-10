@@ -35,11 +35,11 @@ const AddNewDrinkType = () => {
       const name = nameRef.current.value;
       const image = imageRef.current.files;
 
-      const res = await addDrinkType(name, image, state.token);
+      const result = await addDrinkType(name, image, state.token);
       // ---- Error Handler ---- //
-      if (res.error) {
-        setErrorMessage(res.error.msg);
-        throw new Error(res.error.msg);
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
       }
 
       setIsSpinnerLoading(false);

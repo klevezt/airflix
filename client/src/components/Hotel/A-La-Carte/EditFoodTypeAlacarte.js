@@ -42,7 +42,13 @@ const EditFoodTypeAlacarte = () => {
     async (id) => {
       setIsSpinnerLoading(true);
       try {
-        await deleteAlacarteType(id, state.token);
+        const result = await deleteAlacarteType(id, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
+
         const food = await fetchFoodTypesAlacarteFromDB(state.token);
         // ---- Error Handler ---- //
         if (food.error) {
@@ -117,7 +123,7 @@ const EditFoodTypeAlacarte = () => {
         setError(true);
         setIsSpinnerLoading(false);
       }
-    }
+    };
 
     exec();
     controller = null;
@@ -133,8 +139,24 @@ const EditFoodTypeAlacarte = () => {
   const handleAlacarteTypeStatus = async (id, status, type) => {
     setIsSpinnerLoading(true);
     try {
-      await setAlacarteTypeStatus(id, status, state.token);
-      if (!status) await updateAlacarteOfAlacarteType_Status(type, state.token);
+      const result = await setAlacarteTypeStatus(id, status, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      if (!status) {
+        const result2 = await updateAlacarteOfAlacarteType_Status(
+          type,
+          state.token
+        );
+        // ---- Error Handler ---- //
+        if (result2.error) {
+          setErrorMessage(result2.error.msg);
+          throw new Error(result2.error.msg);
+        }
+      }
 
       const food = await fetchFoodTypesAlacarteFromDB(state.token);
       // ---- Error Handler ---- //
@@ -166,6 +188,7 @@ const EditFoodTypeAlacarte = () => {
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
+      setEditAlacarteType(true);
       setIsSpinnerLoading(false);
     }
   };
@@ -194,21 +217,27 @@ const EditFoodTypeAlacarte = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await updateAlacarteType(
+      const result = await updateAlacarteType(
         selectedAlacarteType._id,
         name,
         image,
         state.token
-      ).then(() => {
-        setEditAlacarteType(false);
-      });
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      setEditAlacarteType(false);
+
       const food = await fetchFoodTypesAlacarteFromDB(state.token);
       // ---- Error Handler ---- //
       if (food.error) {
         setErrorMessage(food.error.msg);
         throw new Error(food.error.msg);
       }
-      
+
       setFoodType(food);
       foodTableRows();
       setIsSpinnerLoading(false);

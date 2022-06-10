@@ -155,7 +155,17 @@ const InfoDetails = () => {
           info.newInfoStatus = stat;
         }
       });
-      await setInfoContentStatus(allInfoData[0]._id, tableState, state.token);
+      const result = await setInfoContentStatus(
+        allInfoData[0]._id,
+        tableState,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+      
       const info = await fetchInfoDetailsFromDB(params.alias, state.token);
       // ---- Error Handler ---- //
       if (info.error) {
@@ -173,8 +183,15 @@ const InfoDetails = () => {
 
   const handleDeleteUser = async (id) => {
     setIsSpinnerLoading(true);
+
     try {
-      await deleteCustomer(id, state.token);
+      const result = await deleteCustomer(id, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const users = await fetchCustomersFromDB(state.token);
       // ---- Error Handler ---- //
       if (users.error) {
@@ -194,7 +211,13 @@ const InfoDetails = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await updateInfoContent(params.alias, newInfo, state.token);
+      const result = await updateInfoContent(params.alias, newInfo, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const data = await fetchInfoDetailsFromDB(params.alias, state.token);
       // ---- Error Handler ---- //
       if (data.error) {
@@ -209,6 +232,7 @@ const InfoDetails = () => {
     } catch (err) {
       setError(true);
       setIsSpinnerLoading(false);
+      setShowAddMoreInfoDetails(false);
     }
   };
 

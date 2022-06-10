@@ -30,6 +30,7 @@ const EditInfo = (props) => {
         props.handleUpdateInfo(
           e,
           selectedInfoName,
+          props.info._id,
           newImageRef.current.files !== "" ? newImageRef.current.files : ""
         )
       }

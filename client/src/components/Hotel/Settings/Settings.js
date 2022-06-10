@@ -22,12 +22,18 @@ const Settings = (props) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await updateUserInfo(
+      const result = await updateUserInfo(
         props.user._id,
         updateUsername,
         updatePassword,
         state.token
       );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const data = await fetchUserInfoFromDB(props.user._id, state.token);
       // ---- Error Handler ---- //
       if (data.error) {

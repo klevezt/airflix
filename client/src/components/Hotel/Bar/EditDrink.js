@@ -45,6 +45,7 @@ const EditDrink = () => {
 
   useEffect(() => {
     let controller = new AbortController();
+    setIsSpinnerLoading(true);
 
     const exec = async () => {
       try {
@@ -81,7 +82,13 @@ const EditDrink = () => {
   const handleDrinkStatus = useCallback(async (id, status) => {
     setIsSpinnerLoading(true);
     try {
-      await setDrinkStatus(id, status, state.token);
+      const result = await setDrinkStatus(id, status, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const drinks = await fetchDrinksFromDB(state.token);
       // ---- Error Handler ---- //
       if (drinks.error) {
@@ -111,6 +118,7 @@ const EditDrink = () => {
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
+      setEditDrink(true);
       setIsSpinnerLoading(false);
     }
   };
@@ -119,7 +127,13 @@ const EditDrink = () => {
     async (id) => {
       setIsSpinnerLoading(true);
       try {
-        await deleteDrink(id, state.token);
+        const result = await deleteDrink(id, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
+
         const drink = await fetchDrinksFromDB(state.token);
         // ---- Error Handler ---- //
         if (drink.error) {
@@ -149,7 +163,7 @@ const EditDrink = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await updateDrink(
+      const result = await updateDrink(
         selectedDrink._id,
         name,
         type,
@@ -158,9 +172,14 @@ const EditDrink = () => {
         price,
         ingredients,
         state.token
-      ).then(() => {
-        setEditDrink(false);
-      });
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      setEditDrink(false);
       const drinks = await fetchDrinksFromDB(state.token);
       // ---- Error Handler ---- //
       if (drinks.error) {

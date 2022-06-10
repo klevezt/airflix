@@ -62,7 +62,13 @@ const InfoComponent = () => {
   const handleDeleteInfo = async (id) => {
     setIsSpinnerLoading(true);
     try {
-      await deleteInfo(id, state.token);
+      const result = await deleteInfo(id, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const data = await fetchInfoTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {
@@ -78,10 +84,17 @@ const InfoComponent = () => {
     }
   };
 
-  const handleUpdateInfo = async (e) => {
+  const handleUpdateInfo = async (e, name, id) => {
     setIsSpinnerLoading(true);
+    
     try {
-      // await updateInfo(name, type, content).then(() => {});
+      const result = await updateInfo(id, name, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const data = await fetchInfoTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {
@@ -94,6 +107,7 @@ const InfoComponent = () => {
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
+      setShowEdit((s) => !s);
       setIsSpinnerLoading(false);
     }
   };
@@ -106,11 +120,17 @@ const InfoComponent = () => {
   const handleChangeFeatured = async (selectedInfo) => {
     setIsSpinnerLoading(true);
     try {
-      await setInfoStatus(
+      const result = await setInfoStatus(
         selectedInfo._id,
         !selectedInfo.featured,
         state.token
       );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const data = await fetchInfoTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {

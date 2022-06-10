@@ -27,7 +27,10 @@ const AddNewStaffForm = (props) => {
 
   useEffect(() => {
     let controller = new AbortController();
+
     const exec = async () => {
+      setIsSpinnerLoading(true);
+
       try {
         const data = await fetchStaffPositionFromDB(state.token);
         // ---- Error Handler ---- //
@@ -50,6 +53,8 @@ const AddNewStaffForm = (props) => {
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
+    setIsSpinnerLoading(true);
+
     try {
       const name = staffNameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();

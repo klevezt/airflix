@@ -919,7 +919,7 @@ export const updateService = (
   }).then((data) => data.json());
 };
 
-export const updateInfo = (id, infoName, infoContent, token) => {
+export const updateInfo = (id, infoName, token) => {
   return fetch(base_url + "/info/update/" + id, {
     method: "PUT",
     headers: {
@@ -928,7 +928,6 @@ export const updateInfo = (id, infoName, infoContent, token) => {
     },
     body: JSON.stringify({
       name: infoName,
-      content: infoContent,
     }),
   }).then((data) => data.json());
 };

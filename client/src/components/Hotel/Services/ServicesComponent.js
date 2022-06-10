@@ -57,13 +57,18 @@ const ServicesComponent = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-    
   }, []);
 
   const handleDeleteServiceType = async (id) => {
     setIsSpinnerLoading(true);
     try {
-      await deleteServiceType(id, state.token);
+      const result = await deleteServiceType(id, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const data = await fetchServicesTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {
@@ -84,7 +89,18 @@ const ServicesComponent = () => {
     setIsSpinnerLoading(true);
     try {
       const alias = serviceTypeName.replace(/\s+/g, "-").toLowerCase();
-      await updateServiceType(id, serviceTypeName, alias, state.token);
+      const result = await updateServiceType(
+        id,
+        serviceTypeName,
+        alias,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+      
       const data = await fetchServicesTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {
@@ -98,6 +114,7 @@ const ServicesComponent = () => {
     } catch (err) {
       setError(true);
       setIsSpinnerLoading(false);
+      setShowEdit((s) => !s);
     }
   };
 

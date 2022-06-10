@@ -41,50 +41,51 @@ const EditDrinkType = () => {
     rows: menu,
   };
 
-  const drinkTableRows = () =>{
-  try {
-    drinks.forEach((item) => {
-      menu.push({
-        name: item.name,
-        type: item.type,
-        status: (
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              checked={item.status ? true : false}
-              onChange={() =>
-                handleDrinkTypeStatus(item._id, !item.status, item.name)
-              }
-              autoComplete="off"
-            />
-          </div>
-        ),
-        actions: (
-          <div>
-            <Link
-              to="/bar/edit-drink-type"
-              onClick={() => handleEditDrinkType(item._id)}
-            >
-              <Edit />
-            </Link>
-            <Link
-              to="/bar/edit-drink-type"
-              onClick={() => {
-                window.confirm(`${t("confirm_delete_drink_type")}`) &&
-                  handleDeleteDrinkType(item._id, item.name);
-              }}
-            >
-              <DeleteForeverSharp />
-            </Link>
-          </div>
-        ),
+  const drinkTableRows = () => {
+    try {
+      drinks.forEach((item) => {
+        menu.push({
+          name: item.name,
+          type: item.type,
+          status: (
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={item.status ? true : false}
+                onChange={() =>
+                  handleDrinkTypeStatus(item._id, !item.status, item.name)
+                }
+                autoComplete="off"
+              />
+            </div>
+          ),
+          actions: (
+            <div>
+              <Link
+                to="/bar/edit-drink-type"
+                onClick={() => handleEditDrinkType(item._id)}
+              >
+                <Edit />
+              </Link>
+              <Link
+                to="/bar/edit-drink-type"
+                onClick={() => {
+                  window.confirm(`${t("confirm_delete_drink_type")}`) &&
+                    handleDeleteDrinkType(item._id, item.name);
+                }}
+              >
+                <DeleteForeverSharp />
+              </Link>
+            </div>
+          ),
+        });
       });
-    });
-  } catch (err) {
-    setError(true);
-    setIsSpinnerLoading(false);
-  }}
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
 
   useEffect(() => {
     let controller = new AbortController();
@@ -118,8 +119,21 @@ const EditDrinkType = () => {
   const handleDrinkTypeStatus = async (id, status, type) => {
     setIsSpinnerLoading(true);
     try {
-      await setDrinkTypeStatus(id, status, state.token);
-      if (!status) await updateDrinksOfDrinkType_Status(type, state.token);
+      const result = await setDrinkTypeStatus(id, status, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      if (!status) {
+        const result2 = await updateDrinksOfDrinkType_Status(type, state.token);
+        // ---- Error Handler ---- //
+        if (result2.error) {
+          setErrorMessage(result2.error.msg);
+          throw new Error(result2.error.msg);
+        }
+      }
       const drinks = await fetchDrinksTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (drinks.error) {
@@ -151,6 +165,7 @@ const EditDrinkType = () => {
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
+      setEditDrinkType(true);
       setIsSpinnerLoading(false);
     }
   };
@@ -158,8 +173,20 @@ const EditDrinkType = () => {
   const handleDeleteDrinkType = async (id, name) => {
     setIsSpinnerLoading(true);
     try {
-      await deleteDrinkType(id, state.token);
-      await updateDrinksOfDrinkType(name, state.token);
+      const result = await deleteDrinkType(id, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      const result2 = await updateDrinksOfDrinkType(name, state.token);
+      // ---- Error Handler ---- //
+      if (result2.error) {
+        setErrorMessage(result2.error.msg);
+        throw new Error(result2.error.msg);
+      }
+
       const drink = await fetchDrinksTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (drink.error) {
@@ -180,14 +207,20 @@ const EditDrinkType = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await updateDrinkType(
+      const result = await updateDrinkType(
         selectedDrinkType._id,
         name,
         image,
         state.token
-      ).then(() => {
-        setEditDrinkType(false);
-      });
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      setEditDrinkType(false);
+
       const drinks = await fetchDrinksTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (drinks.error) {

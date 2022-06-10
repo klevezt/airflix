@@ -20,7 +20,7 @@ const AddNewInfo = () => {
 
   // const [tableState, setTableState] = useState([]);
   // const [allInfoData, setAllInfoData] = useState([]);
-  
+
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -37,23 +37,30 @@ const AddNewInfo = () => {
     let controller = new AbortController();
     setIsSpinnerLoading(true);
     const exec = async () => {
-      const res = await fetchInfoTypesFromDB(state.token);
-      // setAllInfoData(data);
-      // setTableState(data[0].content);
-      // ---- Error Handler ---- //
-      if (res.error) {
-        setErrorMessage(res.error.msg);
-        throw new Error(res.error.msg);
+      try {
+        const res = await fetchInfoTypesFromDB(state.token);
+        // setAllInfoData(data);
+        // setTableState(data[0].content);
+        // ---- Error Handler ---- //
+        if (res.error) {
+          setErrorMessage(res.error.msg);
+          throw new Error(res.error.msg);
+        }
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
       }
-      setIsSpinnerLoading(false);
     };
-    exec();
+    // exec();
     controller = null;
     return () => controller?.abort();
   }, []);
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
+    setIsSpinnerLoading(true);
+
     try {
       const name = infoNameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();
@@ -67,6 +74,7 @@ const AddNewInfo = () => {
       }
 
       history.replace("/info");
+      setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
       setIsSpinnerLoading(false);

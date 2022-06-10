@@ -121,13 +121,20 @@ const Food = () => {
 
     weeks.forEach(async (_, i) => {
       try {
-        await addNewMonth(month, year, i + 1, state.token);
+        const result = await addNewMonth(month, year, i + 1, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
+        
         const w = await fetchWeekFromDB(month, year, state.token);
         // ---- Error Handler ---- //
         if (w.error) {
           setErrorMessage(w.error.msg);
           throw new Error(w.error.msg);
         }
+
         const menu_week = assignWeeksToTable(year, month, w);
         setTableMenu(menu_week);
         setMonthIsInitialized(true);

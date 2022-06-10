@@ -28,6 +28,7 @@ function DrinkDetails() {
 
   useEffect(() => {
     let controller = new AbortController();
+    setIsSpinnerLoading(true);
 
     const exec = async () => {
       try {
@@ -40,7 +41,7 @@ function DrinkDetails() {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
-        
+
         setDrink(data[0]);
         setIsSpinnerLoading(false);
       } catch (err) {

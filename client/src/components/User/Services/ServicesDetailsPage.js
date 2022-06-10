@@ -10,9 +10,12 @@ import { useStateValue } from "../../../StateProvider";
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import { useTranslation } from "react-i18next";
 import ErrorComponent from "../../Error/Error";
 
 const ServicesDetailsPage = () => {
+  const { t } = useTranslation();
+  
   const [serviceDetails, setServiceDetails] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [state] = useStateValue();
@@ -24,11 +27,10 @@ const ServicesDetailsPage = () => {
 
   useEffect(() => {
     let controller = new AbortController();
-
     setIsSpinnerLoading(true);
+    
     const exec = async () => {
-
-      try{
+      try {
         const data = await fetchServiceWithParamasFromDB(
           "type=" + params.type,
           state.token
@@ -51,18 +53,15 @@ const ServicesDetailsPage = () => {
         }
 
         setServiceDetails(myArr);
-        setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 500);
-      }catch(err){
-          setError(true);
-        }
-        };
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, [params.type]);
 
   const allServiceDetails = serviceDetails.map((serviceDetail, i) => {
@@ -87,7 +86,7 @@ const ServicesDetailsPage = () => {
             rel="noopener noreferrer"
           >
             <LocationOn />
-            <span>Τοποθεσία στον χάρτη</span>
+            <span>{t("location")}</span>
           </a>
         </div>
       </div>

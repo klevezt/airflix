@@ -108,6 +108,7 @@ const BuffetLandingPage = () => {
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
+        setIsSpinnerLoading(false);
       }
     };
     exec();

@@ -68,13 +68,12 @@ const Staff = () => {
 
           setList(arr_2);
           setIsSpinnerLoading(false);
-          setTimeout(() => {
-            setIsGridLoading(false);
-          }, 500);
+          setIsGridLoading(false);
         });
       } catch (err) {
         setError(true);
         setIsSpinnerLoading(false);
+        setIsGridLoading(false);
       }
     };
     exec();

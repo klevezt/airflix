@@ -49,11 +49,10 @@ const DrinksLandingPage = () => {
 
         setCatalog(myArr);
 
-        setTimeout(() => {
-          setIsSpinnerLoading(false);
-        }, 500);
+        setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
+        setIsSpinnerLoading(false);
       }
     };
     exec();

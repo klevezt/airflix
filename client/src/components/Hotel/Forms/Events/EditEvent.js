@@ -39,27 +39,30 @@ const EditEvent = (props) => {
     let controller = new AbortController();
 
     const exec = async () => {
-      const data = await fetchSingleEventFromDB(
-        { alias: params.eventAlias },
-        state.token
-      );
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
+      try {
+        const data = await fetchSingleEventFromDB(
+          { alias: params.eventAlias },
+          state.token
+        );
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
+        setEventId(data[0]._id);
+        setEventName(data[0].name);
+        setEventTime(data[0].time);
+        setEventDescription(data[0].description);
+        setEventImage(data[0].images);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
       }
-      setEventId(data[0]._id);
-      setEventName(data[0].name);
-      setEventTime(data[0].time);
-      setEventDescription(data[0].description);
-      setEventImage(data[0].images);
-      setIsSpinnerLoading(false);
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, [params.eventAlias]);
 
   const nameChangeHandler = (e) => {
@@ -78,23 +81,30 @@ const EditEvent = (props) => {
     setImageChange((s) => !s);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const alias = eventName.replace(/\s+/g, "-").toLowerCase();
+    try {
+      const result = await updateEvent(
+        eventId,
+        eventName,
+        alias,
+        eventImage,
+        eventTime,
+        eventDescription,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
 
-    updateEvent(
-      eventId,
-      eventName,
-      alias,
-      eventImage,
-      eventTime,
-      eventDescription,
-      state.token
-    )
-      .then(() => {
-        history.push("/events");
-      })
-      .catch();
+      history.push("/events");
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
   };
 
   return (

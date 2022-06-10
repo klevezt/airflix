@@ -65,13 +65,12 @@ const EventsComponent = () => {
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
+        setIsSpinnerLoading(false);
       }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, []);
 
   const upcomingEvent = events.map((event, i) => {
@@ -164,9 +163,7 @@ const EventsComponent = () => {
               </div>
               {recentEvents}
               {events.length <= 1 && (
-                <p className="text-center kp-warning">
-                  {t("no_events")}
-                </p>
+                <p className="text-center kp-warning">{t("no_events")}</p>
               )}
             </div>
             <Link to="/events/all" className="user-more-button">

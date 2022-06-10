@@ -42,6 +42,8 @@ const EditFoodType = () => {
     let controller = new AbortController();
 
     const exec = async () => {
+      setIsSpinnerLoading(true);
+
       try {
         const data = await fetchFoodTypesFromDB(state.token);
         // ---- Error Handler ---- //
@@ -68,8 +70,21 @@ const EditFoodType = () => {
     async (id, status, type) => {
       setIsSpinnerLoading(true);
       try {
-        await setFoodTypeStatus(id, status, state.token);
-        if (!status) await updateFoodOfFoodType_Status(type, state.token);
+        const result = await setFoodTypeStatus(id, status, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
+
+        if (!status) {
+          const result2 = await updateFoodOfFoodType_Status(type, state.token);
+          // ---- Error Handler ---- //
+          if (result2.error) {
+            setErrorMessage(result2.error.msg);
+            throw new Error(result2.error.msg);
+          }
+        }
         const food = await fetchFoodTypesFromDB(state.token);
         // ---- Error Handler ---- //
         if (food.error) {
@@ -103,6 +118,7 @@ const EditFoodType = () => {
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
+        setEditFoodType(true);
         setIsSpinnerLoading(false);
       }
     },
@@ -113,7 +129,13 @@ const EditFoodType = () => {
     async (id) => {
       setIsSpinnerLoading(true);
       try {
-        await deleteFoodType(id, state.token);
+        const result = await deleteFoodType(id, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
+
         const food = await fetchFoodTypesFromDB(state.token);
         // ---- Error Handler ---- //
         if (food.error) {
@@ -183,11 +205,19 @@ const EditFoodType = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await updateFoodType(selectedFoodType._id, name, image, state.token).then(
-        () => {
-          setEditFoodType(false);
-        }
+      const result = await updateFoodType(
+        selectedFoodType._id,
+        name,
+        image,
+        state.token
       );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+      setEditFoodType(false);
+      
       const food = await fetchFoodTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (food.error) {

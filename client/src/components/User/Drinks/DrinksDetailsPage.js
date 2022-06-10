@@ -13,8 +13,8 @@ const DrinksDetailsPage = (props) => {
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [state] = useStateValue();
 
-   const [error, setError] = useState(false);
-   const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [drinkDetails, setDrinkDetails] = useState([]);
 
@@ -23,7 +23,7 @@ const DrinksDetailsPage = (props) => {
 
     setIsSpinnerLoading(true);
     const exec = async () => {
-      try{
+      try {
         const data = await fetchDrinksWithParamasFromDB(
           "type=" + params.type,
           state.token
@@ -47,15 +47,14 @@ const DrinksDetailsPage = (props) => {
 
         setDrinkDetails(myArr);
         setIsSpinnerLoading(false);
-      }catch(err){
-      setError(true);
-    }
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, [params.type]);
 
   const allDrinkDetails = drinkDetails.map((drink, i) => {

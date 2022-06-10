@@ -36,6 +36,8 @@ const AddNewDrink = () => {
   useEffect(() => {
     let controller = new AbortController();
     const exec = async () => {
+      setIsSpinnerLoading(true);
+
       try {
         const data = await fetchDrinksTypesFromDB(state.token);
         // ---- Error Handler ---- //
@@ -58,6 +60,8 @@ const AddNewDrink = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setIsSpinnerLoading(true);
+
     try {
       const name = nameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();
@@ -66,7 +70,7 @@ const AddNewDrink = () => {
       const description = descriptionRef.current.value;
       const price = priceRef.current.value;
 
-      const res = await addDrink(
+      const result = await addDrink(
         name,
         alias,
         type,
@@ -77,9 +81,9 @@ const AddNewDrink = () => {
         state.token
       );
       // ---- Error Handler ---- //
-      if (res.error) {
-        setErrorMessage(res.error.msg);
-        throw new Error(res.error.msg);
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
       }
       history.replace("/bar");
     } catch (err) {

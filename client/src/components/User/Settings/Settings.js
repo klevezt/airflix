@@ -19,9 +19,9 @@ const Settings = (props) => {
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   const handleUpdateUserInfo = async (e, updateUsername, updatePassword) => {
+    setIsSpinnerLoading(true);
     try {
       e.preventDefault();
-      setIsSpinnerLoading(true);
       const updatedInfo = await updateUserInfo(
         props.user._id,
         updateUsername,
@@ -45,15 +45,16 @@ const Settings = (props) => {
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
+      setIsSpinnerLoading(false);
     }
   };
 
   useEffect(() => {
     let controller = new AbortController();
-
     setIsSpinnerLoading(true);
+    
     const exec = async () => {
-      try{
+      try {
         const data = await fetchUserInfoFromDB(props.user._id, state.token);
 
         // ---- Error Handler ---- //
@@ -64,15 +65,14 @@ const Settings = (props) => {
 
         setUser(data);
         setIsSpinnerLoading(false);
-      }catch(err){
+      } catch (err) {
         setError(true);
+        setIsSpinnerLoading(false);
       }
     };
     exec();
     controller = null;
-    return () => {
-      controller?.abort();
-    };
+    return () => controller?.abort();
   }, [props.user._id]);
 
   return (

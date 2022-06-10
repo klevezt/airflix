@@ -159,13 +159,19 @@ const Customers = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await setCustomer(
+      const result = await setCustomer(
         new_username,
         new_password,
         room_number,
         room_type,
         state.token
       );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const users = await fetchCustomersFromDB(state.token);
       // ---- Error Handler ---- //
       if (users.error) {
@@ -203,6 +209,7 @@ const Customers = () => {
       setShowEditUser(true);
     } catch (err) {
       setError(true);
+      setShowEditUser(true);
       setIsSpinnerLoading(false);
     }
   };
@@ -210,7 +217,13 @@ const Customers = () => {
   const handleUserStatus = async (id, stat) => {
     setIsSpinnerLoading(true);
     try {
-      await setUserStatus(id, stat, state.token);
+      const result = await setUserStatus(id, stat, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const users = await fetchCustomersFromDB(state.token);
       // ---- Error Handler ---- //
       if (users.error) {
@@ -229,7 +242,13 @@ const Customers = () => {
   const handleDeleteUser = async (id) => {
     setIsSpinnerLoading(true);
     try {
-      await deleteCustomer(id, state.token);
+      const result = await deleteCustomer(id, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
       const users = await fetchCustomersFromDB(state.token);
       // ---- Error Handler ---- //
       if (users.error) {
@@ -255,7 +274,7 @@ const Customers = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      await updateCustomer(
+      const result = await updateCustomer(
         editUserId,
         editUsername,
         editPassword,
@@ -263,6 +282,11 @@ const Customers = () => {
         editRoomType,
         state.token
       );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
       const users = await fetchCustomersFromDB(state.token);
       // ---- Error Handler ---- //
       if (users.error) {
@@ -276,6 +300,7 @@ const Customers = () => {
       setShowEditUser(false);
     } catch (err) {
       setError(true);
+      setShowEditUser(false);
       setIsSpinnerLoading(false);
     }
   };
