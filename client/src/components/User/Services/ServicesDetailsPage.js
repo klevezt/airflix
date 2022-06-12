@@ -74,11 +74,11 @@ const ServicesDetailsPage = () => {
           <h2>{serviceDetail.name}</h2>
           <a href={`tel:0030${serviceDetail.phone}`}>
             <PhoneAndroid />
-            <span>{"phone"}</span>
+            <span>{serviceDetail.phone}</span>
           </a>
           <a href={`mailto:${serviceDetail.email}`}>
             <Email />
-            <span>{"email"}</span>
+            <span>{serviceDetail.email}</span>
           </a>
           <a
             href={serviceDetail.location}
@@ -100,8 +100,10 @@ const ServicesDetailsPage = () => {
       {!error && !isSpinnerLoading && (
         <div className="row">
           <div className="user-services-details-total-wrapper">
-            <div className="user-home-general-headline-wrapper mb-4">
-              <h2 className="user-home-general-headline">{params.type}</h2>
+            <div className="mt-3">
+              <div className="user-home-general-headline-wrapper mb-4">
+                <h2 className="user-home-general-headline">{params.type}</h2>
+              </div>
             </div>
             {allServiceDetails}
           </div>

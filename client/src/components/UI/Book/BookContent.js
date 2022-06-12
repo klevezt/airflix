@@ -52,7 +52,7 @@ function BookContent(props) {
           alt="book-caligrafic"
         />
         {props.loading && <LoadingSpinner />}
-        {!props.loading && <>{props.details}</>}
+        {!props.loading && <div className="page-content-listing">{props.details}</div>}
         {/* {props.contentHeadline === "Cocktail" && (
         <>
           {openQuestions && questionsModal}

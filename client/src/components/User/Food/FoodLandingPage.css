@@ -1,3 +1,5 @@
+
+
 .food-landing-page {
   width: 100%;
   display: flex;
@@ -28,6 +30,7 @@
   height: 100%;
   max-width: calc(100vw - 20px);
   padding: 0;
+  position: relative;
 }
 
 .food-landing-page .landing-page-icon {
@@ -206,4 +209,11 @@
   border-right: 15px solid rgb(255, 168, 105);
   border-bottom: 15px solid transparent;
   border-radius: 5px;
+}
+
+@media(min-width:768px) {
+  .user.main__content .container .user-container {
+    max-width: 80%;
+    margin: auto;
+  }
 }

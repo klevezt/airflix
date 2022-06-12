@@ -6,6 +6,7 @@
     width: auto;
     background-color: #0091a4;
     color: white;
+    border-top: 5px solid #464646;
 }
 @media(max-width:767.98px){
     .footer{

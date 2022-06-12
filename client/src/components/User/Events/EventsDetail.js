@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { fetchEventWithParamasFromDB } from "../../../api_requests/hotel_requests";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import { useStateValue } from "../../../StateProvider";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import ErrorComponent from "../../Error/Error";
+import "./EventsDetail.css";
+import IconButton from "../../UI/Buttons/IconButton";
+import { ReadMore } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 function EventsDetail() {
+  const { t } = useTranslation();
   const params = useParams();
   const [state] = useStateValue();
 
@@ -65,9 +70,20 @@ function EventsDetail() {
             <div className="user-home-general-headline-wrapper mb-4">
               <h2 className="user-home-general-headline">{event.name}</h2>
             </div>
-            <img className="w-100 mb-4" src={event.image} alt="event-image" />
-            <p className="text-start">{event.description}</p>
+            <div className="user-events-details-content-wrapper">
+              <img className="w-100 mb-4" src={event.image} alt="event-image" />
+              <p className="text-start">{event.description}</p>
+            </div>
           </div>
+          <Link to="/events/all" className="user-more-button">
+            <IconButton
+              text={t("all_events")}
+              icon={<ReadMore className="mr-2" />}
+              color="warning"
+              variant="contained"
+              className="my-2"
+            />
+          </Link>
         </div>
       )}
     </>

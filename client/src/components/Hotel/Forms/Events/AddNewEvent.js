@@ -31,7 +31,7 @@ const AddNewEvent = () => {
   const imageRef = useRef("");
   const descriptionRef = useRef("");
 
-  const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
+  const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
   const [value, setValue] = useState(new Date());
 
   useEffect(() => {
@@ -109,6 +109,7 @@ const AddNewEvent = () => {
             />
 
             <h2 className="form-headline">{t("new_event")}</h2>
+            <hr className="m-0" />
           </div>
           <div className="container">
             <div className="row mb-3">
@@ -181,9 +182,13 @@ const AddNewEvent = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary-theme">
-              {t("add")}
-            </button>
+            <div className="row ">
+              <div className="offset-sm-2 offset-0 col-sm-4 col-12">
+                <button type="submit" className="btn btn-primary-theme">
+                  {t("add")}
+                </button>
+              </div>
+            </div>
           </div>
         </form>
       )}

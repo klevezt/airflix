@@ -4,6 +4,18 @@
   border-right: 1px solid #eee;
 }
 
+.left__sidebar.customer {
+  background-color: #464646;
+  flex: 0.30;
+  border-right: 5px solid #0091a4;
+}
+
+@media(min-width:1440px){
+  .left__sidebar.customer {
+      flex: 0.25;
+    }
+}
+
 @media (max-width: 990.98px) {
   .left__sidebar {
     display: none;
@@ -16,8 +28,12 @@
 }
 
 .sidebar__list li {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.151);
+  border-bottom: 1px solid rgba(123,123,123);
   width: auto;
+}
+
+.sidebar__list li svg{
+  font-size: 30px;
 }
 
 .navigation__link {
@@ -25,7 +41,7 @@
   color: inherit;
   width: fit-content;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 }
 .accordion-details .active,
 .navigation__link.active {
@@ -36,13 +52,26 @@
   display: inline-flex;
 }
 
+.customer .MuiAccordionSummary-expandIconWrapper,
+.customer .accordion-details a,
+.customer .accordion-li > div,
+.customer .navigation__link,
+.customer .navigation__link h5 {
+  color: white;
+}
+
+.customer .navigation__link h5{
+  font-size: 26px;
+  margin-bottom: 0;
+}
+
 .accordion-navigation-link {
   background-color: transparent !important;
   box-shadow: none !important;
 }
 
 .sidebar__list > :not(.accordion-li) {
-  padding: 15px;
+  padding: 20px 10px;
 }
 
 .accordion-details {

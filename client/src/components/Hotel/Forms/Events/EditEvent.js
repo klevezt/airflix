@@ -121,9 +121,7 @@ const EditEvent = (props) => {
           <div className="form-header">
             <IconButton
               className="form-back-button"
-              // onClick={() => {
-              //   props.toggleEditDrink();
-              // }}
+              onClick={() => history.goBack()}
               text={t("back")}
               icon={<UndoIcon />}
               color="warning"
@@ -131,6 +129,7 @@ const EditEvent = (props) => {
             />
 
             <h2 className="form-headline">{t("edit_event")}</h2>
+            <hr className="m-0" />
           </div>
           <div className="container">
             <div className="row mb-3">

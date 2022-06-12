@@ -100,8 +100,10 @@ const ServicesLandingPage = () => {
   const allServices = catalog.map((service, i) => {
     return (
       <Fragment key={i}>
-        <div className="user-home-general-headline-wrapper">
-          <h2 className="user-home-general-headline">{t("services")}</h2>
+        <div className="mt-3">
+          <div className="user-home-general-headline-wrapper">
+            <h2 className="user-home-general-headline">{t("services")}</h2>
+          </div>
         </div>
         <Link
           to={`/services/${service.name}/detail`}

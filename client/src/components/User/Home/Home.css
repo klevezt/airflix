@@ -1,3 +1,4 @@
+
 .user-more-button{
     margin-top: 20px;
 }
@@ -79,7 +80,8 @@
 }
 .user-home-general-headline{
     text-align: start;
-    background: white;
+    color: white;
+    background: #464646;
     width: fit-content;
     padding-right: 10px;
     font-size: 22px;
@@ -95,11 +97,10 @@
     width: 100%;
     right: 0;
     bottom: 5px;
-    background: rgb(38 38 38);
+    background: white;
     z-index: 1;
 }
 .user-home-accordion-wrapper{
-    /* border: 1px solid rgba(15, 15, 15, 0.4); */
     border-bottom: 0;
 }
 
@@ -107,6 +108,7 @@
     margin: 15px;
     font-size: 20px;
     font-weight: bold;
+    color: white;
 }
 
 .user-home-info-section .user-home-accordion{
@@ -133,7 +135,8 @@
 }
 .kp-table-row:nth-child(odd){background-color: #0091a427;}
 .kp-table-row:nth-child(even){background-color: #0091a40c;}
-.kp-each-info{border: 1px solid rgba(15, 15, 15, 0.4);}
+.kp-each-info{border: 1px solid white;}
+
 @media(max-width:424.98px) {
     .user-home-events-scroller .user-services-img img {
         height: 180px;
@@ -165,7 +168,7 @@
     padding: 5px;
 }
 
-.black-bg{background-color: #353535;color: white;right: 0;}
+.black-bg{background-color: #464646;color: white;right: 0;}
 
 .modal-view-food-container hr{
     border: 1px solid #0091a4 !important;
@@ -175,3 +178,21 @@
 
 .kp-custom.kp-ingredients{list-style: circle;}
 .kp-custom.kp-special-ingredients{list-style: disc;}
+
+@media(min-width:768px) {
+
+    .user-home-general-headline{
+        font-size: 30px;
+    }
+
+    .user-home-accordion-wrapper {
+        /* display: flex; */
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .kp-each-info {
+        /* flex-basis: 45%; */
+        /* height: fit-content; */
+    }
+}

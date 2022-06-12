@@ -31,12 +31,18 @@ export const imageGetter = async (
           ? imageArr.image
           : imageArr.images[0];
 
-        const storageRef = ref(storage, img_path + temp);
+        let path;
+        if(!temp) path = "General/no_image.png";
+        else path = img_path + temp;
 
+        const storageRef = ref(storage, path);
         await getDownloadURL(storageRef)
-          .then((image) => myArr.push({ ...imageArr, image }))
-          .catch(() => (error = true))
-          .finally(() => (loading = false));
+          .then((image) => {
+            myArr.push({ ...imageArr, image });
+          })
+          .catch((err) => {
+            error = true;
+          });
       })
     );
   } catch (err) {

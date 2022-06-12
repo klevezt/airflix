@@ -38,6 +38,7 @@ const AddNewFoodTypeForm = (props) => {
           variant="contained"
         />
         <h2 className="form-headline">{t("new_food_type")}</h2>
+        <hr className="m-0" />
       </div>
       <div className="container">
         <div className="row mb-3">

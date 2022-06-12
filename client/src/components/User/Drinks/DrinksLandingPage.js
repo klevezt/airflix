@@ -46,7 +46,6 @@ const DrinksLandingPage = () => {
           setErrorMessage(tmp_error);
           throw new Error(tmp_error);
         }
-
         setCatalog(myArr);
 
         setIsSpinnerLoading(false);

@@ -2,6 +2,8 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+  border-top: 5px solid #0091a4;
+  border-bottom: 5px solid #0091a4;
 }
 .content {
   display: flex;

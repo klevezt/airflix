@@ -143,7 +143,7 @@ const el = {
     new_review: "Νέα κριτική",
     drink: "Ποτό",
     menu: "Μενού",
-    upcoming_event: "Προσεχής εκδήλωσης",
+    upcoming_event: "Προσεχής εκδήλωση",
     upcoming_events: "Προσεχής εκδηλώσεις",
     next_events: "Επόμενες εκδηλώσεις",
     no_upcoming_events_message: "Δεν υπάρχουν προσεχής εκδηλώσεις",

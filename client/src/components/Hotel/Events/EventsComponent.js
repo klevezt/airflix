@@ -76,7 +76,7 @@ const EventsComponent = () => {
               minute: "2-digit",
             })}
           </h4>
-          <div className="col-lg-6">
+          <div className="col-lg-12">
             <div className="latest-post-box">
               <NavLink to={`/events/edit/${event.alias}`} className="post-img">
                 <img src={event.img} alt="Upcoming Blog" />

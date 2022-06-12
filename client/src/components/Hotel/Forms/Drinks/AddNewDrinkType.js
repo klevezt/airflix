@@ -74,6 +74,7 @@ const AddNewDrinkType = () => {
             />
 
             <h2 className="form-headline">{t("new_drink_type")}</h2>
+            <hr className="m-0" />
           </div>
           <div className="container">
             <div className="row mb-3">

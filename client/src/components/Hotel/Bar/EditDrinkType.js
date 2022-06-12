@@ -112,7 +112,7 @@ const EditDrinkType = () => {
 
   useEffect(() => {
     drinkTableRows();
-  }, [isSpinnerLoading]);
+  }, [isSpinnerLoading, editDrinkType]);
 
   /* Status Handler */
 

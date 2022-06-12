@@ -12,6 +12,7 @@
   flex-wrap: wrap;
   flex-direction: column;
   padding: 20px;
+  max-width: 65%;
 }
 
 .error-wrapper p{

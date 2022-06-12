@@ -42,7 +42,7 @@ const Header = () => {
         </>
       )}
 
-      {state.authenticated && (
+      {state.authenticated && state.user.role !== "Customer" && (
         <div className="header__right">
           <ul>
             <li>

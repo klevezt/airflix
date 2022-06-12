@@ -77,6 +77,51 @@
     flex-basis: 55%;
 }
 
+@media(min-width:991px){
+    .user-services-details-content{
+        flex-direction: column;
+        padding: 20px;
+        flex-basis: 45%;
+    }
+
+    .user-services-details-img{
+        flex-basis: 55%;
+    }
+}
+
+@media(min-width: 575px) {
+
+    .user-services-details-content a{
+        align-self: flex-start;
+    }
+
+    .user-services-details-content a span{
+        margin-left: 10px;
+    }
+
+    .user-services-details-wrapper h2{
+        flex-basis: auto;
+        text-align: start;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .user-services-details-content{
+        flex-direction: column;
+        padding: 20px;
+        flex-basis: 40%;
+    }
+
+    .user-services-details-img{
+        flex-basis: 60%;
+    }
+
+    .user-services-details-wrapper {
+        flex-wrap: nowrap;
+    }
+
+}
+
 @media(max-width: 574.98px){
     .user-services-details-content span{
         display: none;

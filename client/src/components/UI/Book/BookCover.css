@@ -1,3 +1,15 @@
+.drink-user-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    border: 5px solid #464646;
+    padding-bottom: 25px;
+    position: relative;
+    background: #464646;
+    min-height: 78vh;
+    margin-top: 10px;
+    margin-bottom: -20px;
+}
+
 @media(max-width:574.98px) {
     .drink-user-headline::before {
         position: absolute;
@@ -5,9 +17,9 @@
         top: -42px;
         content: none;
         width: 29px;
-        border-bottom: 2px solid rgb(53, 53, 53);
-        border-right: 2px solid rgb(53, 53, 53);
-        background-color: rgb(53, 53, 53);
+        border-bottom: 2px solid #464646;
+        border-right: 2px solid #464646;
+        background-color: #464646;
         transform: skew(251deg, 319deg);
         border-radius: 10px;
     }
@@ -68,10 +80,10 @@
     .drink-user-wrapper {
         display: flex;
         flex-wrap: wrap;
-        border: 5px solid rgb(53, 53, 53);
+        border: 5px solid #464646;
         padding-bottom: 25px;
         position: relative;
-        background: rgb(53, 53, 53);
+        background: #464646;
         min-height: 78vh;
         margin-top: 10px;
         margin-bottom: -20px;
@@ -79,7 +91,7 @@
 
     .user-book-general-headline {
         text-align: start;
-        background: rgb(53, 53, 53);
+        background: #464646;
         color: white;
         width: fit-content;
         padding-right: 10px;
@@ -125,7 +137,7 @@
         margin-bottom: 40px; */
     }
     .user-book-general-search .search-icon{
-        color: #353535;
+        color: #464646;
         z-index: 9;
         font-size: 32px;
     }
@@ -133,7 +145,7 @@
         cursor: pointer;
     }
     .user-book-general-search h4 {
-        color: #353535;
+        color: #464646;
         font-size: 24px;
         margin: 0;
         z-index: 9;

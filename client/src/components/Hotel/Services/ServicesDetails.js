@@ -106,6 +106,7 @@ const ServicesDetails = () => {
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
+      setAddNewService(false);
       setIsSpinnerLoading(false);
     }
   };
@@ -153,6 +154,7 @@ const ServicesDetails = () => {
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
+      setAddNewService(false);
       setIsSpinnerLoading(false);
     }
   };
@@ -170,8 +172,10 @@ const ServicesDetails = () => {
 
       customEditServices(data);
       setEditService(true);
+      setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
+      setEditService(true);
       setIsSpinnerLoading(false);
     }
   };

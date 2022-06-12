@@ -84,3 +84,20 @@
     margin-bottom: 5px;
     margin-top: 20px;
 }
+
+@media(min-width:768px){
+    .drink-details-each-drink-text h2{font-size: 28px;}
+    .drink-details-each-drink-text h3{font-size: 24px;}
+    .drink-details-each-drink-text p{font-size: 14px;}
+
+    .page-content .page-content-calligrafy-line{width: 50%!important;}
+    .page-content h1{font-size: 45px;}
+    .page-content-listing{display: flex;flex-wrap: wrap;}
+
+    .page-content-listing > div{
+        flex-basis: 46%;
+        margin: 0 2%;
+    }
+
+    .page-content img{max-height: 170px;}
+}

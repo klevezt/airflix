@@ -67,7 +67,7 @@ const EventsAll = () => {
 
   const allEvents = events.map((event, i) => {
     return (
-      <div className="col-lg-6" key={i}>
+      <div className="col-md-12 col-lg-6" key={i}>
         <div className="user-all-events latest-post-box">
           <NavLink to={`/events/view/${event.alias}`} className="post-img">
             <img src={event.img} alt="Upcoming Blog" />

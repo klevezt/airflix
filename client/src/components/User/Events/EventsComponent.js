@@ -77,7 +77,7 @@ const EventsComponent = () => {
     if (i !== 0) return "";
     return (
       <Fragment key={i}>
-        <div className="col-lg-6" key={i}>
+        <div className="col-lg-12" key={i}>
           <div className="user-home-events latest-post-box">
             <NavLink to={`/events/view/${event.alias}`} className="post-img">
               <img src={event.img} alt="Upcoming Blog " />
@@ -148,24 +148,24 @@ const EventsComponent = () => {
                   {t("upcoming_event")}
                 </h2>
               </div>
-              {upcomingEvent}
-              {events.length < 1 && (
-                <p className="text-center kp-warning">
-                  {t("no_upcoming_events_message")}
-                </p>
-              )}
             </div>
+            {upcomingEvent}
+            {events.length < 1 && (
+              <p className="text-center kp-warning">
+                {t("no_upcoming_events_message")}
+              </p>
+            )}
             <div className="mt-4">
               <div className="user-home-general-headline-wrapper">
                 <h2 className="user-home-general-headline">
                   {t("next_events")}
                 </h2>
               </div>
-              {recentEvents}
-              {events.length <= 1 && (
-                <p className="text-center kp-warning">{t("no_events")}</p>
-              )}
             </div>
+            {recentEvents}
+            {events.length <= 1 && (
+              <p className="text-center kp-warning">{t("no_events")}</p>
+            )}
             <Link to="/events/all" className="user-more-button">
               <IconButton
                 text={t("all_events")}

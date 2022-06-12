@@ -1,9 +1,13 @@
 .spinner {
-  margin: 25% auto;
-  width: 70px;
-  height: 70px;
-  text-align: center;
-  font-size: 10px;
+    margin: auto;
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    font-size: 10px;
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translateX(-50%) translateY(-50%);
 }
 
 .spinner>div {

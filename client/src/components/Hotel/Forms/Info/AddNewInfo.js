@@ -27,7 +27,7 @@ const AddNewInfo = () => {
   const [newInfo, setNewInfo] = useState([
     { newInfoName: "", newInfoDescription: "", newInfoStatus: true },
   ]);
-  const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
+  const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
   const infoNameRef = useRef();
   const infoImageRef = useRef("");
@@ -35,7 +35,7 @@ const AddNewInfo = () => {
   // All useEffect Hooks
   useEffect(() => {
     let controller = new AbortController();
-    setIsSpinnerLoading(true);
+    // setIsSpinnerLoading(true);
     const exec = async () => {
       try {
         const res = await fetchInfoTypesFromDB(state.token);
