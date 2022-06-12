@@ -15,7 +15,7 @@ table > thead > tr > th {
   display: flex;
   align-items: center;
   width: 100%;
-  background-color: #f0914d85;
+  background-color: #f0914d;
   border-radius: 5px;
   padding: 20px 50px;
 }

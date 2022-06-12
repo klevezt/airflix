@@ -7,12 +7,13 @@
   object-position: center;
 }
 .latest-post-box .post-desc {
-  background-color: #fff;
+  background-color: #0091a4;
   padding: 20px 15px;
+  color: white;
 }
 .latest-post-box {
-  border: 1px solid #707070;
-  padding-bottom: 5px;
+  /* border: 1px solid #707070; */
+  /* padding-bottom: 5px; */
   margin-bottom: 20px;
   text-align: start;
   border-radius: 5px;
@@ -22,7 +23,7 @@
 }
 .latest-post-box h4 a {
   text-decoration: none;
-  color: black;
+  color: white;
 }
 .kp-events > h2 {
   font-size: 40px;

@@ -94,9 +94,11 @@ const EventsAll = () => {
           <h2 className="text-center mt-3 mb-3">{t("all_events")}</h2>
           {allEvents}
           {events.length < 1 && (
-            <p className="text-center kp-warning">
-              {t("no_upcoming_events_message")}
-            </p>
+            <div>
+              <p className="text-center kp-warning">
+                {t("no_upcoming_events_message")}
+              </p>
+            </div>
           )}
         </div>
       )}

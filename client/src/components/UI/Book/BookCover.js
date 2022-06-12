@@ -15,11 +15,9 @@ const BookCover = (props) => {
   return (
     <section className="drink-user-wrapper">
       <div
-        className={`w-100 d-flex flex-wrap ${
-          myArray.length === 0 ? "justify-content-end h-fit-content" : ""
-        }  ${myArray.length !== 0 ? "justify-content-center" : ""} ${
-          props.withSearch ? "with-search flex-direction-reverse" : ""
-        }`}
+        className={`w-100 d-flex flex-wrap ${myArray.length === 0 ? "justify-content-end h-fit-content" : ""
+          }  ${myArray.length !== 0 ? "justify-content-center" : ""} ${props.withSearch ? "with-search flex-direction-reverse" : ""
+          }`}
       >
         {props.withSearch && (
           <div className="user-book-general-search">
@@ -28,25 +26,27 @@ const BookCover = (props) => {
           </div>
         )}
         <div
-          className={`user-book-general-headline-wrapper ${
-            props.withSearch ? "mb-4" : ""
-          }`}
+          className={`user-book-general-headline-wrapper ${props.withSearch ? "mb-4" : ""
+            }`}
         >
           <h2 className="user-book-general-headline">{props.coverHeadline}</h2>
         </div>
       </div>
-      {props.withSearch && (
-        <>
-          {myArray.length === 0 ? (
-            <h2 className="text-center color-white h-fit-content">
-              {t("no_registered_food")}
-            </h2>
-          ) : (
-            props.catalog
-          )}
-        </>
-      )}
-      {!props.withSearch && props.catalog}
+      <div className="d-flex flex-wrap justify-content-center w-100">
+        {props.withSearch && (
+          <>
+            {myArray.length === 0 ? (
+
+              <h2 className="text-center color-white h-fit-content ">
+                {t("no_registered_food")}
+              </h2>
+            ) : (
+              props.catalog
+            )}
+          </>
+        )}
+        {!props.withSearch && props.catalog}
+      </div>
     </section>
   );
 };

@@ -44,6 +44,13 @@
     flex-basis: 10%;
     justify-content: center;
     margin: 0 1%;
+    border: 1px solid #0091a4;
+}
+
+.user-services-details-content a:hover{
+    color: white;
+    background: #0091a4;
+    border: 1px solid white;
 }
 
 .user-services-details-content a svg{

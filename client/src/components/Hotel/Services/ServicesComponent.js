@@ -16,6 +16,7 @@ import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 import EditServiceType from "../Forms/Services/EditServiceType";
 import { useStateValue } from "../../../StateProvider";
 import ErrorComponent from "../../Error/Error";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 
 const ServicesComponent = () => {
@@ -31,7 +32,7 @@ const ServicesComponent = () => {
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
   const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     let controller = new AbortController();
@@ -47,7 +48,17 @@ const ServicesComponent = () => {
           throw new Error(data.error.msg);
         }
 
-        setServices(data);
+        const { myArr } = await imageGetter(data, "Services/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setServices(myArr);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -76,7 +87,17 @@ const ServicesComponent = () => {
         throw new Error(data.error.msg);
       }
 
-      setServices(data);
+      const { myArr } = await imageGetter(data, "Services/");
+
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
+
+      setServices(myArr);
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
@@ -100,7 +121,7 @@ const ServicesComponent = () => {
         setErrorMessage(result.error.msg);
         throw new Error(result.error.msg);
       }
-      
+
       const data = await fetchServicesTypesFromDB(state.token);
       // ---- Error Handler ---- //
       if (data.error) {
@@ -108,7 +129,17 @@ const ServicesComponent = () => {
         throw new Error(data.error.msg);
       }
 
-      setServices(data);
+      const { myArr } = await imageGetter(data, "Services/");
+
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
+
+      setServices(myArr);
       setShowEdit((s) => !s);
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -150,7 +181,7 @@ const ServicesComponent = () => {
             className="info-avatar text-center"
           >
             <img
-              src={`${process.env.REACT_APP_IMAGES_URL}/Images/Services/${service.image}`}
+              src={service.image}
               alt="service"
             />
             <div className=" text-center info-description">

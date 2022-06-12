@@ -225,7 +225,7 @@ const BuffetLandingPage = () => {
 
     if (category[1].length !== 0) {
       return (
-        <div className="mb-3 max-width-100" key={q}>
+        <div className="mb-3 max-width-100 w-100" key={q}>
           <div className="user-buffet-general-headline-wrapper">
             <h2 className="user-buffet-general-headline">{t(category[0])}</h2>
           </div>
@@ -286,14 +286,22 @@ const BuffetLandingPage = () => {
         throw new Error(foodd.error.msg);
       }
 
-      setFood(foodd);
-      setTodaysFoodCategories(allCategoriesArray);
+      const { myArr } = await imageGetter(foodd, "Food/");
 
-      setTimeout(() => {
-        setIsSpinnerLoading(false);
-      }, 500);
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "User/BuffetLandingPage/useEffect => Food imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
+
+      setFood(myArr);
+      setTodaysFoodCategories(allCategoriesArray);
+      setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
+      setIsSpinnerLoading(false);
     }
   };
 

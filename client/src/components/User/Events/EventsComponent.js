@@ -151,9 +151,11 @@ const EventsComponent = () => {
             </div>
             {upcomingEvent}
             {events.length < 1 && (
-              <p className="text-center kp-warning">
-                {t("no_upcoming_events_message")}
-              </p>
+              <div>
+                <p className="text-center kp-warning">
+                  {t("no_upcoming_events_message")}
+                </p>
+              </div>
             )}
             <div className="mt-4">
               <div className="user-home-general-headline-wrapper">
@@ -164,7 +166,9 @@ const EventsComponent = () => {
             </div>
             {recentEvents}
             {events.length <= 1 && (
-              <p className="text-center kp-warning">{t("no_events")}</p>
+              <div>
+                <p className="text-center kp-warning">{t("no_events")}</p>
+              </div>
             )}
             <Link to="/events/all" className="user-more-button">
               <IconButton

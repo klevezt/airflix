@@ -18,6 +18,7 @@ import { DeleteOutline, Edit, Star, StarBorder } from "@mui/icons-material";
 import EditInfo from "../Forms/Info/EditInfo";
 import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 import { useStateValue } from "../../../StateProvider";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const InfoComponent = () => {
   const [state] = useStateValue();
@@ -47,7 +48,17 @@ const InfoComponent = () => {
           throw new Error(data.error.msg);
         }
 
-        setInfo(data);
+        const { myArr } = await imageGetter(data, "Info/", true);
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setInfo(myArr);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -76,7 +87,18 @@ const InfoComponent = () => {
         throw new Error(data.error.msg);
       }
 
-      setInfo(data);
+      const { myArr } = await imageGetter(data, "Info/", true);
+
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
+
+      setInfo(myArr);
+
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
@@ -86,7 +108,7 @@ const InfoComponent = () => {
 
   const handleUpdateInfo = async (e, name, id) => {
     setIsSpinnerLoading(true);
-    
+
     try {
       const result = await updateInfo(id, name, state.token);
       // ---- Error Handler ---- //
@@ -102,7 +124,17 @@ const InfoComponent = () => {
         throw new Error(data.error.msg);
       }
 
-      setInfo(data);
+      const { myArr } = await imageGetter(data, "Info/", true);
+
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
+
+      setInfo(myArr);
       setShowEdit((s) => !s);
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -138,7 +170,18 @@ const InfoComponent = () => {
         throw new Error(data.error.msg);
       }
 
-      setInfo(data);
+      const { myArr } = await imageGetter(data, "Info/", true);
+
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
+
+      setInfo(myArr);
+
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
@@ -179,7 +222,7 @@ const InfoComponent = () => {
           className="info-avatar text-center"
         >
           <img
-            src={`${process.env.REACT_APP_IMAGES_URL}/Images/Info/${inf.image}`}
+            src={inf.image}
             alt=""
           />
           <div className=" text-center info-description">

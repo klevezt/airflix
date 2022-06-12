@@ -1,3 +1,13 @@
+@media (min-width:575px) {
+  .drinkTypes-user-box{
+    flex-basis: 48%;
+    margin: 2% 2% 2% 0;
+  }
+  .drinkTypes-user-box .img-wrapper img{
+    object-fit: cover;
+    height: 240px;
+  }
+}
 @media(max-width:574.98px){
   .drinkTypes-user-box {
     position: relative;

@@ -23,7 +23,6 @@ export const imageGetter = async (
   var myArr = [];
   var error = false;
   var loading = true;
-
   try {
     await Promise.all(
       data.map(async (imageArr) => {

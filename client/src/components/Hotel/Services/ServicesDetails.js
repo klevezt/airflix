@@ -24,6 +24,7 @@ import EditService from "../Forms/Services/EditService";
 import { useStateValue } from "../../../StateProvider";
 
 import ErrorComponent from "../../Error/Error";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const ServicesDetails = () => {
   const [state] = useStateValue();
@@ -71,7 +72,17 @@ const ServicesDetails = () => {
           throw new Error(services.error.msg);
         }
 
-        setServices(services);
+        const { myArr } = await imageGetter(services, "Services/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setServices(myArr);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -101,7 +112,17 @@ const ServicesDetails = () => {
         throw new Error(data.error.msg);
       }
 
-      setServices(data);
+      const { myArr } = await imageGetter(data, "Services/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+      setServices(myArr);
       setAddNewService(false);
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -149,7 +170,17 @@ const ServicesDetails = () => {
         throw new Error(data.error.msg);
       }
 
-      setServices(data);
+      const { myArr } = await imageGetter(data, "Services/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+      setServices(myArr);
       setAddNewService(false);
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -219,7 +250,17 @@ const ServicesDetails = () => {
         throw new Error(data.error.msg);
       }
 
-      setServices(data);
+      const { myArr } = await imageGetter(data, "Services/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+      setServices(myArr);
       setEditService(false);
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -250,7 +291,7 @@ const ServicesDetails = () => {
           </Button>
         </div>
         <img
-          src={`${process.env.REACT_APP_IMAGES_URL}/Images/Services/${service.image}`}
+          src={service.image}
           alt="Service"
         />
         <div>

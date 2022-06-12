@@ -1,15 +1,15 @@
 
 .user-more-button{
     margin-top: 20px;
+    display: flex;
+    width: fit-content;
 }
 .user-more-button button{
-    color: #0091a4;
-    background: transparent;
-    border: 1px solid;
+    color: white;
+    background: #0091a4;
 }
 .user-more-button button:hover{
-    background: transparent;
-    color: #0091a4;
+    background: #0091a480;
 }
 .user-home-events-scroller{
     display: -webkit-inline-box;
@@ -19,6 +19,8 @@
     height: 240px;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
+    width:100%;
+    object-fit: cover;
 }
 .user-home-events-inner-wrapper{
     width: 75vw;
@@ -30,17 +32,14 @@
     margin-right: 0;
 }
 .user-home-events-scroller-outer-wrapper{
-    overflow-x: scroll;
+    overflow-x: hidden;
     width: 100%;
 }
 .user-home-events-inner-wrapper.final-element{
     margin-right: 0 !important;
 }
 
-.user-home-todayFood-inner-wrapper {
-    width: 75vw;
-    margin-left: 10px;
-}
+
 
 .user-home-todayFood-scroller-outer-wrapper {
     overflow-x: scroll;
@@ -133,15 +132,17 @@
     border-top: 1px solid rgba(224, 224, 224, 1);
     border-bottom: none;
 }
-.kp-table-row:nth-child(odd){background-color: #0091a427;}
-.kp-table-row:nth-child(even){background-color: #0091a40c;}
-.kp-each-info{border: 1px solid white;}
-
-@media(max-width:424.98px) {
-    .user-home-events-scroller .user-services-img img {
-        height: 180px;
-    }
+.kp-table-row:nth-child(odd){background-color: #46464626;}
+.kp-table-row:nth-child(even){background-color: #ededed;}
+.kp-each-info{
+    border: 5px solid #0091a4;
+    border-top: 1px solid;
+    background-color: #0091a4;
 }
+.kp-each-info > div{
+    border-radius: 0px ;
+}
+
 
 .modal-view-food-container{
     position: relative;
@@ -179,20 +180,51 @@
 .kp-custom.kp-ingredients{list-style: circle;}
 .kp-custom.kp-special-ingredients{list-style: disc;}
 
+.user-buffet-wrapper:hover{
+    cursor: pointer;
+}
+
 @media(min-width:768px) {
+    .user-home-todayFood-inner-wrapper {
+        flex-basis: 48%;
+        margin-right: 2%;
+        margin-left: 0;
+        margin-bottom: 2%;
+    }
 
     .user-home-general-headline{
         font-size: 30px;
     }
 
     .user-home-accordion-wrapper {
-        /* display: flex; */
         flex-wrap: wrap;
         justify-content: space-around;
     }
+    .user-home-events-scroller{display: flex;flex-wrap: wrap;}
+    .user-buffet-general-headline{
+        margin: 10px 0;
+        text-align: start;
+    }
+}
 
-    .kp-each-info {
-        /* flex-basis: 45%; */
-        /* height: fit-content; */
+
+@media (max-width:767.98px) {
+    
+    .user-more-button{
+        width: 100%;
+    }
+    .user-home-events-scroller-outer-wrapper{
+      overflow-x: scroll;
+    }
+    
+    .user-home-todayFood-inner-wrapper {
+        width: 75vw;
+        margin-left: 10px;
+    }
+  }
+
+@media(max-width:424.98px) {
+    .user-home-events-scroller .user-services-img img {
+        height: 180px;
     }
 }

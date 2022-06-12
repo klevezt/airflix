@@ -8,6 +8,32 @@
     min-height: 78vh;
     margin-top: 10px;
     margin-bottom: -20px;
+    color: white;
+}
+
+.user-book-general-search {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    background: white;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    color: #464646;
+}
+
+.user-book-general-search h4{
+    font-size: 26px;
+    margin-bottom: 0;
+}
+.user-book-general-search svg{
+    font-size: 32px;
+}
+.user-book-general-search svg:hover{
+    cursor: pointer;
 }
 
 @media(max-width:574.98px) {
@@ -118,17 +144,7 @@
         background: white;
         z-index: 1;
     }
-    .user-book-general-search {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        margin-bottom: 20px;
-        background: white;
-        padding: 10px;
-        border-radius: 5px;
-    }
+    
     .with-search{
         margin-top: 10px;
     }

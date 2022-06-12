@@ -139,16 +139,20 @@ const EventsComponent = () => {
             <h2 className="text-center mt-3 mb-3">{t("upcoming_event")}</h2>
             {upcomingEvent}
             {events.length < 1 && (
-              <p className="text-center kp-warning">
-                {t("no_upcoming_events_message")}
-              </p>
+              <div>
+                <p className="text-center kp-warning">
+                  {t("no_upcoming_events_message")}
+                </p>
+              </div>
             )}
           </div>
           <div className="row justify-content-center kp-events">
             <h2 className="text-center mt-4 mb-3"> {t("next_events")} </h2>
             {recentEvents}
             {events.length <= 1 && (
-              <p className="text-center kp-warning">{t("no_events")}</p>
+              <div>
+                <p className="text-center kp-warning">{t("no_events")}</p>
+              </div>
             )}
           </div>
           <div className="row text-center">
