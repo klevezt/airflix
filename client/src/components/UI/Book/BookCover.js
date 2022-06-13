@@ -12,6 +12,7 @@ const BookCover = (props) => {
     const arr = props.catalog.filter((cat) => cat !== undefined);
     setArr(arr);
   }, []);
+  
   return (
     <section className="drink-user-wrapper">
       <div
@@ -29,14 +30,13 @@ const BookCover = (props) => {
           className={`user-book-general-headline-wrapper ${props.withSearch ? "mb-4" : ""
             }`}
         >
-          <h2 className="user-book-general-headline">{props.coverHeadline}</h2>
+          <h2 className="user-book-general-headline">{t(props.coverHeadline)}</h2>
         </div>
       </div>
       <div className="d-flex flex-wrap justify-content-center w-100">
         {props.withSearch && (
           <>
             {myArray.length === 0 ? (
-
               <h2 className="text-center color-white h-fit-content ">
                 {t("no_registered_food")}
               </h2>

@@ -75,10 +75,10 @@ const EventsAll = () => {
           <div className="post-desc">
             <h4>
               <NavLink to={`/events/view/${event.alias}`}>
-                {event.title}
+                {t(event.title)}
               </NavLink>
             </h4>
-            <p>{truncateString(event.description, 150)}</p>
+            <p>{truncateString(t(event.description), 150)}</p>
           </div>
         </div>
       </div>
@@ -103,7 +103,6 @@ const EventsAll = () => {
                 {t("no_upcoming_events_message")}
               </p>
             </div>
-
           )}
         </div>
       )}

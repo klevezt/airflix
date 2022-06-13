@@ -101,10 +101,8 @@ const BuffetLandingPage = () => {
           setErrorMessage(tmp_error);
           throw new Error(tmp_error);
         }
-
         setFood(myArr);
         setTodaysFoodCategories(allCategoriesArray);
-
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -162,13 +160,13 @@ const BuffetLandingPage = () => {
               className="w-100"
             />
             <div className="p-4">
-              <h2 className="text-center">{previewSelectedFood[0].name}</h2>
+              <h2 className="text-center">{t(previewSelectedFood[0].name)}</h2>
               {previewSelectedFood[0].ingredients && (
                 <>
                   <hr />
                   <ul className="kp-custom kp-ingredients">
                     {previewSelectedFood[0].ingredients.map((ingr, i) => {
-                      return <li key={i}> {ingr}</li>;
+                      return <li key={i}> {t(ingr)}</li>;
                     })}
                   </ul>
                 </>
@@ -178,12 +176,12 @@ const BuffetLandingPage = () => {
                   <hr />
                   <ul className="kp-custom kp-special-ingredients">
                     {previewSelectedFood[0].special_features.map((feat, j) => {
-                      return <li key={j}> {feat}</li>;
+                      return <li key={j}> {t(feat)}</li>;
                     })}
                   </ul>
                 </>
               )}
-              <p>{previewSelectedFood[0].description}</p>
+              <p>{t(previewSelectedFood[0].description)}</p>
               <IconButton
                 text={t("close")}
                 icon={<Close className="mr-2" />}
@@ -201,6 +199,7 @@ const BuffetLandingPage = () => {
   const showAllCategories = todaysFoodCategories.map((category, q) => {
     const foodPerEachCategory = category[1].map((food, kk) => {
       const variable = foodState.filter((f) => f.name === food);
+      if (variable.length === 0) return null;
       return variable.map((currentFood, j) => {
         return (
           <div
@@ -215,7 +214,7 @@ const BuffetLandingPage = () => {
                 <img src={`${currentFood.image}`} alt="buffet" />
               </div>
               <div className="user-services-content">
-                <h2>{currentFood.name}</h2>
+                <h2>{t(currentFood.name)}</h2>
               </div>
             </div>
           </div>
@@ -223,7 +222,7 @@ const BuffetLandingPage = () => {
       });
     });
 
-    if (category[1].length !== 0) {
+    if (category[1].length !== 0 && foodPerEachCategory[0] !== null) {
       return (
         <div className="mb-3 max-width-100 w-100" key={q}>
           <div className="user-buffet-general-headline-wrapper">
@@ -312,7 +311,7 @@ const BuffetLandingPage = () => {
       {!error && !isSpinnerLoading && (
         <div className="row">
           <BookCover
-            coverHeadline="Μπουφές"
+            coverHeadline={t("Μπουφές")}
             catalog={showAllCategories}
             date={fullDate}
             withSearch
@@ -340,7 +339,7 @@ const BuffetLandingPage = () => {
                   <Fade in={openSearch}>
                     <div className="modalFoodSearch-container">
                       <div className="row mb-3">
-                        <h3>Αναζήτηση </h3>
+                        <h3>{t("search")} </h3>
                       </div>
                       <div className="row mb-3">
                         <div
@@ -367,7 +366,7 @@ const BuffetLandingPage = () => {
                       </div>
                       <IconButton
                         className="search-button"
-                        text="Αναζήτηση"
+                        text={t("search")}
                         icon={<Search />}
                         color="warning"
                         variant="contained"

@@ -12,8 +12,8 @@ import ErrorComponent from "../../Error/Error";
 const Settings = (props) => {
   const [state] = useStateValue();
 
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [user, setUser] = useState("");
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
@@ -54,15 +54,20 @@ const Settings = (props) => {
 
     setIsSpinnerLoading(true);
     const exec = async () => {
-      const data = await fetchUserInfoFromDB(props.user._id, state.token);
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
+      try {
+        const data = await fetchUserInfoFromDB(props.user._id, state.token);
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
+        }
 
-      setUser(data);
-      setIsSpinnerLoading(false);
+        setUser(data);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
     };
     exec();
     controller = null;

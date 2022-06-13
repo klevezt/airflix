@@ -102,7 +102,7 @@ const ServicesDetailsPage = () => {
           <div className="user-services-details-total-wrapper">
             <div className="mt-3">
               <div className="user-home-general-headline-wrapper mb-4">
-                <h2 className="user-home-general-headline">{params.type}</h2>
+                <h2 className="user-home-general-headline">{t(params.type)}</h2>
               </div>
             </div>
             {allServiceDetails}

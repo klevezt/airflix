@@ -18,7 +18,6 @@ import { useStateValue } from "../../../StateProvider";
 import ErrorComponent from "../../Error/Error";
 import { imageGetter } from "../../../Helpers/Const/constants";
 
-
 const ServicesComponent = () => {
   const [state] = useStateValue();
 
@@ -48,7 +47,7 @@ const ServicesComponent = () => {
           throw new Error(data.error.msg);
         }
 
-        const { myArr } = await imageGetter(data, "Services/");
+        const { myArr } = await imageGetter(data, "Services/", true);
 
         // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null) {
@@ -87,7 +86,7 @@ const ServicesComponent = () => {
         throw new Error(data.error.msg);
       }
 
-      const { myArr } = await imageGetter(data, "Services/");
+      const { myArr } = await imageGetter(data, "Services/", true);
 
       // ---- Error Handler ---- //
       if (myArr === undefined || myArr === null) {
@@ -129,7 +128,7 @@ const ServicesComponent = () => {
         throw new Error(data.error.msg);
       }
 
-      const { myArr } = await imageGetter(data, "Services/");
+      const { myArr } = await imageGetter(data, "Services/", true);
 
       // ---- Error Handler ---- //
       if (myArr === undefined || myArr === null) {
@@ -180,10 +179,7 @@ const ServicesComponent = () => {
             to={`/services/view/${service.alias}`}
             className="info-avatar text-center"
           >
-            <img
-              src={service.image}
-              alt="service"
-            />
+            <img src={service.image} alt="service" />
             <div className=" text-center info-description">
               <h2>{translate(service.name)}</h2>
             </div>
@@ -200,7 +196,7 @@ const ServicesComponent = () => {
       {!error && !isSpinnerLoading && !showEdit && (
         <section className="info-wrapper">
           <div className="row mb-5">
-            <Link to="/serviceType/add" className="text-center">
+            <Link to="/serviceType/add">
               <Button
                 variant="contained"
                 color="primary"

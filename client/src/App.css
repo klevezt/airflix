@@ -96,10 +96,13 @@ span.psw {
 .general-form .form-headline {
   text-align: center;
   padding: 15px 0;
+  color: #464646;
+  margin-bottom: 0;
 }
 
 .general-form .btn-primary-theme {
-  background-color: #f3a46c;
+  background-color: #0091a4;
+  color: white;
 }
 
 .form-control {
@@ -154,5 +157,6 @@ span.psw {
   background: #ffe13c;
   padding: 10px;
   border-radius: 5px;
+  color: #464646;
 }
 .h-fit-content{height: fit-content;}

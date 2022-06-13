@@ -31,7 +31,9 @@
 .mobile__navigation__link:hover {
   color: #292929;
 }
-.accordion-details .active,
+.accordion-details .active{
+  color: white;
+}
 .mobile__navigation__link.active {
   color: #02d1ec;
 }

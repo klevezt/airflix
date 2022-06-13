@@ -28,8 +28,11 @@
 }
 
 .sidebar__list li {
-  border-bottom: 1px solid rgba(123,123,123);
+  border-bottom: 1px solid #464646;
   width: auto;
+}
+.customer .sidebar__list li{
+  border-bottom: 1px solid #0091a4;
 }
 
 .sidebar__list li svg{
@@ -45,11 +48,12 @@
 }
 .accordion-details .active,
 .navigation__link.active {
-  color: #0a58ca;
+  color: white;
 }
 .navigation__link h5 {
   margin-left: 10px;
   display: inline-flex;
+  margin-bottom: 0;
 }
 
 .customer .MuiAccordionSummary-expandIconWrapper,

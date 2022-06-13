@@ -77,7 +77,7 @@ const EventsComponent = () => {
     if (i !== 0) return "";
     return (
       <Fragment key={i}>
-        <div className="col-lg-12" key={i}>
+        <div className="col-md-12 col-lg-6" key={i}>
           <div className="user-home-events latest-post-box">
             <NavLink to={`/events/view/${event.alias}`} className="post-img">
               <img src={event.img} alt="Upcoming Blog " />
@@ -85,7 +85,7 @@ const EventsComponent = () => {
             <div className="post-desc">
               <h4>
                 <NavLink to={`/events/view/${event.alias}`}>
-                  {event.title}
+                  {t(event.title)}
                 </NavLink>
               </h4>
               <h6>
@@ -97,7 +97,7 @@ const EventsComponent = () => {
                   minute: "2-digit",
                 })}
               </h6>
-              <p>{truncateString(event.description, 150)}</p>
+              <p>{truncateString(t(event.description), 150)}</p>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@ const EventsComponent = () => {
   const recentEvents = events.map((event, i) => {
     if (i === 0) return "";
     return (
-      <div className="col-lg-4" key={i}>
+      <div className="col-lg-6" key={i}>
         <div className="user-home-events latest-post-box">
           <NavLink to={`/events/view/${event.alias}`} className="post-img">
             <img src={event.img} alt="Event" />
@@ -116,7 +116,7 @@ const EventsComponent = () => {
           <div className="post-desc">
             <h4>
               <NavLink to={`/events/view/${event.alias}`}>
-                {event.title}
+                {t(event.title)}
               </NavLink>
             </h4>
             <h6>
@@ -128,7 +128,7 @@ const EventsComponent = () => {
                 minute: "2-digit",
               })}
             </h6>
-            <p>{truncateString(event.description, 150)}</p>
+            <p>{truncateString(t(event.description), 150)}</p>
           </div>
         </div>
       </div>

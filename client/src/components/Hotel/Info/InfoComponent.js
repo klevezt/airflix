@@ -240,7 +240,7 @@ const InfoComponent = () => {
       {!error && !isSpinnerLoading && !showEdit && (
         <section className="info-wrapper">
           <div className="row mb-5">
-            <Link to="/info/add" className="text-center">
+            <Link to="/info/add">
               <Button
                 variant="contained"
                 color="primary"

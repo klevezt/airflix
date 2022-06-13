@@ -7,8 +7,11 @@ import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import ErrorComponent from "../../Error/Error";
+import { useTranslation } from "react-i18next";
 
 const BuffetDetailsPage = () => {
+  const { t } = useTranslation();
+
   const params = useParams();
   const [state] = useStateValue();
 
@@ -65,11 +68,11 @@ const BuffetDetailsPage = () => {
             alt="buffet"
           />
           <div className="drink-details-each-drink-text text-end">
-            <h3>{buffet.name}</h3>
+            <h3>{t(buffet.name)}</h3>
             <p>
               {buffet.ingredients.map((ing, j) => (
                 <Fragment key={j}>
-                  <span>{ing}</span>
+                  <span>{t(ing)}</span>
                   <br />
                 </Fragment>
               ))}

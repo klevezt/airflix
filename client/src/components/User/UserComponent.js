@@ -58,7 +58,6 @@ const User = () => {
               },
             }
           ).then((data) => data.json());
-          console.log(dataaa);
 
           // ---- Error Handler ---- //
           if (dataaa.error) {

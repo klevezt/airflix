@@ -138,10 +138,10 @@ const SidebarComponent = () => {
                 <h5> {t("sidebar_food")} </h5>
               </AccordionSummary>
               <AccordionDetails className="accordion-details">
-                <NavLink exact to="/food">
+                {/* <NavLink exact to="/food">
                   <BurstMode className="mr-10" />
                   {t("sidebar_all_food")}
-                </NavLink>
+                </NavLink> */}
                 <NavLink exact to="/food/menu">
                   <ListAlt className="mr-10" />
                   {t("sidebar_view_menu")}

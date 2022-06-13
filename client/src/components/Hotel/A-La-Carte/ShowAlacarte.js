@@ -11,6 +11,7 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import CubeSpinner from "../../UI/Spinners/CubeSpinner";
 import FadeUpLong from "../../hoc/FadeUpLong";
 import { useStateValue } from "../../../StateProvider";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const ShowAlacarte = () => {
   const [state] = useStateValue();
@@ -38,13 +39,20 @@ const ShowAlacarte = () => {
           throw new Error(data.error.msg);
         }
 
-        data.forEach((food) => {
+        const { myArr } = await imageGetter(data, "Alacarte/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/ShowAlacarte/useEffect => Alacarte imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        myArr.forEach((food) => {
           if (food.status)
             arr.push({
-              img:
-                process.env.REACT_APP_IMAGES_URL +
-                "/Images/Alacarte/" +
-                food.images[0],
+              img: food.image,
               alias: food.alias,
               title: food.name,
               featured: food.featured,
@@ -81,11 +89,15 @@ const ShowAlacarte = () => {
   }, []);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     let f = alacarte;
     if (filter !== "Όλα") {
       f = alacarte.filter((drink) => drink.type === filter);
     }
     setFilteredAlacarte(f);
+    controller = null;
+    return () => controller?.abort();
   }, [filter, alacarte]);
 
   const drinkListing = (

@@ -68,11 +68,11 @@ function EventsDetail() {
         <div className="row mb-80">
           <div className="user-services-details-total-wrapper">
             <div className="user-home-general-headline-wrapper mb-4">
-              <h2 className="user-home-general-headline">{event.name}</h2>
+              <h2 className="user-home-general-headline">{t(event.name)}</h2>
             </div>
             <div className="user-events-details-content-wrapper">
               <img className="w-100 mb-4" src={event.image} alt="event-image" />
-              <p className="text-start">{event.description}</p>
+              <p className="text-start">{t(event.description)}</p>
             </div>
           </div>
           <Link to="/events/all" className="user-more-button">

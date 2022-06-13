@@ -144,7 +144,7 @@ const el = {
     drink: "Ποτό",
     menu: "Μενού",
     upcoming_event: "Προσεχής εκδήλωση",
-    upcoming_events: "Προσεχής εκδηλώσεις",
+    upcoming_events: "Προσεχείς εκδηλώσεις",
     next_events: "Επόμενες εκδηλώσεις",
     no_upcoming_events_message: "Δεν υπάρχουν προσεχής εκδηλώσεις",
     no_events: "Δεν υπάρχουν εκδηλώσεις",
@@ -155,6 +155,8 @@ const el = {
     add_information: "Προσθήκη πληροφοριών",
     role: "Ρόλος",
     location: "Τοποθεσία στον χάρτη",
+    today_menu: "Σημερινός Μπουφές",
+    search: "Αναζήτηση",
   },
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 // import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
@@ -16,7 +16,7 @@ const AlacarteLandingPage = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   // const translate = (text) => removeUpperAccents(t(text));
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
@@ -74,7 +74,7 @@ const AlacarteLandingPage = () => {
           />
         </div>
         <div className="drinkTypes-user-box__bookmark-text-wrapper">
-          <h2>{alacarte.name}</h2>
+          <h2>{t(alacarte.name)}</h2>
         </div>
       </Link>
     );
@@ -87,7 +87,7 @@ const AlacarteLandingPage = () => {
       {!error && !isSpinnerLoading && (
         <div className="row">
           <BookCover
-            coverHeadline="Κατάλογος A La Carte"
+            coverHeadline={t("Κατάλογος A La Carte")}
             catalog={alacarteCatalog}
           />
         </div>

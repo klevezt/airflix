@@ -59,10 +59,10 @@ const Info = () => {
               {inf.content.map((row, j) => (
                 <TableRow className="kp-table-row" key={j}>
                   <TableCell style={{ width: 160 }}>
-                    {row.newInfoName}
+                    {t(row.newInfoName)}
                   </TableCell>
                   <TableCell style={{ width: 160 }}>
-                    {row.newInfoDescription}
+                    {t(row.newInfoDescription)}
                   </TableCell>
                 </TableRow>
               ))}

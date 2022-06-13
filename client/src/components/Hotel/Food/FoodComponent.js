@@ -179,8 +179,8 @@ const Food = () => {
                       >
                         {months.map((mmonth, i) => {
                           return (
-                            (new Date().getMonth() + 1 <= i + 3 ||
-                              new Date().getFullYear() < year) && (
+                            // (new Date().getMonth() + 1 <= i + 3 ||
+                            //   new Date().getFullYear() < year) && (
                               <option
                                 value={i + 3}
                                 defaultChecked={i + 3 === month}
@@ -188,7 +188,7 @@ const Food = () => {
                               >
                                 {mmonth}
                               </option>
-                            )
+                            // )
                           );
                         })}
                       </select>

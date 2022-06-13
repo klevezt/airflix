@@ -255,7 +255,7 @@ export const monthTableRow = (year, month, menu, tableMenu) => {
         ),
       });
     } catch (error) {
-      console.log("Error: " + error);
+      // console.log("Error: " + error);
     }
   });
 };

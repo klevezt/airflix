@@ -152,6 +152,8 @@ const en = {
     add_information: "Add information",
     role: "Role",
     location: "Location on the map",
+    today_menu: "Today's menu",
+    search: "Search"
   },
 };
 

@@ -10,6 +10,7 @@ import ErrorComponent from "../../Error/Error";
 import "./EventsComponent.css";
 import { truncateString } from "../../../Helpers/Functions/functions";
 import { useTranslation } from "react-i18next";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const EventsComponent = () => {
   const { t } = useTranslation();
@@ -35,24 +36,32 @@ const EventsComponent = () => {
           throw new Error(data.error.msg);
         }
 
-        data.forEach((event) => {
+
+        const { myArr } = await imageGetter(data, "Events/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/EventsComponent/useEffect => Events imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        myArr.forEach((event) => {
           if (
             event.status &&
             new Date().getTime() < new Date(event.time).getTime()
           )
             arr.push({
-              img:
-                process.env.REACT_APP_IMAGES_URL +
-                "/Images/Events/" +
-                event.images[0],
+              img: event.image,
               alias: event.alias,
               title: event.name,
               time: event.time,
               description: event.description,
             });
+          });
           setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
           setIsSpinnerLoading(false);
-        });
       } catch (err) {
         setError(true);
         setIsSpinnerLoading(false);
@@ -67,7 +76,7 @@ const EventsComponent = () => {
     if (i === 0) {
       return (
         <Fragment key={i}>
-          <h4 className="text-center mb-5">
+          <h4 className="mb-5">
             {new Date(event.time).toLocaleString([], {
               year: "numeric",
               month: "numeric",
@@ -76,7 +85,7 @@ const EventsComponent = () => {
               minute: "2-digit",
             })}
           </h4>
-          <div className="col-lg-12">
+          <div className="col-md-12 col-lg-6">
             <div className="latest-post-box">
               <NavLink to={`/events/edit/${event.alias}`} className="post-img">
                 <img src={event.img} alt="Upcoming Blog" />
@@ -84,10 +93,10 @@ const EventsComponent = () => {
               <div className="post-desc">
                 <h4>
                   <NavLink to={`/events/edit/${event.alias}`}>
-                    {event.title}
+                    {t(event.title)}
                   </NavLink>
                 </h4>
-                <p>{truncateString(event.description, 150)}</p>
+                <p>{truncateString(t(event.description), 150)}</p>
               </div>
             </div>
           </div>
@@ -100,7 +109,7 @@ const EventsComponent = () => {
   const recentEvents = events.map((event, i) => {
     if (i !== 0) {
       return (
-        <div className="col-lg-4" key={i}>
+        <div className="col-lg-6" key={i}>
           <div className="latest-post-box">
             <NavLink to={`/events/edit/${event.alias}`} className="post-img">
               <img src={event.img} alt="Event" />
@@ -108,7 +117,7 @@ const EventsComponent = () => {
             <div className="post-desc">
               <h4>
                 <NavLink to={`/events/edit/${event.alias}`}>
-                  {event.title}
+                  {t(event.title)}
                 </NavLink>
               </h4>
               <h6>
@@ -120,7 +129,7 @@ const EventsComponent = () => {
                   minute: "2-digit",
                 })}
               </h6>
-              <p>{truncateString(event.description, 150)}</p>
+              <p>{truncateString(t(event.description), 150)}</p>
             </div>
           </div>
         </div>
@@ -135,10 +144,10 @@ const EventsComponent = () => {
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
         <>
-          <div className="row justify-content-center kp-events">
-            <h2 className="text-center mt-3 mb-3">{t("upcoming_event")}</h2>
+          <div className="row kp-events">
+            <h2 className="mt-3 mb-3">{t("upcoming_event")}</h2>
             {upcomingEvent}
-            {events.length < 1 && (
+            {upcomingEvent === "" && (
               <div>
                 <p className="text-center kp-warning">
                   {t("no_upcoming_events_message")}
@@ -146,8 +155,8 @@ const EventsComponent = () => {
               </div>
             )}
           </div>
-          <div className="row justify-content-center kp-events">
-            <h2 className="text-center mt-4 mb-3"> {t("next_events")} </h2>
+          <div className="row kp-events">
+            <h2 className="mt-4 mb-3"> {t("next_events")} </h2>
             {recentEvents}
             {events.length <= 1 && (
               <div>
@@ -156,10 +165,10 @@ const EventsComponent = () => {
             )}
           </div>
           <div className="row text-center">
-            <Link to="/events/all" className=" more-button">
+            <Link to="/events/all" className="user-more-button">
               <IconButton
                 className="w-auto m-auto"
-                text={t("")}
+                text={t("all_events")}
                 icon={<ReadMore className="mr-2" />}
                 color="warning"
                 variant="contained"

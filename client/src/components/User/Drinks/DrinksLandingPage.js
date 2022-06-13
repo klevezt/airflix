@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { useTranslation } from "react-i18next";
 // import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
@@ -10,14 +9,15 @@ import { useStateValue } from "../../../StateProvider";
 import BookCover from "../../UI/Book/BookCover";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import ErrorComponent from "../../Error/Error";
+import { useTranslation } from "react-i18next";
 
 const DrinksLandingPage = () => {
   const [state] = useStateValue();
+  const { t } = useTranslation();
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const { t } = useTranslation();
   // const translate = (text) => removeUpperAccents(t(text));
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
@@ -70,7 +70,7 @@ const DrinksLandingPage = () => {
           <img className="w-100" src={`${drink.image}`} alt="drink-img" />
         </div>
         <div className="drinkTypes-user-box__bookmark-text-wrapper">
-          <h2>{drink.name}</h2>
+          <h2>{t(drink.name)}</h2>
         </div>
       </Link>
     );

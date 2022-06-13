@@ -3,11 +3,13 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { Api } from "@mui/icons-material";
 import { Fade, Backdrop, Modal } from "@mui/material";
 import Multistep from "../MuiltiStepForm/Multistep";
+import { useTranslation } from "react-i18next";
 
 import "./BookContent.css";
 import reactDom from "react-dom";
 
 function BookContent(props) {
+  const { t } = useTranslation();
   const [openQuestions, setOpenQuestions] = useState(false);
 
   const handleOpen = () => {
@@ -45,14 +47,18 @@ function BookContent(props) {
   return (
     <div className="d-flex flex-direction-column flex-wrap w-100">
       <div className="page-content">
-        <h1>{props.contentHeadline}</h1>
-        <img
-          className="w-100 page-content-calligrafy-line"
-          src="https://raw.githubusercontent.com/klevezt/cudia-images-server/5a69bc8d02aa4c840eb7f7aec6f3601664e61f9b/svg/custom.svg"
-          alt="book-caligrafic"
-        />
         {props.loading && <LoadingSpinner />}
-        {!props.loading && <div className="page-content-listing">{props.details}</div>}
+        {!props.loading && (
+          <>
+            <h1>{t(props.contentHeadline)}</h1>
+            <img
+              className="w-100 page-content-calligrafy-line"
+              src="https://raw.githubusercontent.com/klevezt/cudia-images-server/5a69bc8d02aa4c840eb7f7aec6f3601664e61f9b/svg/custom.svg"
+              alt="book-caligrafic"
+            />
+            <div className="page-content-listing">{props.details}</div>
+          </>
+        )}
         {/* {props.contentHeadline === "Cocktail" && (
         <>
           {openQuestions && questionsModal}

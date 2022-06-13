@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { fetchAlacarteWithParamasFromDB } from "../../../api_requests/hotel_requests";
 import "./AlacarteDetailsPage.css";
@@ -11,6 +12,7 @@ import ErrorComponent from "../../Error/Error";
 const AlacarteDetailsPage = () => {
   const params = useParams();
   const [state] = useStateValue();
+  const { t } = useTranslation();
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -62,11 +64,11 @@ const AlacarteDetailsPage = () => {
         <div className="drink-details-each-drink-wrapper d-flex justify-content-between align-items-start">
           <img src={`${alacarte.image}`} alt="alacarte" />
           <div className="drink-details-each-drink-text text-end">
-            <h3>{alacarte.name}</h3>
+            <h3>{t(alacarte.name)}</h3>
             <p>
               {alacarte.ingredients.map((ing, j) => (
                 <Fragment key={j}>
-                  <span>{ing}</span>
+                  <span>{t(ing)}</span>
                   <br />
                 </Fragment>
               ))}

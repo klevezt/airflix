@@ -87,7 +87,7 @@
 @media(min-width:991px){
     .user-services-details-content{
         flex-direction: column;
-        padding: 20px;
+        padding: 10px;
         flex-basis: 45%;
     }
 
@@ -100,6 +100,8 @@
 
     .user-services-details-content a{
         align-self: flex-start;
+        width: 100%;
+        justify-content: flex-start;
     }
 
     .user-services-details-content a span{
@@ -115,7 +117,7 @@
 
     .user-services-details-content{
         flex-direction: column;
-        padding: 20px;
+        padding: 10px;
         flex-basis: 40%;
     }
 

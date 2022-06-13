@@ -114,7 +114,7 @@ const ServicesLandingPage = () => {
             <img src={service.image} alt="service" />
           </div>
           <div className="user-services-content">
-            <h2>{service.name}</h2>
+            <h2>{t(service.name)}</h2>
           </div>
         </Link>
       </Fragment>

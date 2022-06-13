@@ -2,7 +2,7 @@
 .user-more-button{
     margin-top: 20px;
     display: flex;
-    width: fit-content;
+    width: -webkit-fill-available;
 }
 .user-more-button button{
     color: white;
@@ -24,7 +24,6 @@
 }
 .user-home-events-inner-wrapper{
     width: 75vw;
-    margin-right: 10px;
     position: relative
 }
 .user-home-events-inner-wrapper__next-event{
@@ -209,6 +208,9 @@
 
 
 @media (max-width:767.98px) {
+    .user-home-events-inner-wrapper{
+        margin-right: 10px;
+    }
     
     .user-more-button{
         width: 100%;

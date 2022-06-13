@@ -36,7 +36,7 @@ p{margin: 0;}
 }
 
 hr {
-  border: 1px solid #ed6c02 !important;
+  border: 1px solid #464646 !important;
   margin: 20px 0 !important;
 }
 
@@ -64,4 +64,15 @@ hr {
 
 .mdb-datatable table tr{
   color: white;
+}
+
+label{
+  color: #464646;
+}
+.hotel-container tbody a{
+  color: #f0914d;
+}
+.page-item.disabled .page-link,
+.page-item .page-link{
+  color: #464646;
 }

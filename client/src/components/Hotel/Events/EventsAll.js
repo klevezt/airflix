@@ -5,6 +5,7 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
 import ErrorComponent from "../../Error/Error";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const EventsAll = () => {
   const { t } = useTranslation();
@@ -30,22 +31,28 @@ const EventsAll = () => {
           throw new Error(data.error.msg);
         }
 
-        data.forEach((event) => {
+        const { myArr } = await imageGetter(data, "Events/");
+
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/EventsComponent/useEffect => Events imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        myArr.forEach((event) => {
           if (event.status)
             arr.push({
-              img:
-                process.env.REACT_APP_IMAGES_URL +
-                "/Images/Events/" +
-                event.images[0],
+              img: event.image,
               alias: event.alias,
               title: event.name,
               time: event.time,
               description: event.description,
             });
-
-          setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
-          setIsSpinnerLoading(false);
         });
+        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+        setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
         setIsSpinnerLoading(false);
@@ -58,7 +65,7 @@ const EventsAll = () => {
 
   const allEvents = events.map((event, i) => {
     return (
-      <div className="col-lg-12" key={i}>
+      <div className="col-md-12 col-lg-6" key={i}>
         <div className="latest-post-box">
           <NavLink to={`/events/edit/${event.alias}`} className="post-img">
             <img src={event.img} alt="Upcoming Blog" />
@@ -66,7 +73,7 @@ const EventsAll = () => {
           <div className="post-desc">
             <h4>
               <NavLink to={`/events/edit/${event.alias}`}>
-                {event.title}
+                {t(event.title)}
               </NavLink>
             </h4>
             <h6>
@@ -78,7 +85,7 @@ const EventsAll = () => {
                 minute: "2-digit",
               })}
             </h6>
-            <p>{event.description}</p>
+            <p>{t(event.description)}</p>
           </div>
         </div>
       </div>

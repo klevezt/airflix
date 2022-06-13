@@ -64,7 +64,7 @@ const ServicesDetails = () => {
         }
 
         setServiceType(data[0]);
-        
+
         const services = await fetchServiceFromDB(state.token);
         // ---- Error Handler ---- //
         if (services.error) {
@@ -72,7 +72,7 @@ const ServicesDetails = () => {
           throw new Error(services.error.msg);
         }
 
-        const { myArr } = await imageGetter(services, "Services/");
+        const { myArr } = await imageGetter(services, "Services/", true);
 
         // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null) {
@@ -112,15 +112,15 @@ const ServicesDetails = () => {
         throw new Error(data.error.msg);
       }
 
-      const { myArr } = await imageGetter(data, "Services/");
+      const { myArr } = await imageGetter(data, "Services/", true);
 
-        // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
-          let tmp_error =
-            "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
-          setErrorMessage(tmp_error);
-          throw new Error(tmp_error);
-        }
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
 
       setServices(myArr);
       setAddNewService(false);
@@ -170,15 +170,15 @@ const ServicesDetails = () => {
         throw new Error(data.error.msg);
       }
 
-      const { myArr } = await imageGetter(data, "Services/");
+      const { myArr } = await imageGetter(data, "Services/", true);
 
-        // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
-          let tmp_error =
-            "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
-          setErrorMessage(tmp_error);
-          throw new Error(tmp_error);
-        }
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
 
       setServices(myArr);
       setAddNewService(false);
@@ -250,15 +250,15 @@ const ServicesDetails = () => {
         throw new Error(data.error.msg);
       }
 
-      const { myArr } = await imageGetter(data, "Services/");
+      const { myArr } = await imageGetter(data, "Services/", true);
 
-        // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
-          let tmp_error =
-            "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
-          setErrorMessage(tmp_error);
-          throw new Error(tmp_error);
-        }
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
 
       setServices(myArr);
       setEditService(false);
@@ -290,10 +290,7 @@ const ServicesDetails = () => {
             <DeleteOutline />
           </Button>
         </div>
-        <img
-          src={service.image}
-          alt="Service"
-        />
+        <img src={service.image} alt="Service" />
         <div>
           <h2>{service.name}</h2>
           <div className="d-inline-block mb-2 mt-1">

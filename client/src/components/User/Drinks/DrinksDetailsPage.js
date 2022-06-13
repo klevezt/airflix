@@ -7,9 +7,12 @@ import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import ErrorComponent from "../../Error/Error";
+import { useTranslation } from "react-i18next";
 
 const DrinksDetailsPage = (props) => {
   const params = useParams();
+  const { t } = useTranslation();
+
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [state] = useStateValue();
 
@@ -67,11 +70,11 @@ const DrinksDetailsPage = (props) => {
         >
           <img src={`${drink.image}`} alt="drink" />
           <div className="drink-details-each-drink-text text-end">
-            <h3>{drink.name}</h3>
+            <h3>{t(drink.name)}</h3>
             <p>
               {drink.ingredients.map((ing, j) => (
                 <Fragment key={j}>
-                  <span>{ing}</span>
+                  <span>{t(ing)}</span>
                   <br />
                 </Fragment>
               ))}
