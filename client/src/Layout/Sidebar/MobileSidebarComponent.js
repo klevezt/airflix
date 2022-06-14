@@ -24,19 +24,48 @@ import RateAppForm from "../../components/UI/RateApp/RateForm";
 import reactDom from "react-dom";
 
 import { rateTheApp } from "../../api_requests/user_requests";
+import { imageGetter } from "../../Helpers/Const/constants";
+import ErrorComponent from "../../components/Error/Error";
 
 const MobileSidebarComponent = (props) => {
   const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [successRate, setSuccessRate] = useState(false);
+  const [logo, setLogo] = useState("");
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const menuClickHandler = () => {
     props.handleOpenMenu();
   };
 
   useEffect(() => {
-    // document.body.style.overflow = "scroll";
+    let controller = new AbortController();
+    const exec = async () => {
+      try {
+        const { myArr: imageLogo } = await imageGetter(
+          [{ image: "logo.png" }],
+          "Logo/",
+          true
+        );
+        // ---- Error Handler ---- //
+        if (imageLogo === undefined || imageLogo === null) {
+          let tmp_error = "Login/useEffect => Avatar imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setLogo(imageLogo[0].image);
+        // document.body.style.overflow = "scroll";
+      } catch (err) {
+        setError(true);
+      }
+    };
+    exec();
+    controller = null;
+    return () => controller?.abort();
   }, []);
 
   const logoutHandler = () => {
@@ -123,117 +152,122 @@ const MobileSidebarComponent = (props) => {
   );
 
   return (
-    <div className="mobile__left__sidebar">
-      <div>
-        <div className="menu-img">
-          <div>
-            <img
-              src={`${process.env.REACT_APP_IMAGES_URL}/Images/Logo/logo.png`}
-              alt="logo"
-            />
-            <div className="circular-close-button" onClick={menuClickHandler}>
-              <Close />
+    <>
+      {error && (
+        <ErrorComponent
+          errorMessage={errorMessage}
+          onClick={() => setError(false)}
+        />
+      )}
+      <div className="mobile__left__sidebar">
+        <div>
+          <div className="menu-img">
+            <div>
+              <img src={logo} alt="logo" />
+              <div className="circular-close-button" onClick={menuClickHandler}>
+                <Close />
+              </div>
             </div>
           </div>
+          <ul className="mobile__sidebar__list">
+            <li>
+              <NavLink
+                exact
+                to="/"
+                className="mobile__navigation__link"
+                onClick={menuClickHandler}
+              >
+                <Home />
+                <h5> {t("sidebar_home")} </h5>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                exact
+                to="/services"
+                className="mobile__navigation__link"
+                onClick={menuClickHandler}
+              >
+                <LocalActivity />
+                <h5> {t("services")} </h5>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                exact
+                to="/info"
+                className="mobile__navigation__link"
+                onClick={menuClickHandler}
+              >
+                <Info />
+                <h5> {t("sidebar_info")} </h5>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                exact
+                to="/food"
+                className="mobile__navigation__link"
+                onClick={menuClickHandler}
+              >
+                <RestaurantMenu />
+                <h5>{t("sidebar_food")}</h5>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                exact
+                to="/drinks"
+                className="mobile__navigation__link"
+                onClick={menuClickHandler}
+              >
+                <LocalBar />
+                <h5>{t("sidebar_drinks")}</h5>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                exact
+                to="/events"
+                className="mobile__navigation__link"
+                onClick={menuClickHandler}
+              >
+                <DateRange />
+                <h5>{t("sidebar_events")}</h5>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                exact
+                to="/"
+                onClick={logoutHandler}
+                className="mobile__navigation__link"
+              >
+                <ExitToApp />
+                <h5>{t("logout")}</h5>
+              </NavLink>
+            </li>
+            <li>
+              <LanguageSwitcher />
+            </li>
+          </ul>
         </div>
-        <ul className="mobile__sidebar__list">
-          <li>
-            <NavLink
-              exact
-              to="/"
-              className="mobile__navigation__link"
-              onClick={menuClickHandler}
-            >
-              <Home />
-              <h5> {t("sidebar_home")} </h5>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              exact
-              to="/services"
-              className="mobile__navigation__link"
-              onClick={menuClickHandler}
-            >
-              <LocalActivity />
-              <h5> {t("services")} </h5>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              exact
-              to="/info"
-              className="mobile__navigation__link"
-              onClick={menuClickHandler}
-            >
-              <Info />
-              <h5> {t("sidebar_info")} </h5>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              exact
-              to="/food"
-              className="mobile__navigation__link"
-              onClick={menuClickHandler}
-            >
-              <RestaurantMenu />
-              <h5>{t("sidebar_food")}</h5>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              exact
-              to="/drinks"
-              className="mobile__navigation__link"
-              onClick={menuClickHandler}
-            >
-              <LocalBar />
-              <h5>{t("sidebar_drinks")}</h5>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              exact
-              to="/events"
-              className="mobile__navigation__link"
-              onClick={menuClickHandler}
-            >
-              <DateRange />
-              <h5>{t("sidebar_events")}</h5>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              exact
-              to="/"
-              onClick={logoutHandler}
-              className="mobile__navigation__link"
-            >
-              <ExitToApp />
-              <h5>{t("logout")}</h5>
-            </NavLink>
-          </li>
-          <li>
-            <LanguageSwitcher />
-          </li>
-        </ul>
-      </div>
 
-      {open && rateModal}
-      {successRate && successRateModal}
-      <div className="color-white d-flex justify-content-evenly align-items-center flex-wrap">
-        <p>© AirFlix {new Date().getFullYear()}</p>
-        <IconButton
-          text={t("rate_us")}
-          icon={<ThumbsUpDown className="mr-2" />}
-          color="warning"
-          variant="contained"
-          className="w-auto"
-          onClick={handleOpen}
-        />
+        {open && rateModal}
+        {successRate && successRateModal}
+        <div className="color-white d-flex justify-content-evenly align-items-center flex-wrap">
+          <p>© AirFlix {new Date().getFullYear()}</p>
+          <IconButton
+            text={t("rate_us")}
+            icon={<ThumbsUpDown className="mr-2" />}
+            color="warning"
+            variant="contained"
+            className="w-auto"
+            onClick={handleOpen}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

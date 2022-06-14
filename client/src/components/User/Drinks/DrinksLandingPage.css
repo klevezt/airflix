@@ -7,6 +7,23 @@
     object-fit: cover;
     height: 240px;
   }
+
+  .drinkTypes-user-box__bookmark-text-wrapper {
+      display: flex;
+      width: 100%;
+      flex-basis: 100%;
+      min-height: 60px;
+      background: #0091a4;
+      align-items: center;
+  }
+    .drinkTypes-user-box__bookmark-text-wrapper h2 {
+      color: white;
+      position: relative;
+      text-align: start;
+      font-size: 22px;
+      margin: 0;
+      padding: 8px;
+    }
 }
 @media(max-width:574.98px){
   .drinkTypes-user-box {

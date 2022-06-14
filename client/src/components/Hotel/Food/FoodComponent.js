@@ -77,7 +77,12 @@ const Food = () => {
   // };
 
   useEffect(() => {
+    let controller = new AbortController();
+
     monthTableRow(year, month, menu, tableMenu);
+
+    controller = null;
+    return () => controller?.abort();
   }, [tableMenu, isSpinnerLoading]);
 
   useEffect(() => {

@@ -104,6 +104,8 @@ const Users = () => {
   }, []);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     tableState.forEach((user) => {
       if (user.username !== state.user.username) {
         tableRows.push({
@@ -133,6 +135,9 @@ const Users = () => {
         });
       }
     });
+    
+    controller = null;
+    return () => controller?.abort();
   }, [showModal, showEditUser, isSpinnerLoading, tableState]);
 
   // All handle events

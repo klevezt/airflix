@@ -96,6 +96,7 @@ const ShowAlacarte = () => {
       f = alacarte.filter((drink) => drink.type === filter);
     }
     setFilteredAlacarte(f);
+    
     controller = null;
     return () => controller?.abort();
   }, [filter, alacarte]);

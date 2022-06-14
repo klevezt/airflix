@@ -131,7 +131,12 @@ const EditFoodTypeAlacarte = () => {
   }, []);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     foodTableRows();
+
+    controller = null;
+    return () => controller?.abort();
   }, [isSpinnerLoading]);
 
   /* Status Handler */

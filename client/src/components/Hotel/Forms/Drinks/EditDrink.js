@@ -153,7 +153,7 @@ const EditDrink = (props) => {
                     return (
                       <Chip
                         className="mx-2 my-1"
-                        label={ingredient}
+                        label={t(ingredient)}
                         onDelete={() => handleRemoveIngredient(i)}
                         color="primary"
                         key={i}

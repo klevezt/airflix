@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { actionTypes } from "../../reducer";
 import { useStateValue } from "../../StateProvider";
 import IconButton from "../UI/Buttons/IconButton";
@@ -8,6 +8,7 @@ import ErrorComponent from "../Error/Error";
 import { useTranslation } from "react-i18next";
 
 import "./LoginForm.css";
+import { imageGetter } from "../../Helpers/Const/constants";
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -22,7 +23,36 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [errorButtonText, setErrorButtonText] = useState("");
 
+  const [loginAvatar, setLoginAvatar] = useState('');
+
   const [state, dispatch] = useStateValue();
+
+  useEffect(() => {
+    let controller = new AbortController();
+    const exec = async () => {
+      try {
+        const { myArr: avatar } = await imageGetter(
+          [{ image: "avatar.png" }],
+          "General/",
+          true
+        );
+        // ---- Error Handler ---- //
+        if (avatar === undefined || avatar === null) {
+          let tmp_error =
+            "Login/useEffect => Avatar imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setLoginAvatar(avatar[0].image);
+      } catch (err) {
+        setError(true);
+      }
+    };
+    exec();
+    controller = null;
+    return () => controller?.abort();
+  }, []);
 
   const authenticateUser = (uname, psw) => {
     setIsButtonSpinnerLoading(true);
@@ -95,10 +125,7 @@ const LoginForm = () => {
           className="general-form login-form"
         >
           <div className="form-header">
-            <img
-              src={`${process.env.REACT_APP_IMAGES_URL}/Images/Avatar/img_avatar.png`}
-              alt="login_avatar"
-            />
+            <img src={loginAvatar} alt="login_avatar" />
             <h2 className="form-headline">ΕΙΣΟΔΟΣ</h2>
           </div>
           <div className="container">

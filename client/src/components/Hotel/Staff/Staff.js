@@ -10,6 +10,7 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import CubeSpinner from "../../UI/Spinners/CubeSpinner";
 import FadeUpLong from "../../hoc/FadeUpLong";
 import ErrorComponent from "../../Error/Error";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const Staff = () => {
   const [state] = useStateValue();
@@ -38,13 +39,19 @@ const Staff = () => {
           throw new Error(data.error.msg);
         }
 
-        data.forEach((staff) => {
+        const { myArr } = await imageGetter(data, "Staff/");
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/ShowDrinks/useEffect => Drink imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        myArr.forEach((staff) => {
           if (staff.status)
             arr.push({
-              img:
-                process.env.REACT_APP_IMAGES_URL +
-                "/Images/Staff/" +
-                staff.images[0],
+              img: staff.image,
               alias: staff.alias,
               title: staff.name,
               featured: staff.featured,
@@ -82,11 +89,16 @@ const Staff = () => {
   }, []);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     let f = drinks;
     if (filter !== "Όλα") {
       f = drinks.filter((drink) => drink.position === filter);
     }
     setFilteredStaff(f);
+
+    controller = null;
+    return () => controller?.abort();
   }, [filter, drinks]);
 
   const staffListing = (

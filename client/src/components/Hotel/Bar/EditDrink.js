@@ -245,7 +245,12 @@ const EditDrink = () => {
   }, [drinks, handleDrinkStatus, handleDeleteDrink]);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     drinkTableRows();
+
+    controller = null;
+    return () => controller?.abort();
   }, [isSpinnerLoading, editDrink]);
 
   return (

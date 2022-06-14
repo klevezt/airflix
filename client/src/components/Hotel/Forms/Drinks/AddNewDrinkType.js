@@ -22,9 +22,10 @@ const AddNewDrinkType = () => {
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setIsSpinnerLoading(false);
     }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleFormSubmit = async (e) => {

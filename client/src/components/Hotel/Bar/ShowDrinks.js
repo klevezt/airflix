@@ -13,6 +13,7 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import CubeSpinner from "../../UI/Spinners/CubeSpinner";
 import FadeUpLong from "../../hoc/FadeUpLong";
 import { useStateValue } from "../../../StateProvider";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 const ShowDrinks = () => {
   const [state] = useStateValue();
@@ -40,13 +41,19 @@ const ShowDrinks = () => {
           throw new Error(data.error.msg);
         }
 
-        data.forEach((drink) => {
+        const { myArr } = await imageGetter(data, "Drinks/");
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/ShowDrinks/useEffect => Drink imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        myArr.forEach((drink) => {
           if (drink.status)
             arr.push({
-              img:
-                process.env.REACT_APP_IMAGES_URL +
-                "/Images/Drinks/" +
-                drink.images[0],
+              img: drink.images,
               alias: drink.alias,
               title: drink.name,
               featured: drink.featured,
@@ -56,7 +63,7 @@ const ShowDrinks = () => {
         setDrinks(arr);
         setFilteredDrinks(arr);
         const arr_2 = ["Όλα"];
-        
+
         const drinkTypes = await fetchDrinksTypesFromDB(state.token);
         // ---- Error Handler ---- //
         if (drinkTypes.error) {
@@ -83,11 +90,16 @@ const ShowDrinks = () => {
   }, []);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     let f = drinks;
     if (filter !== "Όλα") {
       f = drinks.filter((drink) => drink.type === filter);
     }
     setFilteredDrinks(f);
+
+    controller = null;
+    return () => controller?.abort();
   }, [filter, drinks]);
 
   const drinkListing = (

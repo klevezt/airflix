@@ -82,7 +82,7 @@ const Home = () => {
             new Date().getTime() < new Date(event.time).getTime()
           )
             arr.push({
-              img: event.images[0],
+              img: event.image,
               alias: event.alias,
               title: event.name,
               time: event.time,
@@ -305,7 +305,7 @@ const Home = () => {
         >
           <div className="user-services-img">
             <img
-              src={`${process.env.REACT_APP_IMAGES_URL}/Images/Events/${event.img}`}
+              src={event.img}
               alt="event"
             />
           </div>

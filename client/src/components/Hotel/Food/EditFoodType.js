@@ -235,7 +235,12 @@ const EditFoodType = () => {
   };
 
   useEffect(() => {
+    let controller = new AbortController();
+
     foodTableRows();
+
+    controller = null;
+    return () => controller?.abort();
   }, [isSpinnerLoading, foodTableRows]);
 
   const handleBackButton = () => {

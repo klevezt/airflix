@@ -28,8 +28,7 @@ const Reviews = (props) => {
 
   useEffect(() => {
     let controller = new AbortController();
-    let timer;
-    
+
     setIsSpinnerLoading(true);
     const exec = () => {
       fetchReviewsFromDBWithParams({ reviewFor: id }, state.token).then(
@@ -40,7 +39,7 @@ const Reviews = (props) => {
 
           setReviews(sortedData);
           if (data.length !== 0) {
-            timer = setTimeout(() => {
+            setTimeout(() => {
               setIsSpinnerLoading(false);
             }, 750);
           } else {
@@ -59,8 +58,7 @@ const Reviews = (props) => {
     addReview(
       {
         author: "Klevest Palucaj",
-        image:
-          process.env.REACT_APP_IMAGES_URL + "/Images/Avatar/img_avatar.png",
+        image: "/Images/Avatar/img_avatar.png",
         reviewFor: id,
         rating: rating,
         content: content,

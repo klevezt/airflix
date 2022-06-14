@@ -9,16 +9,25 @@ const BookCover = (props) => {
   const [myArray, setArr] = useState([]);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     const arr = props.catalog.filter((cat) => cat !== undefined);
     setArr(arr);
+
+     controller = null;
+     return () => controller?.abort();
   }, []);
   
   return (
     <section className="drink-user-wrapper">
       <div
-        className={`w-100 d-flex flex-wrap ${myArray.length === 0 ? "justify-content-end h-fit-content" : ""
-          }  ${myArray.length !== 0 ? "justify-content-center" : ""} ${props.withSearch ? "with-search flex-direction-reverse" : ""
-          }`}
+        className={`w-100  ${
+          myArray.length === 0 ? "justify-content-end h-fit-content" : ""
+        }  ${myArray.length !== 0 ? "justify-content-center" : ""} ${
+          props.withSearch
+            ? "d-flex flex-wrap with-search flex-direction-reverse"
+            : ""
+        }`}
       >
         {props.withSearch && (
           <div className="user-book-general-search">
@@ -27,10 +36,13 @@ const BookCover = (props) => {
           </div>
         )}
         <div
-          className={`user-book-general-headline-wrapper ${props.withSearch ? "mb-4" : ""
-            }`}
+          className={`user-home-general-headline-wrapper ${
+            props.withSearch ? "mb-4" : ""
+          }`}
         >
-          <h2 className="user-book-general-headline">{t(props.coverHeadline)}</h2>
+          <h2 className="user-home-general-headline">
+            {t(props.coverHeadline)}
+          </h2>
         </div>
       </div>
       <div className="d-flex flex-wrap justify-content-center w-100">

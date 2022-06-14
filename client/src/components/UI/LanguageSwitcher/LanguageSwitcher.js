@@ -9,6 +9,8 @@ const LanguageSwitcher = () => {
   const [englishFlag, setEnglishFlag] = useState("");
 
   useEffect(() => {
+    let controller = new AbortController();
+
     const exec = async () => {
       const { myArr: greeceResult } = await imageGetter(
         [{ image: "greece.png" }],
@@ -25,6 +27,8 @@ const LanguageSwitcher = () => {
       setEnglishFlag(englishResult[0].image);
     };
     exec();
+    controller = null;
+    return () => controller?.abort();
   }, []);
 
   const changeLanguage = (lng) => {

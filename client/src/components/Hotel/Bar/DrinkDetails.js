@@ -12,6 +12,7 @@ import "./DrinkDetails.css";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 function DrinkDetails() {
   const params = useParams();
@@ -42,7 +43,15 @@ function DrinkDetails() {
           throw new Error(data.error.msg);
         }
 
-        setDrink(data[0]);
+        const { myArr } = await imageGetter(data[0], "Drinks/", true);
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error = "Hotel/DrinkDetails/useEffect => Drink imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setDrink(myArr);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -53,8 +62,6 @@ function DrinkDetails() {
     controller = null;
     return () => controller?.abort();
   }, [params.drinkAlias]);
-
-  const imagePath = process.env.REACT_APP_IMAGES_URL + "/Images";
 
   return (
     <>
@@ -86,7 +93,7 @@ function DrinkDetails() {
                   {drink.ingredients.map((ingredient, i) => {
                     return (
                       <Chip
-                        label={ingredient}
+                        label={t(ingredient)}
                         color="primary"
                         className="my-2 mx-2 chip"
                         key={i}
@@ -102,7 +109,7 @@ function DrinkDetails() {
             </div>
             <div className="col-6 image-container">
               <img
-                src={`${imagePath}/Drinks/${drink.images[0]}`}
+                src={drink.image}
                 alt={drink.name}
               />
             </div>

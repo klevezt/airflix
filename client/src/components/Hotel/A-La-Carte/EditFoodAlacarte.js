@@ -168,7 +168,12 @@ const EditFoodAlacarte = () => {
   }, []);
 
   useEffect(() => {
+    let controller = new AbortController();
+    
     alacarteTableRows();
+    
+    controller = null;
+    return () => controller?.abort();
   }, [isSpinnerLoading]);
 
   /* Status Handler */

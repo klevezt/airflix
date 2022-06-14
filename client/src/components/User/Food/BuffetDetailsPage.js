@@ -63,10 +63,7 @@ const BuffetDetailsPage = () => {
     return (
       <Fragment key={i}>
         <div className="drink-details-each-drink-wrapper d-flex justify-content-between align-items-start pb-4">
-          <img
-            src={`${process.env.REACT_APP_IMAGES_URL}/Images/Food/${buffet.images[0]}`}
-            alt="buffet"
-          />
+          <img src={buffet.image} alt="buffet" />
           <div className="drink-details-each-drink-text text-end">
             <h3>{t(buffet.name)}</h3>
             <p>

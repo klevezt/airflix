@@ -11,6 +11,7 @@ import { useStateValue } from "../../../StateProvider";
 import ErrorComponent from "../../Error/Error";
 
 import "./AlacarteDetails.css";
+import { imageGetter } from "../../../Helpers/Const/constants";
 
 function AlacarteDetails() {
   const [state] = useStateValue();
@@ -41,7 +42,15 @@ function AlacarteDetails() {
           throw new Error(data.error.msg);
         }
 
-        setAlacarte(data[0]);
+        const { myArr } = await imageGetter(data[0], "Alacarte/", true);
+        // ---- Error Handler ---- //
+        if (myArr === undefined || myArr === null) {
+          let tmp_error = "Hotel/AlacarteDetails/useEffect => Alacarte imageGetter Problem";
+          setErrorMessage(tmp_error);
+          throw new Error(tmp_error);
+        }
+
+        setAlacarte(myArr);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -52,8 +61,6 @@ function AlacarteDetails() {
     controller = null;
     return () => controller?.abort();
   }, [params.alacarteAlias]);
-
-  const imagePath = process.env.REACT_APP_IMAGES_URL + "/Images";
 
   return (
     <>
@@ -85,7 +92,7 @@ function AlacarteDetails() {
                   {alacarte.ingredients.map((ingredient, i) => {
                     return (
                       <Chip
-                        label={ingredient}
+                        label={t(ingredient)}
                         color="primary"
                         className="my-2 mx-2 chip"
                         key={i}
@@ -101,7 +108,7 @@ function AlacarteDetails() {
             </div>
             <div className="col-6 image-container">
               <img
-                src={`${imagePath}/Alacarte/${alacarte.images[0]}`}
+                src={alacarte.image}
                 alt={alacarte.name}
               />
             </div>

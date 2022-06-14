@@ -236,7 +236,12 @@ const EditFood = () => {
   }, []);
 
   useEffect(() => {
+    let controller = new AbortController();
+
     foodTableRows();
+
+    controller = null;
+    return () => controller?.abort();
   }, [isSpinnerLoading, editFood]);
 
   /* Status Handler */

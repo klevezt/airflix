@@ -170,15 +170,17 @@ const EventsComponent = () => {
                 <p className="text-center kp-warning">{t("no_events")}</p>
               </div>
             )}
-            <Link to="/events/all" className="user-more-button">
-              <IconButton
-                text={t("all_events")}
-                icon={<ReadMore className="mr-2" />}
-                color="warning"
-                variant="contained"
-                className="my-2"
-              />
-            </Link>
+            <div className="col-12">
+              <Link to="/events/all" className="user-more-button">
+                <IconButton
+                  text={t("all_events")}
+                  icon={<ReadMore className="mr-2" />}
+                  color="warning"
+                  variant="contained"
+                  className="my-2"
+                />
+              </Link>
+            </div>
           </div>
         </>
       )}

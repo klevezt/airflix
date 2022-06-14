@@ -1,3 +1,7 @@
+  .user-buffet-wrapper .user-buffet-img {
+    width: 100%;
+  }
+
 @media(max-width:574.98px){
 
   .user-buffet-wrapper {
