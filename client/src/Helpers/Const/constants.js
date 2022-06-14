@@ -35,7 +35,7 @@ export const imageGetter = async (
         if (!temp) path = "General/no_image.png";
         else path = img_path + temp;
 
-        const storageRef = ref(storage, path);
+        // const storageRef = ref(storage, path);
         // console.log("xcaxax");
         myArr.push({
           ...imageArr,
@@ -59,7 +59,7 @@ export const imageGetter = async (
       // })
     );
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 
   return { myArr, error, loading };

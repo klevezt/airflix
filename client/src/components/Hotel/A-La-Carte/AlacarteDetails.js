@@ -42,15 +42,17 @@ function AlacarteDetails() {
           throw new Error(data.error.msg);
         }
 
-        const { myArr } = await imageGetter(data[0], "Alacarte/", true);
+
+        const { myArr } = await imageGetter(data, "Alacarte/", true);
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
-          let tmp_error = "Hotel/AlacarteDetails/useEffect => Alacarte imageGetter Problem";
+        if (myArr === undefined || myArr === null || myArr.length === 0) {
+          let tmp_error =
+            "Hotel/AlacarteDetails/useEffect => Alacarte imageGetter Problem";
           setErrorMessage(tmp_error);
           throw new Error(tmp_error);
         }
 
-        setAlacarte(myArr);
+        setAlacarte(myArr[0]);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -107,10 +109,7 @@ function AlacarteDetails() {
               </h4>
             </div>
             <div className="col-6 image-container">
-              <img
-                src={alacarte.image}
-                alt={alacarte.name}
-              />
+              <img src={alacarte.image} alt={alacarte.name} />
             </div>
           </div>
           {/* <Reviews data={alacarte} /> */}

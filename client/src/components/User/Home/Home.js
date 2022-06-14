@@ -135,7 +135,7 @@ const Home = () => {
         const { myArr } = await imageGetter(foodd, "Food/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
+        if (myArr === undefined || myArr === null || myArr.length === 0) {
           let tmp_error = "User/Home/useEffect => Food Array Problem";
           setErrorMessage(tmp_error);
           throw new Error(tmp_error);

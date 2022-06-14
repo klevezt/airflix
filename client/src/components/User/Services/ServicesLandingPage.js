@@ -77,7 +77,7 @@ const ServicesLandingPage = () => {
         const { myArr } = await imageGetter(services, "Services/", true);
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
+        if (myArr === undefined || myArr === null || myArr.length === 0) {
           let tmp_error =
             "User/ServicesLandingPage/useEffect => Services imageGetter Problem";
           setErrorMessage(tmp_error);

@@ -51,7 +51,7 @@ const InfoComponent = () => {
         const { myArr } = await imageGetter(data, "Info/", true);
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
+        if (myArr === undefined || myArr === null || myArr.length === 0) {
           let tmp_error =
             "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -90,7 +90,7 @@ const InfoComponent = () => {
       const { myArr } = await imageGetter(data, "Info/", true);
 
       // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null) {
+      if (myArr === undefined || myArr === null || myArr.length === 0) {
         let tmp_error =
           "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
         setErrorMessage(tmp_error);
@@ -127,7 +127,7 @@ const InfoComponent = () => {
       const { myArr } = await imageGetter(data, "Info/", true);
 
       // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null) {
+      if (myArr === undefined || myArr === null || myArr.length === 0) {
         let tmp_error =
           "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
         setErrorMessage(tmp_error);
@@ -173,7 +173,7 @@ const InfoComponent = () => {
       const { myArr } = await imageGetter(data, "Info/", true);
 
       // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null) {
+      if (myArr === undefined || myArr === null || myArr.length === 0) {
         let tmp_error =
           "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
         setErrorMessage(tmp_error);

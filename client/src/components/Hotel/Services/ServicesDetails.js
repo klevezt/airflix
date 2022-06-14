@@ -75,7 +75,7 @@ const ServicesDetails = () => {
         const { myArr } = await imageGetter(services, "Services/", true);
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
+        if (myArr === undefined || myArr === null || myArr.length === 0) {
           let tmp_error =
             "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -115,7 +115,7 @@ const ServicesDetails = () => {
       const { myArr } = await imageGetter(data, "Services/", true);
 
       // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null) {
+      if (myArr === undefined || myArr === null || myArr.length === 0) {
         let tmp_error =
           "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
         setErrorMessage(tmp_error);
@@ -173,7 +173,7 @@ const ServicesDetails = () => {
       const { myArr } = await imageGetter(data, "Services/", true);
 
       // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null) {
+      if (myArr === undefined || myArr === null || myArr.length === 0) {
         let tmp_error =
           "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
         setErrorMessage(tmp_error);
@@ -253,7 +253,7 @@ const ServicesDetails = () => {
       const { myArr } = await imageGetter(data, "Services/", true);
 
       // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null) {
+      if (myArr === undefined || myArr === null || myArr.length === 0) {
         let tmp_error =
           "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
         setErrorMessage(tmp_error);

@@ -218,6 +218,9 @@
 }
 
 @media(min-width:768px) {
+  .user-container.mb-80{
+    margin-bottom: 0px;
+  }
   .user.main__content .container .user-container {
     max-width: 80%;
     margin: auto;
@@ -225,6 +228,9 @@
 }
 
 @media (max-width:767.98px) {
+  .user-container.mb-80 {
+      margin-bottom: 20px;
+    }
   .user.main__content > .container,
   .user.main__content .container .user-container {
     max-width: calc(100vw - 20px);

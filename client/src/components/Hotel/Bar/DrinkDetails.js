@@ -43,15 +43,15 @@ function DrinkDetails() {
           throw new Error(data.error.msg);
         }
 
-        const { myArr } = await imageGetter(data[0], "Drinks/", true);
+        const { myArr } = await imageGetter(data, "Drinks/", true);
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
+        if (myArr === undefined || myArr === null || myArr.length === 0) {
           let tmp_error = "Hotel/DrinkDetails/useEffect => Drink imageGetter Problem";
           setErrorMessage(tmp_error);
           throw new Error(tmp_error);
         }
 
-        setDrink(myArr);
+        setDrink(myArr[0]);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);

@@ -40,7 +40,7 @@ function EventsDetail() {
         const { myArr } = await imageGetter(data, "Events/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
+        if (myArr === undefined || myArr === null || myArr.length === 0) {
           let tmp_error =
             "User/ServicesDetailPage/useEffect => Services imageGetter Problem";
           setErrorMessage(tmp_error);
