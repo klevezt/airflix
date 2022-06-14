@@ -53,7 +53,7 @@ const ShowDrinks = () => {
         myArr.forEach((drink) => {
           if (drink.status)
             arr.push({
-              img: drink.images,
+              img: drink.image,
               alias: drink.alias,
               title: drink.name,
               featured: drink.featured,

@@ -43,7 +43,7 @@ function DrinkDetails() {
           throw new Error(data.error.msg);
         }
 
-        const { myArr } = await imageGetter(data, "Drinks/", true);
+        const { myArr } = await imageGetter(data, "Drinks/");
         // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null || myArr.length === 0) {
           let tmp_error = "Hotel/DrinkDetails/useEffect => Drink imageGetter Problem";
