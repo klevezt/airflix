@@ -40,7 +40,7 @@ const EventsComponent = () => {
         const { myArr } = await imageGetter(data, "Events/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null || myArr.length === 0) {
+        if (myArr === undefined || myArr === null ) {
           let tmp_error =
             "Hotel/EventsComponent/useEffect => Events imageGetter Problem";
           setErrorMessage(tmp_error);

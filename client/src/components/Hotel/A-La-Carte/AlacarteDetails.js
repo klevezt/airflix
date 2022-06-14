@@ -45,7 +45,7 @@ function AlacarteDetails() {
 
         const { myArr } = await imageGetter(data, "Alacarte/", true);
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null || myArr.length === 0) {
+        if (myArr === undefined || myArr === null ) {
           let tmp_error =
             "Hotel/AlacarteDetails/useEffect => Alacarte imageGetter Problem";
           setErrorMessage(tmp_error);

@@ -77,7 +77,7 @@ const ServicesLandingPage = () => {
         const { myArr } = await imageGetter(services, "Services/", true);
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null || myArr.length === 0) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "User/ServicesLandingPage/useEffect => Services imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -99,25 +99,18 @@ const ServicesLandingPage = () => {
 
   const allServices = catalog.map((service, i) => {
     return (
-      <Fragment key={i}>
-        <div className="mt-3">
-          <div className="user-home-general-headline-wrapper">
-            <h2 className="user-home-general-headline">{t("services")}</h2>
-          </div>
+      <Link
+        to={`/services/${service.name}/detail`}
+        className="user-services-wrapper"
+        key={i}
+      >
+        <div className="user-services-img">
+          <img src={service.image} alt="service" />
         </div>
-        <Link
-          to={`/services/${service.name}/detail`}
-          className="user-services-wrapper"
-          key={i}
-        >
-          <div className="user-services-img">
-            <img src={service.image} alt="service" />
-          </div>
-          <div className="user-services-content">
-            <h2>{t(service.name)}</h2>
-          </div>
-        </Link>
-      </Fragment>
+        <div className="user-services-content">
+          <h2>{t(service.name)}</h2>
+        </div>
+      </Link>
     );
   });
 
@@ -127,7 +120,22 @@ const ServicesLandingPage = () => {
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
         <div className="row">
-          <div className="user-services-total-wrapper mb-5">{allServices}</div>
+          <div className="mt-3">
+            <div className="user-home-general-headline-wrapper">
+              <h2 className="user-home-general-headline">{t("services")}</h2>
+            </div>
+          </div>
+          {allServices.length > 0 ? (
+            <div className="row">
+              <div className="user-services-total-wrapper mb-5">
+                {allServices}
+              </div>
+            </div>
+          ) : (
+            <div>
+              <p className="text-center kp-warning">{t("no_services")}</p>
+            </div>
+          )}
         </div>
       )}
     </>

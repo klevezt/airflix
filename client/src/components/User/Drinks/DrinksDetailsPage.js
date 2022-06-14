@@ -41,7 +41,7 @@ const DrinksDetailsPage = (props) => {
         const { myArr } = await imageGetter(data, "Drinks/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null || myArr.length === 0) {
+        if (myArr === undefined || myArr === null ) {
           let tmp_error =
             "User/DrinksDetails/useEffect => Drinks imageGetter Problem";
           setErrorMessage(tmp_error);

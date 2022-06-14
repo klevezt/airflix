@@ -7,10 +7,11 @@ import IconButton from "../UI/Buttons/IconButton";
 import { ExitToApp } from "@mui/icons-material";
 
 import "./Error.css";
+import { actionTypes } from "../../reducer";
 
 const Error = (props) => {
   const [open] = useState(true);
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
 
   const [networkError, setNetworkError] = useState(false);
@@ -28,9 +29,15 @@ const Error = (props) => {
         content: props.errorMessage,
       }),
     })
-      .then((data) => {
+      .then(() => {
         if (props.onClick) return props.onClick();
-        window.location.reload(false);
+
+        localStorage.clear();
+        dispatch({
+          type: actionTypes.REMOVE_JWT_TOKEN,
+          authenticated: false,
+          token: "",
+        });
       })
       .catch((err) => err);
   };
@@ -38,7 +45,7 @@ const Error = (props) => {
   const message = props.errorMessage ? props.errorMessage : t("general_error");
   const btnText = props.errorButtonText
     ? props.errorButtonText
-    : "Ανανεώστε τη σελίδα";
+    : "Αποσύνδεση";
 
   return reactDom.createPortal(
     <Modal

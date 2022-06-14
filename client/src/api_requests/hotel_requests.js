@@ -564,7 +564,7 @@ export const setFoodStatus = (id, stat, token) => {
     body: JSON.stringify({
       status: stat,
     }),
-  });
+  }).then((data) => data.json());
 };
 
 export const setInfoStatus = (id, stat, token) => {
@@ -577,7 +577,7 @@ export const setInfoStatus = (id, stat, token) => {
     body: JSON.stringify({
       featured: stat,
     }),
-  });
+  }).then((data) => data.json());
 };
 
 export const setInfoContentStatus = (id, content, token) => {
@@ -590,7 +590,7 @@ export const setInfoContentStatus = (id, content, token) => {
     body: JSON.stringify({
       content,
     }),
-  });
+  }).then((data) => data.json());
 };
 
 export const setServiceContentStatus = (id, content, token) => {
@@ -603,7 +603,7 @@ export const setServiceContentStatus = (id, content, token) => {
     body: JSON.stringify({
       content,
     }),
-  });
+  }).then((data) => data.json());
 };
 
 export const setDrinkStatus = (id, stat, token) => {
@@ -616,7 +616,7 @@ export const setDrinkStatus = (id, stat, token) => {
     body: JSON.stringify({
       status: stat,
     }),
-  });
+  }).then((data) => data.json());
 };
 
 export const setAlacarteStatus = (id, stat, token) => {
@@ -629,7 +629,7 @@ export const setAlacarteStatus = (id, stat, token) => {
     body: JSON.stringify({
       status: stat,
     }),
-  });
+  }).then((data) => data.json());
 };
 export const setAlacarteTypeStatus = (id, stat, token) => {
   return fetch(base_url + "/alacarteType/status/" + id, {
@@ -641,7 +641,7 @@ export const setAlacarteTypeStatus = (id, stat, token) => {
     body: JSON.stringify({
       status: stat,
     }),
-  });
+  }).then((data) => data.json());
 };
 
 export const setFoodTypeStatus = (id, stat, token) => {
@@ -654,7 +654,7 @@ export const setFoodTypeStatus = (id, stat, token) => {
     body: JSON.stringify({
       status: stat,
     }),
-  });
+  }).then((data) => data.json());
 };
 
 export const setDrinkTypeStatus = (id, stat, token) => {
@@ -667,7 +667,7 @@ export const setDrinkTypeStatus = (id, stat, token) => {
     body: JSON.stringify({
       status: stat,
     }),
-  });
+  }).then((data) => data.json());
 };
 
 export const setCustomer = (uname, pass, room, room_type, token) => {
@@ -734,7 +734,7 @@ export const deleteCustomer = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((user) => user.json());
 };
 
 export const fetchCustomersFromDB = (token) => {
@@ -947,7 +947,7 @@ export const updateServiceType = (id, serviceTypeName, a, token) => {
 };
 
 export const updateDrinksOfDrinkType = (t, token) => {
-  return fetch(base_url + "/drink/uu/update-drink-type", {
+  return fetch(base_url + "/drink/update-drink-type", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -957,8 +957,7 @@ export const updateDrinksOfDrinkType = (t, token) => {
       type: t,
     }),
   })
-    .then((data) => data.json())
-    .catch((e) => console.log(e));
+    .then((data) => data.json());
 };
 
 export const updateDrinksOfDrinkType_Status = (t, token) => {
@@ -973,8 +972,7 @@ export const updateDrinksOfDrinkType_Status = (t, token) => {
       status: false,
     }),
   })
-    .then((data) => data.json())
-    .catch((e) => console.log(e));
+    .then((data) => data.json());
 };
 
 export const updateFoodOfFoodType_Status = (t, token) => {
@@ -989,8 +987,7 @@ export const updateFoodOfFoodType_Status = (t, token) => {
       status: false,
     }),
   })
-    .then((data) => data.json())
-    .catch((e) => console.log(e));
+    .then((data) => data.json());
 };
 export const updateAlacarteOfAlacarteType_Status = (t, token) => {
   return fetch(base_url + "/alacarte/update-alacarte-type-statuses", {
@@ -1004,8 +1001,7 @@ export const updateAlacarteOfAlacarteType_Status = (t, token) => {
       status: false,
     }),
   })
-    .then((data) => data.json())
-    .catch((e) => console.log(e));
+    .then((data) => data.json());
 };
 export const updateDrink = (
   id,
@@ -1150,7 +1146,7 @@ export const deleteFood = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((data) => data.json());
 };
 
 export const deleteDrink = (id, token) => {
@@ -1160,7 +1156,7 @@ export const deleteDrink = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((data) => data.json());
 };
 
 export const deleteAlacarte = (id, token) => {
@@ -1170,7 +1166,7 @@ export const deleteAlacarte = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((data) => data.json());
 };
 
 export const deleteFoodType = (id, token) => {
@@ -1180,7 +1176,7 @@ export const deleteFoodType = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((data) => data.json());
 };
 export const deleteDrinkType = (id, token) => {
   return fetch(base_url + "/drinkType/delete/" + id, {
@@ -1189,7 +1185,7 @@ export const deleteDrinkType = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((data) => data.json());
 };
 export const deleteAlacarteType = (id, token) => {
   return fetch(base_url + "/alacarteType/delete/" + id, {
@@ -1198,7 +1194,7 @@ export const deleteAlacarteType = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((data) => data.json());
 };
 export const deleteInfo = (id, token) => {
   return fetch(base_url + "/info/delete/" + id, {
@@ -1207,7 +1203,7 @@ export const deleteInfo = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((data) => data.json());
 };
 export const deleteService = (id, token) => {
   return fetch(base_url + "/service/delete/" + id, {
@@ -1216,7 +1212,7 @@ export const deleteService = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((data) => data.json());
 };
 
 export const deleteServiceType = (id, token) => {
@@ -1226,7 +1222,7 @@ export const deleteServiceType = (id, token) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).then((data) => data.json());
 };
 
 export const fetchReviewsFromDB = (token) => {

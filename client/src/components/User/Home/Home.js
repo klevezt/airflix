@@ -9,7 +9,10 @@ import {
 } from "../../../api_requests/hotel_requests";
 import { Close, ReadMore } from "@mui/icons-material";
 import IconButton from "../../UI/Buttons/IconButton";
-import { getCurrentWeekInMonth, truncateString } from "../../../Helpers/Functions/functions";
+import {
+  getCurrentWeekInMonth,
+  truncateString,
+} from "../../../Helpers/Functions/functions";
 import { fetchTodaysMenuFromDB } from "../../../api_requests/user_requests";
 import {
   imageGetter,
@@ -70,26 +73,28 @@ const Home = () => {
 
         const arr = [];
 
-        // ---- Error Handler ---- //
-        if (eventArr === undefined || eventArr === null) {
-          let tmp_error = "User/Home/useEffect => Event Array Problem";
-          setErrorMessage(tmp_error);
-          throw new Error(tmp_error);
+        if (eventArr.length !== 0) {
+          if (eventArr === undefined || eventArr === null) {
+            // ---- Error Handler ---- //
+            let tmp_error = "User/Home/useEffect => Event Array Problem";
+            setErrorMessage(tmp_error);
+            throw new Error(tmp_error);
+          }
+          eventArr.forEach((event) => {
+            if (
+              event.status &&
+              new Date().getTime() < new Date(event.time).getTime()
+            )
+              arr.push({
+                img: event.image,
+                alias: event.alias,
+                title: event.name,
+                time: event.time,
+                description: event.description,
+              });
+          });
+          setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
         }
-        eventArr.forEach((event) => {
-          if (
-            event.status &&
-            new Date().getTime() < new Date(event.time).getTime()
-          )
-            arr.push({
-              img: event.image,
-              alias: event.alias,
-              title: event.name,
-              time: event.time,
-              description: event.description,
-            });
-        });
-        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
 
         const todaysYear = today.getFullYear();
         const todaysMonth = today.getMonth() + 1;
@@ -103,22 +108,24 @@ const Home = () => {
           todaysYear,
           state.token
         );
-
-        // ---- Error Handler ---- //
-        if (data.error) {
-          setErrorMessage(data.error.msg);
-          throw new Error(data.error.msg);
-        }
-
-        const currentDay = weekNamesAliases[today.getDay()];
-
-        const allCategoriesObject = data[0][currentDay];
-        const allCategoriesArray = Object.entries(allCategoriesObject).map(
-          (key) => {
-            if (key[1].length !== 0) setIsThereFoodToday(true);
-            return key;
+        if (data.length !== 0) {
+          // ---- Error Handler ---- //
+          if (data.error) {
+            setErrorMessage(data.error.msg);
+            throw new Error(data.error.msg);
           }
-        );
+
+          const currentDay = weekNamesAliases[today.getDay()];
+
+          const allCategoriesObject = data[0][currentDay];
+          const allCategoriesArray = Object.entries(allCategoriesObject).map(
+            (key) => {
+              if (key[1].length !== 0) setIsThereFoodToday(true);
+              return key;
+            }
+          );
+          setTodaysFoodCategories(allCategoriesArray);
+        }
         const arr2 = [];
 
         const foodd = await fetchFoodFromDBWithParams(
@@ -134,18 +141,19 @@ const Home = () => {
 
         const { myArr } = await imageGetter(foodd, "Food/");
 
-        // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null || myArr.length === 0) {
-          let tmp_error = "User/Home/useEffect => Food Array Problem";
-          setErrorMessage(tmp_error);
-          throw new Error(tmp_error);
-        }
+        if (myArr.length !== 0) {
+          // ---- Error Handler ---- //
+          if (myArr === undefined || myArr === null) {
+            let tmp_error = "User/Home/useEffect => Food Array Problem";
+            setErrorMessage(tmp_error);
+            throw new Error(tmp_error);
+          }
 
-        myArr.forEach((f) => {
-          arr2.push({ name: f, img: f.image });
-        });
-        setFoodWithImages(arr2);
-        setTodaysFoodCategories(allCategoriesArray);
+          myArr.forEach((f) => {
+            arr2.push({ name: f, img: f.image });
+          });
+          setFoodWithImages(arr2);
+        }
 
         const buffet = await fetchFoodTypesFromDB(state.token);
 
@@ -163,8 +171,8 @@ const Home = () => {
           setErrorMessage(featured_info.error.msg);
           throw new Error(featured_info.error.msg);
         }
-        setInfo(featured_info);
 
+        setInfo(featured_info);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -304,10 +312,7 @@ const Home = () => {
           key={i}
         >
           <div className="user-services-img">
-            <img
-              src={event.img}
-              alt="event"
-            />
+            <img src={event.img} alt="event" />
           </div>
           <div className="user-services-content justify-content-start">
             <h2>{t(event.title)}</h2>
@@ -370,11 +375,22 @@ const Home = () => {
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
         <div className="row">
-          {todaysMenu}
+          {todayBuffet.lenght > 0 ? (
+            todaysMenu
+          ) : (
+            <>
+              <div className="mt-3 mb-5 user-home-general-headline-wrapper">
+                <h2 className="user-home-general-headline">
+                  {t("today_menu")}
+                </h2>
+                <p className="kp-warning">{t("no_registered_food")}</p>
+              </div>
+            </>
+          )}
           {open && previewSelectedFood.length >= 1 && previewFood}
           <div className="mt-3 mb-5">
             <div className="user-home-general-headline-wrapper">
-              <h2 className="user-home-general-headline mb-4">
+              <h2 className="user-home-general-headline">
                 {t("upcoming_events")}
               </h2>
             </div>
@@ -398,19 +414,25 @@ const Home = () => {
           </div>
           <div className="mt-3 mb-5 user-home-info-section">
             <div className="user-home-general-headline-wrapper">
-              <h2 className="user-home-general-headline ">{t("info")}</h2>
+              <h2 className="user-home-general-headline">{t("info")}</h2>
             </div>
-            <div className="my-3 user-home-accordion-wrapper">
-              {featuredInfo}
-            </div>
-            <Link to="/info" className="user-more-button">
-              <IconButton
-                text={t("read_more")}
-                icon={<ReadMore className="mr-2" />}
-                color="warning"
-                variant="contained"
-              />
-            </Link>
+            {featuredInfo.length > 1 ? (
+              <>
+                <div className="my-3 user-home-accordion-wrapper">
+                  {featuredInfo}
+                </div>
+                <Link to="/info" className="user-more-button">
+                  <IconButton
+                    text={t("read_more")}
+                    icon={<ReadMore className="mr-2" />}
+                    color="warning"
+                    variant="contained"
+                  />
+                </Link>
+              </>
+            ) : (
+              <p className="kp-warning">{t("no_information")}</p>
+            )}
           </div>
         </div>
       )}

@@ -66,20 +66,23 @@ const BuffetLandingPage = () => {
           selectedYear,
           state.token
         );
-
-        // ---- Error Handler ---- //
-        if (data.error) {
-          setErrorMessage(data.error.msg);
-          throw new Error(data.error.msg);
-        }
-
-        const currentDay = weekNamesAliases[date.getDay()];
-        const allCategoriesObject = data[0][currentDay];
-        const allCategoriesArray = Object.entries(allCategoriesObject).map(
-          (key) => {
-            return key;
+        if (data.length !== 0) {
+          // ---- Error Handler ---- //
+          if (data.error) {
+            setErrorMessage(data.error.msg);
+            throw new Error(data.error.msg);
           }
-        );
+
+          const currentDay = weekNamesAliases[date.getDay()];
+          const allCategoriesObject = data[0][currentDay];
+          const allCategoriesArray = Object.entries(allCategoriesObject).map(
+            (key) => {
+              return key;
+            }
+          );
+
+          setTodaysFoodCategories(allCategoriesArray);
+        }
 
         const foodd = await fetchFoodFromDBWithParams(
           "status=true",
@@ -95,14 +98,13 @@ const BuffetLandingPage = () => {
         const { myArr } = await imageGetter(foodd, "Food/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null || myArr.length === 0) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "User/BuffetLandingPage/useEffect => Food imageGetter Problem";
           setErrorMessage(tmp_error);
           throw new Error(tmp_error);
         }
         setFood(myArr);
-        setTodaysFoodCategories(allCategoriesArray);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -262,21 +264,22 @@ const BuffetLandingPage = () => {
         selectedYear,
         state.token
       );
-
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
-
-      const currentDay = weekNamesAliases[date.getDay()];
-      const allCategoriesObject = data[0][currentDay];
-      const allCategoriesArray = Object.entries(allCategoriesObject).map(
-        (key) => {
-          return key;
+      if (data.length !== 0) {
+        // ---- Error Handler ---- //
+        if (data.error) {
+          setErrorMessage(data.error.msg);
+          throw new Error(data.error.msg);
         }
-      );
 
+        const currentDay = weekNamesAliases[date.getDay()];
+        const allCategoriesObject = data[0][currentDay];
+        const allCategoriesArray = Object.entries(allCategoriesObject).map(
+          (key) => {
+            return key;
+          }
+        );
+        setTodaysFoodCategories(allCategoriesArray);
+      }
       const foodd = await fetchFoodFromDBWithParams("status=true", state.token);
 
       // ---- Error Handler ---- //
@@ -288,7 +291,7 @@ const BuffetLandingPage = () => {
       const { myArr } = await imageGetter(foodd, "Food/");
 
       // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null || myArr.length === 0) {
+      if (myArr === undefined || myArr === null) {
         let tmp_error =
           "User/BuffetLandingPage/useEffect => Food imageGetter Problem";
         setErrorMessage(tmp_error);
@@ -296,7 +299,6 @@ const BuffetLandingPage = () => {
       }
 
       setFood(myArr);
-      setTodaysFoodCategories(allCategoriesArray);
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);

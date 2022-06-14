@@ -87,9 +87,7 @@ const Info = () => {
           <div className="user-home-accordion-wrapper">{allInfo}</div>
           {allInfo.length < 1 && (
             <div>
-              <p className="text-center kp-warning">
-                {t("no_upcoming_events_message")}
-              </p>
+              <p className="text-center kp-warning">{t("no_information")}</p>
             </div>
           )}
         </div>

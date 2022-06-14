@@ -153,7 +153,9 @@ const en = {
     role: "Role",
     location: "Location on the map",
     today_menu: "Today's menu",
-    search: "Search"
+    search: "Search",
+    no_information: "There are no information",
+    no_services: "There are no services",
   },
 };
 

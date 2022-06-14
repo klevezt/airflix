@@ -50,7 +50,7 @@ const ServicesComponent = () => {
         const { myArr } = await imageGetter(data, "Services/", true);
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null || myArr.length === 0) {
+        if (myArr === undefined || myArr === null ) {
           let tmp_error =
             "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -89,7 +89,7 @@ const ServicesComponent = () => {
       const { myArr } = await imageGetter(data, "Services/", true);
 
       // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null || myArr.length === 0) {
+      if (myArr === undefined || myArr === null ) {
         let tmp_error =
           "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
         setErrorMessage(tmp_error);
@@ -131,7 +131,7 @@ const ServicesComponent = () => {
       const { myArr } = await imageGetter(data, "Services/", true);
 
       // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null || myArr.length === 0) {
+      if (myArr === undefined || myArr === null ) {
         let tmp_error =
           "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
         setErrorMessage(tmp_error);

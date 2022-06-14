@@ -142,45 +142,47 @@ const EventsComponent = () => {
       {!error && !isSpinnerLoading && (
         <>
           <div className="row">
-            <div className="mt-4">
+            <div className="mt-3 mb-5">
               <div className="user-home-general-headline-wrapper">
                 <h2 className="user-home-general-headline">
                   {t("upcoming_event")}
                 </h2>
+                {upcomingEvent}
               </div>
+              {events.length < 1 && (
+                <div>
+                  <p className="text-center kp-warning">
+                    {t("no_upcoming_events_message")}
+                  </p>
+                </div>
+              )}
             </div>
-            {upcomingEvent}
-            {events.length < 1 && (
-              <div>
-                <p className="text-center kp-warning">
-                  {t("no_upcoming_events_message")}
-                </p>
-              </div>
-            )}
-            <div className="mt-4">
+            <div className="mt-3 mb-5">
               <div className="user-home-general-headline-wrapper">
                 <h2 className="user-home-general-headline">
                   {t("next_events")}
                 </h2>
+                {recentEvents}
               </div>
+              {events.length <= 1 && (
+                <div>
+                  <p className="text-center kp-warning">{t("no_events")}</p>
+                </div>
+              )}
             </div>
-            {recentEvents}
-            {events.length <= 1 && (
-              <div>
-                <p className="text-center kp-warning">{t("no_events")}</p>
+            {events.length > 1 && (
+              <div className="col-12">
+                <Link to="/events/all" className="user-more-button">
+                  <IconButton
+                    text={t("all_events")}
+                    icon={<ReadMore className="mr-2" />}
+                    color="warning"
+                    variant="contained"
+                    className="my-2"
+                  />
+                </Link>
               </div>
             )}
-            <div className="col-12">
-              <Link to="/events/all" className="user-more-button">
-                <IconButton
-                  text={t("all_events")}
-                  icon={<ReadMore className="mr-2" />}
-                  color="warning"
-                  variant="contained"
-                  className="my-2"
-                />
-              </Link>
-            </div>
           </div>
         </>
       )}

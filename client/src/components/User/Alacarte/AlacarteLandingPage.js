@@ -39,7 +39,7 @@ const AlacarteLandingPage = () => {
         const { myArr } = await imageGetter(alacarte, "Alacarte/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null || myArr.length === 0) {
+        if (myArr === undefined || myArr === null ) {
           let tmp_error =
             "User/AlacarteLandingPage/useEffect => Alacarte imageGetter Problem";
           setErrorMessage(tmp_error);
