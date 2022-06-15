@@ -41,7 +41,7 @@ const Staff = () => {
 
         const { myArr } = await imageGetter(data, "Staff/");
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "Hotel/ShowDrinks/useEffect => Drink imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -86,7 +86,7 @@ const Staff = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   useEffect(() => {
     let controller = new AbortController();

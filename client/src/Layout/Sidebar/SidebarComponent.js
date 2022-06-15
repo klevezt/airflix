@@ -46,6 +46,7 @@ const SidebarComponent = () => {
       type: actionTypes.REMOVE_JWT_TOKEN,
       authenticated: false,
       token: "",
+      refreshToken: "",
     });
   };
 

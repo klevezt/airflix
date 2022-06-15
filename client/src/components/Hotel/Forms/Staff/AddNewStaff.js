@@ -8,6 +8,7 @@ import { fetchStaffPositionFromDB } from "../../../../api_requests/hotel_request
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
 import ErrorComponent from "../../../Error/Error";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const AddNewStaffForm = (props) => {
   const [state] = useStateValue();
@@ -49,7 +50,7 @@ const AddNewStaffForm = (props) => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
@@ -100,7 +101,7 @@ const AddNewStaffForm = (props) => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -135,7 +136,6 @@ const AddNewStaffForm = (props) => {
                   type="file"
                   ref={staffImageRef}
                   autoComplete="off"
-                  multiple
                 />
               </div>
             </div>

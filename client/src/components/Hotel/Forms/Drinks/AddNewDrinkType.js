@@ -7,6 +7,7 @@ import IconButton from "../../../UI/Buttons/IconButton";
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
 import ErrorComponent from "../../../Error/Error";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const AddNewDrinkType = () => {
   const [state] = useStateValue();
@@ -68,7 +69,7 @@ const AddNewDrinkType = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -98,7 +99,6 @@ const AddNewDrinkType = () => {
                 <input
                   className="form-control form-control-sm"
                   type="file"
-                  multiple
                   autoComplete="off"
                   ref={imageRef}
                 />

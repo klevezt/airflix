@@ -17,7 +17,7 @@ import {
   monthTableRow,
 } from "../../../Helpers/Const/constants";
 import PrimaryButton from "../../UI/Buttons/PrimaryButton";
-import { getWeeksInMonth } from "../../../Helpers/Functions/functions";
+import { getWeeksInMonth, removeUpperAccents } from "../../../Helpers/Functions/functions";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import FadeUp from "../../hoc/FadeUp";
 import { useStateValue } from "../../../StateProvider";
@@ -116,7 +116,7 @@ const Food = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [month, year]);
+  }, [month, year, state.token]);
 
   // All handle events
 
@@ -186,13 +186,13 @@ const Food = () => {
                           return (
                             // (new Date().getMonth() + 1 <= i + 3 ||
                             //   new Date().getFullYear() < year) && (
-                              <option
-                                value={i + 3}
-                                defaultChecked={i + 3 === month}
-                                key={i}
-                              >
-                                {mmonth}
-                              </option>
+                            <option
+                              value={i + 3}
+                              defaultChecked={i + 3 === month}
+                              key={i}
+                            >
+                              {mmonth}
+                            </option>
                             // )
                           );
                         })}
@@ -244,7 +244,7 @@ const Food = () => {
                   <PrimaryButton
                     show
                     icon={<Add className="mr-2 " />}
-                    text={t("new_timetable")}
+                    text={removeUpperAccents(t("new_timetable"))}
                     onClick={handleCreateMonthTimetable}
                   />
                 )}

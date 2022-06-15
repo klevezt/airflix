@@ -20,6 +20,7 @@ import "./UsersComponent.css";
 import AddNewUserForm from "../Forms/AddNewUserForm/AddNewUserForm";
 import EditUserForm from "../Forms/EditUserForm/EditUserForm";
 import ErrorComponent from "../../Error/Error";
+import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 
 const Users = () => {
   const { t } = useTranslation();
@@ -101,7 +102,7 @@ const Users = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -298,7 +299,7 @@ const Users = () => {
           onClick={openNewUserForm}
         >
           <AddIcon />
-          {t("add_user")}
+          {removeUpperAccents(t("add_user"))}
         </Button>
       )}
       {!error && showModal && !isSpinnerLoading && (
@@ -309,7 +310,7 @@ const Users = () => {
           onClick={closeNewUserForm}
         >
           <Cancel />
-          {t("cancel")}
+          {removeUpperAccents(t("cancel"))}
         </Button>
       )}
       {!error && showEditUser && !isSpinnerLoading && (
@@ -320,7 +321,7 @@ const Users = () => {
           onClick={closeEditUserForm}
         >
           <Cancel />
-          {t("cancel")}
+          {removeUpperAccents(t("cancel"))}
         </Button>
       )}
       {!error && showEditUser && !isSpinnerLoading && (

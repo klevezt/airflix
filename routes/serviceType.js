@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 let ServiceType = require("../models/serviceType.model");
 
-router.route("/").get((req, res) => {
+router.route("/").get((req, res, next) => {
   ServiceType.find(req.query)
     .then((service) => {
       if (!service) {
@@ -20,7 +20,7 @@ router.route("/").get((req, res) => {
     });
 });
 
-router.route("/:id").get((req, res) => {
+router.route("/:id").get((req, res, next) => {
   ServiceType.findById(req.params.id)
     .then((service) => {
       if (!service) {
@@ -38,7 +38,7 @@ router.route("/:id").get((req, res) => {
     });
 });
 
-router.route("/add").post((req, res) => {
+router.route("/add").post((req, res, next) => {
   const name = req.body.name;
   const image = req.body.image;
   const content = req.body.content;
@@ -71,7 +71,7 @@ router.route("/add").post((req, res) => {
     });
 });
 
-router.route("/status/:id").put((req, res) => {
+router.route("/status/:id").put((req, res, next) => {
   ServiceType.findByIdAndUpdate(
     req.params.name,
     req.body,
@@ -94,7 +94,7 @@ router.route("/status/:id").put((req, res) => {
   });
 });
 
-router.route("/update/:id").put((req, res) => {
+router.route("/update/:id").put((req, res, next) => {
   ServiceType.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -115,7 +115,7 @@ router.route("/update/:id").put((req, res) => {
   });
 });
 
-router.route("/delete/:id").delete((req, res) => {
+router.route("/delete/:id").delete((req, res, next) => {
   ServiceType.findByIdAndDelete(req.params.id)
     .then((result) => {
       if (!result) {

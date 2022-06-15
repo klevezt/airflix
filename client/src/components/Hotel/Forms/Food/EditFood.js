@@ -4,6 +4,7 @@ import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
 import { Chip } from "@mui/material";
 import { AddCircleOutline } from "@mui/icons-material";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const EditFoodForm = (props) => {
   const { t } = useTranslation();
@@ -90,7 +91,7 @@ const EditFoodForm = (props) => {
           onClick={() => {
             props.handleBackButton();
           }}
-          text={t("back")}
+          text={removeUpperAccents(t("back"))}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"

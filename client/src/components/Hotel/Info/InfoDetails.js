@@ -5,9 +5,9 @@ import Button from "@mui/material/Button";
 import IconButton from "../../UI/Buttons/IconButton";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import {
-  getCustomerEdit,
-  deleteCustomer,
-  fetchCustomersFromDB,
+  // getCustomerEdit,
+  // deleteCustomer,
+  // fetchCustomersFromDB,
   fetchInfoDetailsFromDB,
   setInfoContentStatus,
   updateInfoContent,
@@ -39,7 +39,7 @@ const InfoDetails = () => {
   const [allInfoData, setAllInfoData] = useState([]);
   const [showAddMoreInfoDetails, setShowAddMoreInfoDetails] = useState(false);
 
-  const [editUserId, setEditUserId] = useState("");
+  // const [editUserId, setEditUserId] = useState("");
   const params = useParams();
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
@@ -93,7 +93,7 @@ const InfoDetails = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [params.alias, state.token]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -123,24 +123,24 @@ const InfoDetails = () => {
 
   // All handle events
 
-  const handleEditUser = async (id) => {
-    setIsSpinnerLoading(true);
-    try {
-      const result = await getCustomerEdit(id, state.token);
-      // ---- Error Handler ---- //
-      if (result.error) {
-        setErrorMessage(result.error.msg);
-        throw new Error(result.error.msg);
-      }
-      setIsSpinnerLoading(false);
+  // const handleEditUser = async (id) => {
+  //   setIsSpinnerLoading(true);
+  //   try {
+  //     const result = await getCustomerEdit(id, state.token);
+  //     // ---- Error Handler ---- //
+  //     if (result.error) {
+  //       setErrorMessage(result.error.msg);
+  //       throw new Error(result.error.msg);
+  //     }
+  //     setIsSpinnerLoading(false);
 
-      setEditUserId(id);
-      setShowAddMoreInfoDetails(true);
-    } catch (err) {
-      setError(true);
-      setIsSpinnerLoading(false);
-    }
-  };
+  //     setEditUserId(id);
+  //     setShowAddMoreInfoDetails(true);
+  //   } catch (err) {
+  //     setError(true);
+  //     setIsSpinnerLoading(false);
+  //   }
+  // };
 
   const handleAddNewInfoDetails = () => {
     setShowAddMoreInfoDetails(true);
@@ -181,31 +181,31 @@ const InfoDetails = () => {
     }
   };
 
-  const handleDeleteUser = async (id) => {
-    setIsSpinnerLoading(true);
+  // const handleDeleteUser = async (id) => {
+  //   setIsSpinnerLoading(true);
 
-    try {
-      const result = await deleteCustomer(id, state.token);
-      // ---- Error Handler ---- //
-      if (result.error) {
-        setErrorMessage(result.error.msg);
-        throw new Error(result.error.msg);
-      }
+  //   try {
+  //     const result = await deleteCustomer(id, state.token);
+  //     // ---- Error Handler ---- //
+  //     if (result.error) {
+  //       setErrorMessage(result.error.msg);
+  //       throw new Error(result.error.msg);
+  //     }
 
-      const users = await fetchCustomersFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (users.error) {
-        setErrorMessage(users.error.msg);
-        throw new Error(users.error.msg);
-      }
+  //     const users = await fetchCustomersFromDB(state.token);
+  //     // ---- Error Handler ---- //
+  //     if (users.error) {
+  //       setErrorMessage(users.error.msg);
+  //       throw new Error(users.error.msg);
+  //     }
 
-      setTableState(users);
-      setIsSpinnerLoading(false);
-    } catch (err) {
-      setError(true);
-      setIsSpinnerLoading(false);
-    }
-  };
+  //     setTableState(users);
+  //     setIsSpinnerLoading(false);
+  //   } catch (err) {
+  //     setError(true);
+  //     setIsSpinnerLoading(false);
+  //   }
+  // };
 
   const handleSubmitForm = async (e, newInfo) => {
     e.preventDefault();
@@ -255,7 +255,7 @@ const InfoDetails = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<Undo />}
               color="warning"
               variant="contained"

@@ -17,7 +17,7 @@ import { authenticateUserWithToken } from "./api_requests/auth_requests";
 import ErrorComponent from "./components/Error/Error";
 
 import "./App.css";
-import { getCookie } from "./Helpers/Functions/functions";
+// import { getCookie } from "./Helpers/Functions/functions";
 
 const App = () => {
   const [state, dispatch] = useStateValue();
@@ -27,7 +27,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    var fact = true;
+    let controller = new AbortController();
+
     const exec = async () => {
       var isExpired = false;
       var isRefreshExpired = false;
@@ -81,10 +82,9 @@ const App = () => {
       }
     };
     // exec();
-    return () => {
-      fact = false;
-    };
-  }, [state.token]);
+    controller = null;
+    return () => controller?.abort();
+  }, [state.token, dispatch]);
 
   return (
     <>

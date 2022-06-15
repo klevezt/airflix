@@ -28,7 +28,7 @@ import "./TableCellCard.css";
 
 import { updateFoodWeek } from "../../../api_requests/hotel_requests";
 import { fetchFoodFromDBWithParams } from "../../../api_requests/hotel_requests";
-import LoadingSpinner from "../Spinners/LoadingSpinner";
+// import LoadingSpinner from "../Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 
 const TableCellCard = (props) => {
@@ -50,7 +50,7 @@ const TableCellCard = (props) => {
 
   useEffect(() => {
     let controller = new AbortController();
-    
+
     const exec = async () => {
       const today = new Date();
       try {
@@ -79,7 +79,7 @@ const TableCellCard = (props) => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token, props.dayNumber]);
 
   const handleOpen = () => {
     setOpen(true);

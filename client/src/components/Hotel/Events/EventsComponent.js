@@ -36,11 +36,10 @@ const EventsComponent = () => {
           throw new Error(data.error.msg);
         }
 
-
         const { myArr } = await imageGetter(data, "Events/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "Hotel/EventsComponent/useEffect => Events imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -59,9 +58,9 @@ const EventsComponent = () => {
               time: event.time,
               description: event.description,
             });
-          });
-          setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
-          setIsSpinnerLoading(false);
+        });
+        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+        setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
         setIsSpinnerLoading(false);
@@ -70,7 +69,7 @@ const EventsComponent = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const upcomingEvent = events.map((event, i) => {
     if (i === 0) {
@@ -145,15 +144,19 @@ const EventsComponent = () => {
       {!error && !isSpinnerLoading && (
         <>
           <div className="row kp-events">
-            <h2 className="mt-3 mb-3">{t("upcoming_event")}</h2>
+            {upcomingEvent.length > 1 ||
+              (upcomingEvent !== "" && (
+                <h2 className="mt-3 mb-3">{t("upcoming_event")}</h2>
+              ))}
             {upcomingEvent}
-            {upcomingEvent === "" && (
-              <div>
-                <p className="text-center kp-warning">
-                  {t("no_upcoming_events_message")}
-                </p>
-              </div>
-            )}
+            {upcomingEvent === "" ||
+              (upcomingEvent.length <= 1 && (
+                <div>
+                  <p className="text-center kp-warning">
+                    {t("no_upcoming_events_message")}
+                  </p>
+                </div>
+              ))}
           </div>
           <div className="row kp-events">
             <h2 className="mt-4 mb-3"> {t("next_events")} </h2>
@@ -164,17 +167,19 @@ const EventsComponent = () => {
               </div>
             )}
           </div>
-          <div className="row text-center">
-            <Link to="/events/all" className="user-more-button">
-              <IconButton
-                className="w-auto m-auto"
-                text={t("all_events")}
-                icon={<ReadMore className="mr-2" />}
-                color="warning"
-                variant="contained"
-              />
-            </Link>
-          </div>
+          {events.length > 1 && (
+            <div className="row text-center">
+              <Link to="/events/all" className="user-more-button">
+                <IconButton
+                  className="w-auto m-auto"
+                  text={t("all_events")}
+                  icon={<ReadMore className="mr-2" />}
+                  color="warning"
+                  variant="contained"
+                />
+              </Link>
+            </div>
+          )}
         </>
       )}
     </>

@@ -8,6 +8,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import bcrypt from "bcryptjs";
 
 import "./SettingsForm.css";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const SettingsForm = (props) => {
   const { t } = useTranslation();
@@ -131,7 +132,7 @@ const SettingsForm = (props) => {
           onClick={() => {
             history.goBack();
           }}
-          text={t("back")}
+          text={removeUpperAccents(t("back"))}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"

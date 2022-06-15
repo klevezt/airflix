@@ -63,7 +63,7 @@ const EventsAll = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const allEvents = events.map((event, i) => {
     return (

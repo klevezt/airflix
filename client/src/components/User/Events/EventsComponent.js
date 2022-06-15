@@ -71,7 +71,7 @@ const EventsComponent = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const upcomingEvent = events.map((event, i) => {
     if (i !== 0) return "";

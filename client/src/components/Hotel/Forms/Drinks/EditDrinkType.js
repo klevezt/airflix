@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const EditDrinkType = (props) => {
   const { t } = useTranslation();
@@ -38,7 +39,7 @@ const EditDrinkType = (props) => {
           onClick={() => {
             props.toggleEditDrinkType();
           }}
-          text={t("back")}
+          text={removeUpperAccents(t("back"))}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"

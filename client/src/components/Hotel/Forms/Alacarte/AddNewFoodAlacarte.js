@@ -10,6 +10,7 @@ import { fetchFoodTypesAlacarteFromDB } from "../../../../api_requests/hotel_req
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
 import ErrorComponent from "../../../Error/Error";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const AddNewFoodForm = () => {
   const [state] = useStateValue();
@@ -56,7 +57,7 @@ const AddNewFoodForm = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -125,7 +126,7 @@ const AddNewFoodForm = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -227,7 +228,6 @@ const AddNewFoodForm = () => {
                 <input
                   className="form-control form-control-sm"
                   type="file"
-                  multiple
                   ref={imageRef}
                 />
               </div>

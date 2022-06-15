@@ -44,7 +44,7 @@ router.route("/login").post(async (req, res) => {
 
   // Send JWT access token
   const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
-    expiresIn: "500s",
+    expiresIn: "1000s",
   });
 
   // Refresh token
@@ -84,7 +84,7 @@ router.route("/token").post(async (req, res) => {
     const user = await JWT.verify(refreshToken, process.env.REFRESH_KEY);
     const { username } = user;
     const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
-      expiresIn: "500s",
+      expiresIn: "1000s",
     });
     res.status(200).json({ accessToken });
   } catch (error) {

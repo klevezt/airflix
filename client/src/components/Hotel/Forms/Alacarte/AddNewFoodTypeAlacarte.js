@@ -9,6 +9,7 @@ import { fetchFoodTypesAlacarteFromDB } from "../../../../api_requests/hotel_req
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
 import ErrorComponent from "../../../Error/Error";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const AddNewFoodTypeFormAlacarte = () => {
   const [state] = useStateValue();
@@ -60,6 +61,7 @@ const AddNewFoodTypeFormAlacarte = () => {
       {!error && !isSpinnerLoading && (
         <form
           method="post"
+          encType="multipart/form-data"
           className="general-form"
           onSubmit={handleFormSubmit}
         >
@@ -69,7 +71,7 @@ const AddNewFoodTypeFormAlacarte = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -106,7 +108,6 @@ const AddNewFoodTypeFormAlacarte = () => {
                 <input
                   className="form-control form-control-sm"
                   type="file"
-                  multiple
                   autoComplete="off"
                   ref={imageRef}
                 />

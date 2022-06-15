@@ -24,6 +24,7 @@ const el = {
     close: "Κλείσιμο",
     add: "Προσθήκη",
     no_food_exists: "Δεν υπάρχουν φαγητά",
+    no_drinks_exists: "Δεν υπάρχουν ποτά",
     default_select_option: "Επιλογή...",
     new_timetable: "Δημιουργία Μηνιαίου Χρονοδιαγράμματος",
     name: "Ονομασία",
@@ -138,6 +139,7 @@ const el = {
     short_description: "Μια σύντομη περιγραφή...",
     staff_position: "Πόστο",
     no_registered_food: "Δεν υπάρχουν καταχωρημένα φαγητά",
+    no_registered_elements: "Δεν υπάρχουν καταχωρημένα στοιχεία",
     comments: "Σχόλια",
     score: "Βαθμολογία!",
     new_review: "Νέα κριτική",
@@ -159,6 +161,7 @@ const el = {
     search: "Αναζήτηση",
     no_information: "Δεν υπάρχουν πληροφορίες",
     no_services: "Δεν υπάρχουν υπηρεσίες",
+    drinks: "Ποτά",
   },
 };
 

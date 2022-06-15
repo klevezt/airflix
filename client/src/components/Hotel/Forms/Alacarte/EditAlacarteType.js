@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const EditAlacarteType = (props) => {
   const { t } = useTranslation();
@@ -42,7 +43,7 @@ const EditAlacarteType = (props) => {
           onClick={() => {
             props.toggleEditAlacarteType();
           }}
-          text={t("back")}
+          text={removeUpperAccents(t("back"))}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"

@@ -51,6 +51,7 @@ const Header = () => {
       type: actionTypes.REMOVE_JWT_TOKEN,
       authenticated: false,
       token: "",
+      refreshToken: "",
     });
   };
 
@@ -65,7 +66,9 @@ const Header = () => {
       <div className="header">
         {state.authenticated && (
           <>
-            <img src={logo} alt="white-logo" />
+            <Link to="/">
+              <img src={logo} alt="white-logo" />
+            </Link>
             {state.user.role === "Customer" && (
               <div className="header-user-text ">
                 <h3>{t("hotel_logo")}</h3>

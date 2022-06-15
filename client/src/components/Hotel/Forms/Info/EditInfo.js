@@ -97,7 +97,6 @@ const EditInfo = (props) => {
                 id="info_image"
                 ref={newImageRef}
                 autoComplete="off"
-                multiple
               />
             </div>
           </div>

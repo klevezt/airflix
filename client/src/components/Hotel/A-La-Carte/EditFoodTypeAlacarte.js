@@ -15,14 +15,12 @@ import { fetchFoodTypesAlacarteFromDB } from "../../../api_requests/hotel_reques
 
 import { Link } from "react-router-dom";
 import { DeleteForeverSharp, Edit } from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
 import EditAlacarteType from "../Forms/Alacarte/EditAlacarteType";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 
 const EditFoodTypeAlacarte = () => {
   const [state] = useStateValue();
-  const { t } = useTranslation();
   const [foodType, setFoodType] = useState([]);
 
   const [error, setError] = useState(false);
@@ -63,7 +61,7 @@ const EditFoodTypeAlacarte = () => {
         setIsSpinnerLoading(false);
       }
     },
-    [t]
+    [state.token]
   );
 
   const foodTableRows = useCallback(() => {
@@ -128,7 +126,7 @@ const EditFoodTypeAlacarte = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   useEffect(() => {
     let controller = new AbortController();

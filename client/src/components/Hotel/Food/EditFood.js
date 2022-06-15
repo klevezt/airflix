@@ -43,30 +43,33 @@ const EditFood = () => {
     rows: menu,
   };
 
-  const handleFoodStatus = useCallback(async (id, status) => {
-    setIsSpinnerLoading(true);
-    try {
-      const result = await setFoodStatus(id, status, state.token);
-      // ---- Error Handler ---- //
-      if (result.error) {
-        setErrorMessage(result.error.msg);
-        throw new Error(result.error.msg);
-      }
+  const handleFoodStatus = useCallback(
+    async (id, status) => {
+      setIsSpinnerLoading(true);
+      try {
+        const result = await setFoodStatus(id, status, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
 
-      const food = await fetchFoodFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (food.error) {
-        setErrorMessage(food.error.msg);
-        throw new Error(food.error.msg);
-      }
+        const food = await fetchFoodFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (food.error) {
+          setErrorMessage(food.error.msg);
+          throw new Error(food.error.msg);
+        }
 
-      setFood(food);
-      setIsSpinnerLoading(false);
-    } catch (err) {
-      setError(true);
-      setIsSpinnerLoading(false);
-    }
-  }, []);
+        setFood(food);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    },
+    [state.token]
+  );
 
   const handleEditFood = async (id) => {
     setIsSpinnerLoading(true);
@@ -113,7 +116,7 @@ const EditFood = () => {
         setIsSpinnerLoading(false);
       }
     },
-    [t]
+    [state.token]
   );
 
   const handleUpdateFood = async (
@@ -233,7 +236,7 @@ const EditFood = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   useEffect(() => {
     let controller = new AbortController();

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Route } from "react-router-dom";
 
 import Sidebar from "../../Layout/Sidebar/SidebarComponent";
@@ -30,7 +30,6 @@ import AddNewStaffPosition from "./Forms/Staff/AddNewStaffPosition";
 import Settings from "./Settings/Settings";
 import Events from "./Events/EventsComponent";
 import AddNewEvent from "./Forms/Events/AddNewEvent";
-import EventsDetail from "./Events/EventsDetail";
 import Customers from "./Customer/CustomersComponent";
 import Info from "./Info/InfoComponent";
 import AddNewInfo from "./Forms/Info/AddNewInfo";
@@ -149,9 +148,6 @@ const Hotel = () => {
             </Route>
             <Route exact path="/events/add">
               {state.authenticated && <AddNewEvent />}
-            </Route>
-            <Route exact path="/events/view/:eventAlias">
-              {state.authenticated && <EventsDetail />}
             </Route>
           </div>
         </div>

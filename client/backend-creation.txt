@@ -1,7 +1,0 @@
-Init: First you need the mongodb account to proceed.
-
-Step 1: Run on the backend folder the command : npm i express cors mongoose dotenv.
-
-Step 2: After that execute the command: npm i -g nodemon.
-
-Step 3: Use all the files from the backend folder in this directory.

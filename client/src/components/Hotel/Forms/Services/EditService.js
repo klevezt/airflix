@@ -128,7 +128,6 @@ const EditService = (props) => {
                 name="service_image"
                 id="service_image"
                 autoComplete="off"
-                multiple
               />
             </div>
           </div>

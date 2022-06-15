@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 import Card from "../../components/UI/Card/TableCellCard";
 import { getWeeksInMonth } from "../Functions/functions";
 import i18next from "i18next";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../firebase";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  // , getDownloadURL
+} from "firebase/storage";
+// import { storage } from "../../firebase";
 
 export const imageUpload = (image) => {
   const storage = getStorage();
@@ -36,7 +41,7 @@ export const imageGetter = async (
         else path = img_path + temp;
 
         // const storageRef = ref(storage, path);
-        
+
         myArr.push({
           ...imageArr,
           image: "/assets/Images/" + path,

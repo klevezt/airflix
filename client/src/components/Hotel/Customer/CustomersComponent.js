@@ -112,7 +112,7 @@ const Customers = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   useEffect(() => {
     let controller = new AbortController();

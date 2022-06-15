@@ -75,33 +75,36 @@ const EditDrink = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   /* Status Handler */
 
-  const handleDrinkStatus = useCallback(async (id, status) => {
-    setIsSpinnerLoading(true);
-    try {
-      const result = await setDrinkStatus(id, status, state.token);
-      // ---- Error Handler ---- //
-      if (result.error) {
-        setErrorMessage(result.error.msg);
-        throw new Error(result.error.msg);
-      }
+  const handleDrinkStatus = useCallback(
+    async (id, status) => {
+      setIsSpinnerLoading(true);
+      try {
+        const result = await setDrinkStatus(id, status, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
 
-      const drinks = await fetchDrinksFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (drinks.error) {
-        setErrorMessage(drinks.error.msg);
-        throw new Error(drinks.error.msg);
+        const drinks = await fetchDrinksFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (drinks.error) {
+          setErrorMessage(drinks.error.msg);
+          throw new Error(drinks.error.msg);
+        }
+        setDrinks(drinks);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
       }
-      setDrinks(drinks);
-      setIsSpinnerLoading(false);
-    } catch (err) {
-      setError(true);
-      setIsSpinnerLoading(false);
-    }
-  }, []);
+    },
+    [state.token]
+  );
 
   const handleEditDrink = async (id) => {
     setIsSpinnerLoading(true);
@@ -148,7 +151,7 @@ const EditDrink = () => {
         setIsSpinnerLoading(false);
       }
     },
-    [t]
+    [state.token]
   );
 
   const handleUpdateDrink = async (

@@ -39,7 +39,7 @@ const AlacarteDetailsPage = () => {
         const { myArr } = await imageGetter(data, "Alacarte/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "User/AlacarteDetailPage/useEffect => Alacarte imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -56,7 +56,7 @@ const AlacarteDetailsPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [params.type]);
+  }, [params.type, state.token]);
 
   const allDrinkDetails = alacarteDetails.map((alacarte, i) => {
     return (

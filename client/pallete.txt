@@ -1,2 +1,0 @@
-hotel theme color: #0091a4
-hotel theme mobile sidebar color: #02d1ec

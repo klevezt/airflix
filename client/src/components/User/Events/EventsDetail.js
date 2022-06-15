@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { fetchEventWithParamasFromDB } from "../../../api_requests/hotel_requests";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import { useStateValue } from "../../../StateProvider";
@@ -40,7 +40,7 @@ function EventsDetail() {
         const { myArr } = await imageGetter(data, "Events/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "User/ServicesDetailPage/useEffect => Services imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -58,7 +58,7 @@ function EventsDetail() {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [params.eventAlias, state.token]);
 
   return (
     <>
@@ -71,7 +71,7 @@ function EventsDetail() {
               <h2 className="user-home-general-headline">{t(event.name)}</h2>
             </div>
             <div className="user-events-details-content-wrapper">
-              <img className="w-100 mb-4" src={event.image} alt="event-image" />
+              <img className="w-100 mb-4" src={event.image} alt="event" />
               <p className="text-start">{t(event.description)}</p>
             </div>
           </div>

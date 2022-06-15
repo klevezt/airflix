@@ -41,7 +41,7 @@ const NewFood = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const handleAddNewFoodType = async (
     e,

@@ -87,7 +87,7 @@ const NewFood = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   return (
     <>

@@ -50,7 +50,7 @@ const ServicesComponent = () => {
         const { myArr } = await imageGetter(data, "Services/", true);
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -67,7 +67,7 @@ const ServicesComponent = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const handleDeleteServiceType = async (id) => {
     setIsSpinnerLoading(true);

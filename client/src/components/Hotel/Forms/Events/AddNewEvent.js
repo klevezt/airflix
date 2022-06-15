@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   addEvent,
-  fetchDrinksTypesFromDB,
+  // fetchDrinksTypesFromDB,
 } from "../../../../api_requests/hotel_requests";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
@@ -17,6 +17,7 @@ import { useStateValue } from "../../../../StateProvider";
 import ErrorComponent from "../../../Error/Error";
 
 import "./AddNewEvent.css";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const AddNewEvent = () => {
   const [state] = useStateValue();
@@ -37,24 +38,24 @@ const AddNewEvent = () => {
   useEffect(() => {
     let controller = new AbortController();
 
-    const exec = async () => {
-      try {
-        const res = await fetchDrinksTypesFromDB(state.token);
-        // ---- Error Handler ---- //
-        if (res.error) {
-          setErrorMessage(res.error.msg);
-          throw new Error(res.error.msg);
-        }
-        setIsSpinnerLoading(false);
-      } catch (err) {
-        setError(true);
-        setIsSpinnerLoading(false);
-      }
-    };
+    // const exec = async () => {
+    //   try {
+    //     const res = await fetchDrinksTypesFromDB(state.token);
+    //     // ---- Error Handler ---- //
+    //     if (res.error) {
+    //       setErrorMessage(res.error.msg);
+    //       throw new Error(res.error.msg);
+    //     }
+    //     setIsSpinnerLoading(false);
+    //   } catch (err) {
+    //     setError(true);
+    //     setIsSpinnerLoading(false);
+    //   }
+    // };
     // exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -102,7 +103,7 @@ const AddNewEvent = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -158,7 +159,6 @@ const AddNewEvent = () => {
                 <input
                   className="form-control form-control-sm"
                   type="file"
-                  multiple
                   autoComplete="off"
                   ref={imageRef}
                 />

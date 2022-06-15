@@ -7,8 +7,6 @@ import { fetchServiceWithParamasFromDB } from "../../../api_requests/hotel_reque
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 
-import { ref, getDownloadURL } from "firebase/storage";
-import { storage } from "../../../firebase";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import { useTranslation } from "react-i18next";
 import ErrorComponent from "../../Error/Error";
@@ -28,7 +26,7 @@ const ServicesDetailsPage = () => {
   useEffect(() => {
     let controller = new AbortController();
     setIsSpinnerLoading(true);
-    
+
     const exec = async () => {
       try {
         const data = await fetchServiceWithParamasFromDB(
@@ -45,7 +43,7 @@ const ServicesDetailsPage = () => {
         const { myArr } = await imageGetter(data, "Services/", true);
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "User/ServicesDetailPage/useEffect => Services imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -62,7 +60,7 @@ const ServicesDetailsPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [params.type]);
+  }, [params.type, state.token]);
 
   const allServiceDetails = serviceDetails.map((serviceDetail, i) => {
     return (

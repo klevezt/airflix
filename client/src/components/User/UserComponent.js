@@ -82,7 +82,7 @@ const User = () => {
     }, 60000);
 
     return () => clearInterval(intervalId);
-  }, [state.token]);
+  }, [state.token, state.refreshToken, dispatch,t]);
 
   const handleClose = () => {
     setAutoLogout(false);
@@ -90,6 +90,7 @@ const User = () => {
       type: actionTypes.REMOVE_JWT_TOKEN,
       authenticated: false,
       token: "",
+      refreshToken: "",
     });
     localStorage.clear();
   };

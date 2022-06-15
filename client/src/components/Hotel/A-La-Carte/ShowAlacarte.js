@@ -12,9 +12,12 @@ import CubeSpinner from "../../UI/Spinners/CubeSpinner";
 import FadeUpLong from "../../hoc/FadeUpLong";
 import { useStateValue } from "../../../StateProvider";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import { useTranslation } from "react-i18next";
 
 const ShowAlacarte = () => {
   const [state] = useStateValue();
+  const { t } = useTranslation();
+
   const [alacarte, setAlacarte] = useState([]);
   const [filteredAlacarte, setFilteredAlacarte] = useState([]);
   const [filter, setFilter] = useState("Όλα");
@@ -42,7 +45,7 @@ const ShowAlacarte = () => {
         const { myArr } = await imageGetter(data, "Alacarte/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "Hotel/ShowAlacarte/useEffect => Alacarte imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -86,7 +89,7 @@ const ShowAlacarte = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -96,7 +99,7 @@ const ShowAlacarte = () => {
       f = alacarte.filter((drink) => drink.type === filter);
     }
     setFilteredAlacarte(f);
-    
+
     controller = null;
     return () => controller?.abort();
   }, [filter, alacarte]);
@@ -127,11 +130,19 @@ const ShowAlacarte = () => {
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
         <div className="d-flex justify-content-start">
-          {drinkListing}
+          {filteredAlacarte.length > 1 && drinkListing}
           <div className="row margin-left-40 w-100">
             <div className="feature-box col-xl-12 col-lg-6 col-sm-12">
               <FadeUpLong>
                 {isGridLoading && <CubeSpinner />}
+                {filteredAlacarte.length <= 1 && (
+                  <div>
+                    <h2 className="my-3">{t("à la carte")}</h2>
+                    <p className="text-center kp-warning">
+                      {t("no_food_exists")}
+                    </p>
+                  </div>
+                )}
                 {!isGridLoading && (
                   <ImageGrid
                     imagesPath="/alacarte/food/"

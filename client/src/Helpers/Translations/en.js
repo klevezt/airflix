@@ -24,6 +24,7 @@ const en = {
     close: "Close",
     add: "Add",
     no_food_exists: "There are no foods",
+    no_drinks_exists: "There are no drinks",
     default_select_option: "Select...",
     new_timetable: "New Timetable",
     name: "Name",
@@ -135,6 +136,7 @@ const en = {
     short_description: "Short description...",
     staff_position: "Position",
     no_registered_food: "There is no food registered",
+    no_registered_elements: "There is no elements registered",
     comments: "Comments",
     score: "Rate!",
     new_review: "New review",
@@ -156,6 +158,7 @@ const en = {
     search: "Search",
     no_information: "There are no information",
     no_services: "There are no services",
+    drinks: "Drinks",
   },
 };
 

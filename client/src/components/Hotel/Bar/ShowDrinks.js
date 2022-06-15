@@ -14,9 +14,12 @@ import CubeSpinner from "../../UI/Spinners/CubeSpinner";
 import FadeUpLong from "../../hoc/FadeUpLong";
 import { useStateValue } from "../../../StateProvider";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import { useTranslation } from "react-i18next";
 
 const ShowDrinks = () => {
   const [state] = useStateValue();
+  const { t } = useTranslation();
+
   const [drinks, setDrinks] = useState([]);
   const [filteredDrinks, setFilteredDrinks] = useState([]);
   const [filter, setFilter] = useState("Όλα");
@@ -43,7 +46,7 @@ const ShowDrinks = () => {
 
         const { myArr } = await imageGetter(data, "Drinks/");
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "Hotel/ShowDrinks/useEffect => Drink imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -87,7 +90,7 @@ const ShowDrinks = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -126,11 +129,19 @@ const ShowDrinks = () => {
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
         <div className="d-flex justify-content-start">
-          {drinkListing}
+          {filteredDrinks.length > 1 && drinkListing}
           <div className="row margin-left-40 w-100">
             <div className="feature-box col-xl-12 col-lg-6 col-sm-12">
               <FadeUpLong>
                 {isGridLoading && <CubeSpinner />}
+                {filteredDrinks.length <= 1 && (
+                  <div>
+                    <h2 className="my-3">{t("drinks")}</h2>
+                    <p className="text-center kp-warning">
+                      {t("no_drinks_exists")}
+                    </p>
+                  </div>
+                )}
                 {!isGridLoading && (
                   <ImageGrid imagesPath="/bar/drink/" data={filteredDrinks} />
                 )}

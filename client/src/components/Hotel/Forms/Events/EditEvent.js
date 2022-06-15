@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
@@ -16,6 +16,7 @@ import {
 } from "../../../../api_requests/hotel_requests";
 import { useStateValue } from "../../../../StateProvider";
 import ErrorComponent from "../../../Error/Error";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const EditEvent = (props) => {
   const { t } = useTranslation();
@@ -63,7 +64,7 @@ const EditEvent = (props) => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [params.eventAlias]);
+  }, [params.eventAlias, state.token]);
 
   const nameChangeHandler = (e) => {
     setEventName(e.target.value);
@@ -122,7 +123,7 @@ const EditEvent = (props) => {
             <IconButton
               className="form-back-button"
               onClick={() => history.goBack()}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

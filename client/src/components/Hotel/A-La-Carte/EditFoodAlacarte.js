@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { MDBDataTableV5 } from "mdbreact";
 import { menuFoodColumns } from "../../../Helpers/Const/constants";
 import FadeUpLong from "../../hoc/FadeUpLong";
@@ -25,7 +24,6 @@ import { useStateValue } from "../../../StateProvider";
 
 const EditFoodAlacarte = () => {
   const [state] = useStateValue();
-  const { t } = useTranslation();
   const [alacarte, setAlacarte] = useState([]);
   const [alacarteTypes, setFoodAlacarteTypes] = useState([]);
   const [selectedAlacarte, setSelectedAlacarte] = useState();
@@ -42,30 +40,33 @@ const EditFoodAlacarte = () => {
     rows: menu,
   };
 
-  const handleAlacarteStatus = useCallback(async (id, status) => {
-    setIsSpinnerLoading(true);
-    try {
-      const result = await setAlacarteStatus(id, status, state.token);
-      // ---- Error Handler ---- //
-      if (result.error) {
-        setErrorMessage(result.error.msg);
-        throw new Error(result.error.msg);
-      }
+  const handleAlacarteStatus = useCallback(
+    async (id, status) => {
+      setIsSpinnerLoading(true);
+      try {
+        const result = await setAlacarteStatus(id, status, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
 
-      const alacarte = await fetchAlacarteFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (alacarte.error) {
-        setErrorMessage(alacarte.error.msg);
-        throw new Error(alacarte.error.msg);
-      }
+        const alacarte = await fetchAlacarteFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (alacarte.error) {
+          setErrorMessage(alacarte.error.msg);
+          throw new Error(alacarte.error.msg);
+        }
 
-      setAlacarte(alacarte);
-      setIsSpinnerLoading(false);
-    } catch (err) {
-      setError(true);
-      setIsSpinnerLoading(false);
-    }
-  }, []);
+        setAlacarte(alacarte);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    },
+    [state.token]
+  );
 
   const handleDeleteAlacarte = useCallback(
     async (id) => {
@@ -92,7 +93,7 @@ const EditFoodAlacarte = () => {
         setIsSpinnerLoading(false);
       }
     },
-    [t]
+    [state.token]
   );
   const alacarteTableRows = useCallback(() => {
     const tempArray = [];
@@ -131,7 +132,7 @@ const EditFoodAlacarte = () => {
       });
     });
     setMenu(tempArray);
-  }, [alacarte, menu, handleAlacarteStatus, handleDeleteAlacarte]);
+  }, [alacarte, menu, handleAlacarteStatus, handleDeleteAlacarte, state.token]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -165,7 +166,7 @@ const EditFoodAlacarte = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   useEffect(() => {
     let controller = new AbortController();

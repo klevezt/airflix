@@ -75,7 +75,7 @@ const ServicesDetails = () => {
         const { myArr } = await imageGetter(services, "Services/", true);
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -92,7 +92,7 @@ const ServicesDetails = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token, params.alias]);
 
   // All handle events
   const handleDeleteService = async (id) => {
@@ -345,7 +345,7 @@ const ServicesDetails = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<Undo />}
               color="warning"
               variant="contained"

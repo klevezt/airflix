@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import {
   Home,
   RestaurantMenu,
@@ -75,6 +75,7 @@ const MobileSidebarComponent = (props) => {
       type: actionTypes.REMOVE_JWT_TOKEN,
       authenticated: false,
       token: "",
+      refreshToken: "",
     });
   };
 
@@ -163,7 +164,9 @@ const MobileSidebarComponent = (props) => {
         <div>
           <div className="menu-img">
             <div>
-              <img src={logo} alt="logo" />
+              <Link to="/" onClick={menuClickHandler}>
+                <img src={logo} alt="logo" />
+              </Link>
               <div className="circular-close-button" onClick={menuClickHandler}>
                 <Close />
               </div>

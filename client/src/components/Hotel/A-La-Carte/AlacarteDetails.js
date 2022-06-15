@@ -35,17 +35,16 @@ function AlacarteDetails() {
           { alias: params.alacarteAlias },
           state.token
         );
-        
+
         // ---- Error Handler ---- //
         if (data.error) {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
 
-
         const { myArr } = await imageGetter(data, "Alacarte/", true);
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "Hotel/AlacarteDetails/useEffect => Alacarte imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -62,7 +61,7 @@ function AlacarteDetails() {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [params.alacarteAlias]);
+  }, [params.alacarteAlias, state.token]);
 
   return (
     <>

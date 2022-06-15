@@ -13,6 +13,7 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 
 function DrinkDetails() {
   const params = useParams();
@@ -45,8 +46,9 @@ function DrinkDetails() {
 
         const { myArr } = await imageGetter(data, "Drinks/");
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
-          let tmp_error = "Hotel/DrinkDetails/useEffect => Drink imageGetter Problem";
+        if (myArr === undefined || myArr === null) {
+          let tmp_error =
+            "Hotel/DrinkDetails/useEffect => Drink imageGetter Problem";
           setErrorMessage(tmp_error);
           throw new Error(tmp_error);
         }
@@ -61,7 +63,7 @@ function DrinkDetails() {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [params.drinkAlias]);
+  }, [params.drinkAlias, state.token]);
 
   return (
     <>
@@ -75,7 +77,7 @@ function DrinkDetails() {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

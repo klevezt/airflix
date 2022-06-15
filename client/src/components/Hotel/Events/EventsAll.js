@@ -34,7 +34,7 @@ const EventsAll = () => {
         const { myArr } = await imageGetter(data, "Events/");
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "Hotel/EventsComponent/useEffect => Events imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -61,7 +61,7 @@ const EventsAll = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const allEvents = events.map((event, i) => {
     return (
@@ -98,7 +98,7 @@ const EventsAll = () => {
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
         <div className="row justify-content-center kp-events">
-          <h2 className="text-center mt-3 mb-3">{t("all_events")}</h2>
+          <h2 className="mt-3 mb-3">{t("all_events")}</h2>
           {allEvents}
           {events.length < 1 && (
             <div>

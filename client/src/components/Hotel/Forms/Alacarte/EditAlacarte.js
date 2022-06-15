@@ -5,6 +5,7 @@ import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
 import { Chip } from "@mui/material";
 import { AddCircleOutline } from "@mui/icons-material";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const EditAlacarte = (props) => {
   const { t } = useTranslation();
@@ -76,7 +77,7 @@ const EditAlacarte = (props) => {
           onClick={() => {
             props.toggleEditAlacarte();
           }}
-          text={t("back")}
+          text={removeUpperAccents(t("back"))}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"

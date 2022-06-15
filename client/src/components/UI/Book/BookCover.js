@@ -14,10 +14,10 @@ const BookCover = (props) => {
     const arr = props.catalog.filter((cat) => cat !== undefined);
     setArr(arr);
 
-     controller = null;
-     return () => controller?.abort();
-  }, []);
-  
+    controller = null;
+    return () => controller?.abort();
+  }, [props.catalog]);
+
   return (
     <section className="drink-user-wrapper">
       <div
@@ -44,6 +44,13 @@ const BookCover = (props) => {
             {t(props.coverHeadline)}
           </h2>
         </div>
+        {!props.withSearch && myArray.length < 1 && (
+          <div>
+            <p className="text-center kp-warning">
+              {t("no_registered_elements")}
+            </p>
+          </div>
+        )}
       </div>
       <div className="d-flex flex-wrap justify-content-center w-100">
         {props.withSearch && (

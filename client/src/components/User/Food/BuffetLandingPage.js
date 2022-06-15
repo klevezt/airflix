@@ -114,7 +114,7 @@ const BuffetLandingPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [search]);
+  }, [search, state.token, date]);
 
   const handleOpen = () => {
     setOpenSearch(true);
@@ -238,6 +238,7 @@ const BuffetLandingPage = () => {
         </div>
       );
     }
+    return 0;
   });
 
   const handleSearchRequest = async () => {

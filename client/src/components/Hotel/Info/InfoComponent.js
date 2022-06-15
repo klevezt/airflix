@@ -51,7 +51,7 @@ const InfoComponent = () => {
         const { myArr } = await imageGetter(data, "Info/", true);
 
         // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null ) {
+        if (myArr === undefined || myArr === null) {
           let tmp_error =
             "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
           setErrorMessage(tmp_error);
@@ -68,7 +68,7 @@ const InfoComponent = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const handleDeleteInfo = async (id) => {
     setIsSpinnerLoading(true);

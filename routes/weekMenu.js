@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 let weekMenu = require("../models/weekMenu.model");
 
-router.route("/").get((req, res) => {
+router.route("/").get((req, res, next) => {
   const obj = req.query;
   weekMenu
     .find({ month: obj.month, year: obj.year })
@@ -22,7 +22,7 @@ router.route("/").get((req, res) => {
     });
 });
 
-router.route("/getFullDay").get((req, res) => {
+router.route("/getFullDay").get((req, res, next) => {
   const obj = req.query;
   weekMenu
     .find({ week: obj.week, month: obj.month, year: obj.year })
@@ -42,7 +42,7 @@ router.route("/getFullDay").get((req, res) => {
     });
 });
 
-router.route("/add").post((req, res) => {
+router.route("/add").post((req, res, next) => {
   const week = new weekMenu(req.body);
 
   week
@@ -63,7 +63,7 @@ router.route("/add").post((req, res) => {
     });
 });
 
-router.route("/update").put((req, res) => {
+router.route("/update").put((req, res, next) => {
   const obj = req.query;
   weekMenu
     .findOneAndUpdate(

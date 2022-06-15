@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchServicesTypesFromDB } from "../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
@@ -69,6 +69,7 @@ const ServicesLandingPage = () => {
             type: actionTypes.REMOVE_JWT_TOKEN,
             authenticated: false,
             token: "",
+            refreshToken: "",
           });
           localStorage.clear();
           return;
@@ -95,7 +96,7 @@ const ServicesLandingPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token, state.refreshToken, dispatch]);
 
   const allServices = catalog.map((service, i) => {
     return (

@@ -72,7 +72,7 @@ const Settings = (props) => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [props.user._id, state.token]);
 
   return (
     <>

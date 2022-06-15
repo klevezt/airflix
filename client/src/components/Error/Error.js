@@ -14,8 +14,8 @@ const Error = (props) => {
   const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
 
-  const [networkError, setNetworkError] = useState(false);
-  const [networkErrorMessage, setNetworkErrorMessage] = useState();
+  // const [networkError, setNetworkError] = useState(false);
+  // const [networkErrorMessage, setNetworkErrorMessage] = useState();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -37,6 +37,7 @@ const Error = (props) => {
           type: actionTypes.REMOVE_JWT_TOKEN,
           authenticated: false,
           token: "",
+          refreshToken: "",
         });
       })
       .catch((err) => err);
@@ -45,7 +46,7 @@ const Error = (props) => {
   const message = props.errorMessage ? props.errorMessage : t("general_error");
   const btnText = props.errorButtonText
     ? props.errorButtonText
-    : "Αποσύνδεση";
+    : t("logout");
 
   return reactDom.createPortal(
     <Modal

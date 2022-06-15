@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
 import { useHistory } from "react-router";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const AddNewFoodTypeForm = (props) => {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ const AddNewFoodTypeForm = (props) => {
   return (
     <form
       method="post"
+      encType="multipart/form-data"
       className="general-form"
       onSubmit={(e) =>
         props.handleAddNewFoodType(
@@ -32,7 +34,7 @@ const AddNewFoodTypeForm = (props) => {
           onClick={() => {
             history.goBack();
           }}
-          text={t("back")}
+          text={removeUpperAccents(t("back"))}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -63,7 +65,6 @@ const AddNewFoodTypeForm = (props) => {
             <input
               className="form-control form-control-sm"
               type="file"
-              multiple
               autoComplete="off"
               ref={imageRef}
             />

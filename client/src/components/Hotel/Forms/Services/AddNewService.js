@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
@@ -9,6 +9,7 @@ import {
   Description,
 } from "@mui/icons-material";
 import "./AddNewService.css";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const AddNewService = (props) => {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ const AddNewService = (props) => {
           onClick={() => {
             props.goBack();
           }}
-          text={t("back")}
+          text={removeUpperAccents(t("back"))}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"
@@ -83,7 +84,6 @@ const AddNewService = (props) => {
               id="service_image"
               ref={serviceImageRef}
               autoComplete="off"
-              multiple
             />
           </div>
         </div>

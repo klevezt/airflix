@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const EditFoodFormType = (props) => {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ const EditFoodFormType = (props) => {
   return (
     <form
       method="post"
+      encType="multipart/form-data"
       className="general-form"
       onSubmit={(e) =>
         props.handleUpdateFoodType(e, editFoodTypeName, editFoodImage)
@@ -39,7 +41,7 @@ const EditFoodFormType = (props) => {
           onClick={() => {
             props.handleBackButton();
           }}
-          text={t("back")}
+          text={removeUpperAccents(t("back"))}
           icon={<UndoIcon />}
           color="warning"
           variant="contained"

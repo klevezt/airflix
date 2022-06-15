@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, Fragment } from "react";
+import React, {  useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
@@ -7,6 +7,7 @@ import { addServiceType } from "../../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../../StateProvider";
 import ErrorComponent from "../../../Error/Error";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const AddNewServiceType = (props) => {
   const [state] = useStateValue();
@@ -16,7 +17,7 @@ const AddNewServiceType = (props) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [newService, setNewService] = useState([]);
+  // const [newService, setNewService] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
   const serviceTypeNameRef = useRef();
@@ -31,7 +32,7 @@ const AddNewServiceType = (props) => {
       const alias = name.replace(/\s+/g, "-").toLowerCase();
       const images = serviceTypeImageRef.current.files;
 
-      const result = await addServiceType(name, images, alias, state.token);
+      const result = await addServiceType(name, images[0].name, alias, state.token);
       // ---- Error Handler ---- //
       if (result.error) {
         setErrorMessage(result.error.msg);
@@ -62,7 +63,7 @@ const AddNewServiceType = (props) => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -101,7 +102,6 @@ const AddNewServiceType = (props) => {
                   id="info_image"
                   ref={serviceTypeImageRef}
                   autoComplete="off"
-                  multiple
                 />
               </div>
             </div>

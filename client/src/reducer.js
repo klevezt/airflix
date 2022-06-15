@@ -31,6 +31,7 @@ const reducer = (state, action) => {
         ...state,
         authenticated: action.authenticated,
         token: action.token,
+        refreshToken: action.refreshToken,
       };
     case actionTypes.LOGOUT_USER:
       return {

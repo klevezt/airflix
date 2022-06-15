@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { RestaurantMenu, MenuBook } from "@mui/icons-material";
 
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import "./FoodLandingPage.css";
 
 function FoodLandingPage() {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   const [openLeft, setOpenLeft] = useState(false);
   const [openRight, setOpenRight] = useState(false);

@@ -5,13 +5,14 @@ import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
 import {
   addInfo,
-  fetchInfoTypesFromDB,
+  // fetchInfoTypesFromDB,
 } from "../../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import AddIcon from "@mui/icons-material/Add";
 import { RemoveCircleOutline } from "@mui/icons-material";
 import { useStateValue } from "../../../../StateProvider";
 import ErrorComponent from "../../../Error/Error";
+import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
 
 const AddNewInfo = () => {
   const [state] = useStateValue();
@@ -36,26 +37,26 @@ const AddNewInfo = () => {
   useEffect(() => {
     let controller = new AbortController();
     // setIsSpinnerLoading(true);
-    const exec = async () => {
-      try {
-        const res = await fetchInfoTypesFromDB(state.token);
-        // setAllInfoData(data);
-        // setTableState(data[0].content);
-        // ---- Error Handler ---- //
-        if (res.error) {
-          setErrorMessage(res.error.msg);
-          throw new Error(res.error.msg);
-        }
-        setIsSpinnerLoading(false);
-      } catch (err) {
-        setError(true);
-        setIsSpinnerLoading(false);
-      }
-    };
+    // const exec = async () => {
+    //   try {
+    //     const res = await fetchInfoTypesFromDB(state.token);
+    //     // setAllInfoData(data);
+    //     // setTableState(data[0].content);
+    //     // ---- Error Handler ---- //
+    //     if (res.error) {
+    //       setErrorMessage(res.error.msg);
+    //       throw new Error(res.error.msg);
+    //     }
+    //     setIsSpinnerLoading(false);
+    //   } catch (err) {
+    //     setError(true);
+    //     setIsSpinnerLoading(false);
+    //   }
+    // };
     // exec();
     controller = null;
     return () => controller?.abort();
-  }, []);
+  }, [state.token]);
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
@@ -122,7 +123,7 @@ const AddNewInfo = () => {
               onClick={() => {
                 history.goBack();
               }}
-              text={t("back")}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"
@@ -161,7 +162,6 @@ const AddNewInfo = () => {
                   id="info_image"
                   ref={infoImageRef}
                   autoComplete="off"
-                  multiple
                 />
               </div>
             </div>

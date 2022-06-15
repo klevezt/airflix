@@ -408,20 +408,24 @@ export const addService = (
 
 export const addServiceType = (n, i, alias, token) => {
   const uploadImages = [];
-  for (const img of i) {
-    uploadImages.push(img.name);
-  }
+  // for (const img of i) {
+  //   uploadImages.push(img.name);
+  // }
+
+  const formData = new FormData();
+
+  formData.append("name", n);
+  formData.append("image", i);
+  formData.append("alias", alias);
+
+  console.log(i);
+
   return fetch(base_url + "/serviceType/add", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: n,
-      image: uploadImages[0],
-      alias,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 
@@ -956,8 +960,7 @@ export const updateDrinksOfDrinkType = (t, token) => {
     body: JSON.stringify({
       type: t,
     }),
-  })
-    .then((data) => data.json());
+  }).then((data) => data.json());
 };
 
 export const updateDrinksOfDrinkType_Status = (t, token) => {
@@ -971,8 +974,7 @@ export const updateDrinksOfDrinkType_Status = (t, token) => {
       type: t,
       status: false,
     }),
-  })
-    .then((data) => data.json());
+  }).then((data) => data.json());
 };
 
 export const updateFoodOfFoodType_Status = (t, token) => {
@@ -986,8 +988,7 @@ export const updateFoodOfFoodType_Status = (t, token) => {
       type: t,
       status: false,
     }),
-  })
-    .then((data) => data.json());
+  }).then((data) => data.json());
 };
 export const updateAlacarteOfAlacarteType_Status = (t, token) => {
   return fetch(base_url + "/alacarte/update-alacarte-type-statuses", {
@@ -1000,8 +1001,7 @@ export const updateAlacarteOfAlacarteType_Status = (t, token) => {
       type: t,
       status: false,
     }),
-  })
-    .then((data) => data.json());
+  }).then((data) => data.json());
 };
 export const updateDrink = (
   id,
