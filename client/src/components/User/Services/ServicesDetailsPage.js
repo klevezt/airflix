@@ -70,22 +70,28 @@ const ServicesDetailsPage = () => {
         </div>
         <div className="user-services-details-content">
           <h2>{serviceDetail.name}</h2>
-          <a href={`tel:0030${serviceDetail.phone}`}>
-            <PhoneAndroid />
-            <span>{serviceDetail.phone}</span>
-          </a>
-          <a href={`mailto:${serviceDetail.email}`}>
-            <Email />
-            <span>{serviceDetail.email}</span>
-          </a>
-          <a
-            href={serviceDetail.location}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <LocationOn />
-            <span>{t("location")}</span>
-          </a>
+          {serviceDetail.phone && (
+            <a href={`tel:0030${serviceDetail.phone}`}>
+              <PhoneAndroid />
+              <span>{serviceDetail.phone}</span>
+            </a>
+          )}
+          {serviceDetail.email && (
+            <a href={`mailto:${serviceDetail.email}`}>
+              <Email />
+              <span>{serviceDetail.email}</span>
+            </a>
+          )}
+          {serviceDetail.location && (
+            <a
+              href={serviceDetail.location}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <LocationOn />
+              <span>{t("location")}</span>
+            </a>
+          )}
         </div>
       </div>
     );

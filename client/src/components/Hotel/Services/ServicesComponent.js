@@ -104,7 +104,7 @@ const ServicesComponent = () => {
     }
   };
 
-  const handleUpdateServiceType = async (e, id, serviceTypeName) => {
+  const handleUpdateServiceType = async (e, id, serviceTypeName, serviceTypeImage) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
@@ -112,6 +112,7 @@ const ServicesComponent = () => {
       const result = await updateServiceType(
         id,
         serviceTypeName,
+        serviceTypeImage ? serviceTypeImage.current.files[0] : null,
         alias,
         state.token
       );
@@ -203,7 +204,7 @@ const ServicesComponent = () => {
                 className="button__addUser mb-3"
               >
                 <AddIcon />
-                {translate("add_service")}
+                {translate("add_service_type")}
               </Button>
             </Link>
           </div>

@@ -37,14 +37,14 @@ export const imageGetter = async (
           : imageArr.images[0];
 
         let path;
-        if (!temp) path = "General/no_image.png";
-        else path = img_path + temp;
+        if (!temp) path = "no_image.png";
+        else path = temp;
 
         // const storageRef = ref(storage, path);
 
         myArr.push({
           ...imageArr,
-          image: "/assets/Images/" + path,
+          image: "/assets/uploads/" + path,
         });
 
         // await getDownloadURL(storageRef)

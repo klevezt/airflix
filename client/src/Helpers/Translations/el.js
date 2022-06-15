@@ -154,6 +154,7 @@ const el = {
     add_user: "Προσθήκη χρήστη",
     add_customer: "Προσθήκη πελάτη",
     add_service: "Προσθήκη υπηρεσίας",
+    add_service_type: "Προσθήκη τύπου υπηρεσίας",
     add_information: "Προσθήκη πληροφοριών",
     role: "Ρόλος",
     location: "Τοποθεσία στον χάρτη",

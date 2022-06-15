@@ -382,43 +382,32 @@ export const addService = (
   description,
   token
 ) => {
-  const uploadImages = [];
-  for (const img of i) {
-    uploadImages.push(img.name);
-  }
+  const formData = new FormData();
+
+  formData.append("name", n);
+  formData.append("type", type);
+  formData.append("image", i);
+  formData.append("alias", alias);
+  formData.append("phone", phone);
+  formData.append("email", email);
+  formData.append("location", location);
+  formData.append("description", description);
 
   return fetch(base_url + "/service/add", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: n,
-      type,
-      image: uploadImages[0],
-      alias,
-      phone,
-      email,
-      location,
-      description,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 
 export const addServiceType = (n, i, alias, token) => {
-  const uploadImages = [];
-  // for (const img of i) {
-  //   uploadImages.push(img.name);
-  // }
-
   const formData = new FormData();
 
   formData.append("name", n);
   formData.append("image", i);
   formData.append("alias", alias);
-
-  console.log(i);
 
   return fetch(base_url + "/serviceType/add", {
     method: "POST",
@@ -904,22 +893,24 @@ export const updateService = (
   serviceDesc,
   token
 ) => {
+
+  const formData = new FormData();
+
+  formData.append("name", serviceName);
+  formData.append("type", serviceType);
+  formData.append("alias", serviceAlias);
+  formData.append("image", serviceImage);
+  formData.append("phone", servicePhone);
+  formData.append("email", serviceEmail);
+  formData.append("location", serviceLocation);
+  formData.append("description", serviceDesc);
+
   return fetch(base_url + "/service/update/" + id, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: serviceName,
-      type: serviceType,
-      alias: serviceAlias,
-      image: serviceImage,
-      phone: servicePhone,
-      email: serviceEmail,
-      location: serviceLocation,
-      description: serviceDesc,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 
@@ -936,17 +927,25 @@ export const updateInfo = (id, infoName, token) => {
   }).then((data) => data.json());
 };
 
-export const updateServiceType = (id, serviceTypeName, a, token) => {
+export const updateServiceType = (
+  id,
+  serviceTypeName,
+  serviceTypeImage,
+  a,
+  token
+) => {
+  const formData = new FormData();
+
+  formData.append("name", serviceTypeName);
+  formData.append("image", serviceTypeImage);
+  formData.append("alias", a);
+
   return fetch(base_url + "/serviceType/update/" + id, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: serviceTypeName,
-      alias: a,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 

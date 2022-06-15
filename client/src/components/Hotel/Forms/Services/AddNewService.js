@@ -30,7 +30,7 @@ const AddNewService = (props) => {
         props.handleSubmitAddNewService(
           e,
           serviceNameRef.current.value,
-          serviceImageRef.current.files,
+          serviceImageRef.current.files[0],
           servicePhoneRef.current.value,
           serviceEmailRef.current.value,
           serviceLocationRef.current.value,
@@ -84,6 +84,7 @@ const AddNewService = (props) => {
               id="service_image"
               ref={serviceImageRef}
               autoComplete="off"
+              required
             />
           </div>
         </div>
@@ -103,7 +104,6 @@ const AddNewService = (props) => {
               placeholder={t("contact_number")}
               ref={servicePhoneRef}
               autoComplete="off"
-              required
             />
           </div>
           <div className="d-flex align-items-center col-sm-5">
@@ -120,7 +120,6 @@ const AddNewService = (props) => {
               placeholder="Email"
               ref={serviceEmailRef}
               autoComplete="off"
-              required
             />
           </div>
           <div className="d-flex align-items-center offset-sm-2 col-sm-10 mb-2">
@@ -140,7 +139,6 @@ const AddNewService = (props) => {
               placeholder={t("map_link")}
               ref={serviceLocationRef}
               autoComplete="off"
-              required
             />
           </div>
           <div className="d-flex offset-sm-2 col-sm-10">
@@ -160,7 +158,6 @@ const AddNewService = (props) => {
               placeholder={t("short_description")}
               ref={serviceDescription}
               autoComplete="off"
-              required
             />
           </div>
         </div>

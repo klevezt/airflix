@@ -40,7 +40,7 @@ router.route("/:id").get((req, res, next) => {
 
 router.route("/add").post((req, res, next) => {
   const name = req.body.name;
-  const image = req.body.image;
+  const image = req.file.filename;
   const type = req.body.type;
   const alias = req.body.alias;
   const phone = req.body.phone;
@@ -99,19 +99,24 @@ router.route("/status/:id").put((req, res, next) => {
 });
 
 router.route("/update/:id").put((req, res, next) => {
-  Service.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true },
-    (err, todo) => {
-      // Handle any possible database errors
-      if (err) {
-        const error = new Error("Review database error.");
-        throw error;
-      }
-      res.status(200).json({ message: "Review status successfully updated!" });
+  const body = {
+    name: req.body.name,
+    type: req.body.type,
+    alias: req.body.alias,
+    ...(req.file && { image: req.file.filename }),
+    phone: req.body.phone,
+    email: req.body.email,
+    location: req.body.location,
+    description: req.body.description,
+  };
+  Service.findByIdAndUpdate(req.params.id, body, { new: true }, (err, todo) => {
+    // Handle any possible database errors
+    if (err) {
+      const error = new Error("Review database error.");
+      throw error;
     }
-  ).catch((err) => {
+    res.status(200).json({ message: "Review status successfully updated!" });
+  }).catch((err) => {
     if (!err.statusCode) {
       err.statusCode = 500;
     }

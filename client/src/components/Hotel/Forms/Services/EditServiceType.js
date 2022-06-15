@@ -32,7 +32,8 @@ const EditServiceType = (props) => {
         props.handleUpdateServiceType(
           e,
           props.serviceType._id,
-          selectedInfoName
+          selectedInfoName,
+          imageChange ? newImageRef : null
         )
       }
     >
@@ -98,6 +99,7 @@ const EditServiceType = (props) => {
                 id="info_image"
                 ref={newImageRef}
                 autoComplete="off"
+                required
               />
             </div>
           </div>

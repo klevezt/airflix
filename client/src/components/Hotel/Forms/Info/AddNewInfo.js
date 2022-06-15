@@ -162,6 +162,7 @@ const AddNewInfo = () => {
                   id="info_image"
                   ref={infoImageRef}
                   autoComplete="off"
+                  required
                 />
               </div>
             </div>

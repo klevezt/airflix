@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
@@ -15,6 +15,8 @@ const EditService = (props) => {
   const translate = (text) => removeUpperAccents(t(text));
 
   const [addNewImage, setAddNewImage] = useState(false);
+  const newImageRef = useRef("");
+
 
   const [newServiceName, setNewServiceName] = useState(props.editService.name);
   const [newServicePhone, setNewServicePhone] = useState(
@@ -45,7 +47,6 @@ const EditService = (props) => {
   const handleServiceDescription = (e) => {
     setNewServiceDescription(e.target.value);
   };
-
   const handleChangeImage = () => {
     setAddNewImage((s) => !s);
   };
@@ -59,7 +60,7 @@ const EditService = (props) => {
         props.handleUpdateService(
           e,
           newServiceName,
-          addNewImage ? "" : props.editService.image,
+          addNewImage ? newImageRef.current.files[0] : props.editService.image,
           newServicePhone,
           newServiceEmail,
           newServiceLocation,
@@ -128,6 +129,8 @@ const EditService = (props) => {
                 name="service_image"
                 id="service_image"
                 autoComplete="off"
+                ref={newImageRef}
+                required
               />
             </div>
           </div>
@@ -145,10 +148,10 @@ const EditService = (props) => {
               className="form-control form-control-sm"
               id="service_phone"
               name="service_phone"
+              placeholder={t("contact_number")}
               value={newServicePhone}
               onChange={handleServicePhone}
               autoComplete="off"
-              required
             />
           </div>
           <div className="d-flex align-items-center col-sm-5">
@@ -162,10 +165,10 @@ const EditService = (props) => {
               className="form-control form-control-sm"
               id="service_email"
               name="service_email"
+              placeholder="Email"
               value={newServiceEmail}
               onChange={handleServiceEmail}
               autoComplete="off"
-              required
             />
           </div>
           <div className="d-flex align-items-center offset-sm-3 col-sm-9 mb-2">
@@ -182,10 +185,10 @@ const EditService = (props) => {
               className="form-control form-control-sm"
               id="service_location"
               name="service_location"
+              placeholder={t("map_link")}
               value={newServiceLocation}
               onChange={handleServiceLocation}
               autoComplete="off"
-              required
             />
           </div>
           <div className="d-flex offset-sm-3 col-sm-9">
@@ -202,10 +205,10 @@ const EditService = (props) => {
               className="form-control form-control-sm"
               id="service_description"
               name="service_description"
+              placeholder={t("short_description")}
               value={newServiceDescription}
               onChange={handleServiceDescription}
               autoComplete="off"
-              required
             />
           </div>
         </div>

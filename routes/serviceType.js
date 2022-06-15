@@ -40,7 +40,7 @@ router.route("/:id").get((req, res, next) => {
 
 router.route("/add").post((req, res, next) => {
   const name = req.body.name;
-  const image = req.body.image;
+  const image = req.file.filename;
   const content = req.body.content;
   const alias = req.body.alias;
   const featured = req.body.featured;
@@ -72,6 +72,7 @@ router.route("/add").post((req, res, next) => {
 });
 
 router.route("/status/:id").put((req, res, next) => {
+  
   ServiceType.findByIdAndUpdate(
     req.params.name,
     req.body,
@@ -95,9 +96,16 @@ router.route("/status/:id").put((req, res, next) => {
 });
 
 router.route("/update/:id").put((req, res, next) => {
+ 
+  const body = {
+    name: req.body.name,
+    alias: req.body.alias,
+    ...(req.file && { image: req.file.filename }),
+  };
+
   ServiceType.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors

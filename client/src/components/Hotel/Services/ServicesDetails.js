@@ -200,6 +200,17 @@ const ServicesDetails = () => {
         setErrorMessage(data.error.msg);
         throw new Error(data.error.msg);
       }
+      
+      // const { myArr } = await imageGetter(data, "Services/", true);
+      // console.log(myArr);
+
+      // ---- Error Handler ---- //
+      // if (myArr === undefined || myArr === null) {
+      //   let tmp_error =
+      //     "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
+      //   setErrorMessage(tmp_error);
+      //   throw new Error(tmp_error);
+      // }
 
       customEditServices(data);
       setEditService(true);
@@ -294,23 +305,29 @@ const ServicesDetails = () => {
         <div>
           <h2>{service.name}</h2>
           <div className="d-inline-block mb-2 mt-1">
-            <a href={`tel:${service.phone}`}>
-              <PhoneAndroid />
-              {service.phone}
-            </a>
-            <a href={`mailto:${service.email}`} className="ms-5">
-              <Email className="me-1" />
-              {service.email}
-            </a>
-            <a
-              href={service.location}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ms-5"
-            >
-              <LocationOn />
-              {t("location")}
-            </a>
+            {service.phone && (
+              <a href={`tel:0030${service.phone}`} className="me-5">
+                <PhoneAndroid />
+                {service.phone}
+              </a>
+            )}
+            {service.email && (
+              <a href={`mailto:${service.email}`} className="me-5">
+                <Email className="me-1" />
+                {service.email}
+              </a>
+            )}
+            {service.location && (
+              <a
+                href={service.location}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="d-block mt-2"
+              >
+                <LocationOn />
+                {t("location")}
+              </a>
+            )}
           </div>
           <p>{truncateString(service.description, 500)}</p>
         </div>

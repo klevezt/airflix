@@ -30,9 +30,9 @@ const AddNewServiceType = (props) => {
     try {
       const name = serviceTypeNameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();
-      const images = serviceTypeImageRef.current.files;
+      const images = serviceTypeImageRef.current.files[0];
 
-      const result = await addServiceType(name, images[0].name, alias, state.token);
+      const result = await addServiceType(name, images, alias, state.token);
       // ---- Error Handler ---- //
       if (result.error) {
         setErrorMessage(result.error.msg);
@@ -102,6 +102,7 @@ const AddNewServiceType = (props) => {
                   id="info_image"
                   ref={serviceTypeImageRef}
                   autoComplete="off"
+                  required
                 />
               </div>
             </div>

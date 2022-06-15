@@ -151,6 +151,7 @@ const en = {
     add_user: "Add user",
     add_customer: "Add customer",
     add_service: "Add service",
+    add_service_type: "Add service type",
     add_information: "Add information",
     role: "Role",
     location: "Location on the map",
