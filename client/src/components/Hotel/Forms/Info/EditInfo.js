@@ -30,8 +30,8 @@ const EditInfo = (props) => {
         props.handleUpdateInfo(
           e,
           selectedInfoName,
-          props.info._id,
-          newImageRef.current.files !== "" ? newImageRef.current.files : ""
+          imageChange ? newImageRef.current.files[0] : props.info.image,
+          props.info._id
         )
       }
     >
@@ -97,6 +97,7 @@ const EditInfo = (props) => {
                 id="info_image"
                 ref={newImageRef}
                 autoComplete="off"
+                required
               />
             </div>
           </div>

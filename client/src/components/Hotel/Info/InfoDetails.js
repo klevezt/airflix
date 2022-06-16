@@ -123,25 +123,6 @@ const InfoDetails = () => {
 
   // All handle events
 
-  // const handleEditUser = async (id) => {
-  //   setIsSpinnerLoading(true);
-  //   try {
-  //     const result = await getCustomerEdit(id, state.token);
-  //     // ---- Error Handler ---- //
-  //     if (result.error) {
-  //       setErrorMessage(result.error.msg);
-  //       throw new Error(result.error.msg);
-  //     }
-  //     setIsSpinnerLoading(false);
-
-  //     setEditUserId(id);
-  //     setShowAddMoreInfoDetails(true);
-  //   } catch (err) {
-  //     setError(true);
-  //     setIsSpinnerLoading(false);
-  //   }
-  // };
-
   const handleAddNewInfoDetails = () => {
     setShowAddMoreInfoDetails(true);
     setIsSpinnerLoading(false);
@@ -180,32 +161,6 @@ const InfoDetails = () => {
       setIsSpinnerLoading(false);
     }
   };
-
-  // const handleDeleteUser = async (id) => {
-  //   setIsSpinnerLoading(true);
-
-  //   try {
-  //     const result = await deleteCustomer(id, state.token);
-  //     // ---- Error Handler ---- //
-  //     if (result.error) {
-  //       setErrorMessage(result.error.msg);
-  //       throw new Error(result.error.msg);
-  //     }
-
-  //     const users = await fetchCustomersFromDB(state.token);
-  //     // ---- Error Handler ---- //
-  //     if (users.error) {
-  //       setErrorMessage(users.error.msg);
-  //       throw new Error(users.error.msg);
-  //     }
-
-  //     setTableState(users);
-  //     setIsSpinnerLoading(false);
-  //   } catch (err) {
-  //     setError(true);
-  //     setIsSpinnerLoading(false);
-  //   }
-  // };
 
   const handleSubmitForm = async (e, newInfo) => {
     e.preventDefault();

@@ -12,9 +12,10 @@ import {
   deleteInfo,
   fetchInfoTypesFromDB,
   setInfoStatus,
+  toggleInfoContentStatus,
   updateInfo,
 } from "../../../api_requests/hotel_requests";
-import { DeleteOutline, Edit, Star, StarBorder } from "@mui/icons-material";
+import { DeleteOutline, Edit, Star, StarBorder, ToggleOffOutlined, ToggleOn } from "@mui/icons-material";
 import EditInfo from "../Forms/Info/EditInfo";
 import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 import { useStateValue } from "../../../StateProvider";
@@ -35,30 +36,39 @@ const InfoComponent = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
 
+  const basicFetch = async () => {
+    try {
+      const data = await fetchInfoTypesFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
+      const { myArr } = await imageGetter(data, "Info/", true);
+
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
+
+      setInfo(myArr);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
+
   useEffect(() => {
     let controller = new AbortController();
 
     setIsSpinnerLoading(true);
     const exec = async () => {
       try {
-        const data = await fetchInfoTypesFromDB(state.token);
-        // ---- Error Handler ---- //
-        if (data.error) {
-          setErrorMessage(data.error.msg);
-          throw new Error(data.error.msg);
-        }
-
-        const { myArr } = await imageGetter(data, "Info/", true);
-
-        // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
-          let tmp_error =
-            "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
-          setErrorMessage(tmp_error);
-          throw new Error(tmp_error);
-        }
-
-        setInfo(myArr);
+        await basicFetch();
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -80,24 +90,7 @@ const InfoComponent = () => {
         throw new Error(result.error.msg);
       }
 
-      const data = await fetchInfoTypesFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
-
-      const { myArr } = await imageGetter(data, "Info/", true);
-
-      // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null ) {
-        let tmp_error =
-          "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
-        setErrorMessage(tmp_error);
-        throw new Error(tmp_error);
-      }
-
-      setInfo(myArr);
+      await basicFetch();
 
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -106,35 +99,21 @@ const InfoComponent = () => {
     }
   };
 
-  const handleUpdateInfo = async (e, name, id) => {
+  const handleUpdateInfo = async (e, name, image, id) => {
+    e.preventDefault();
     setIsSpinnerLoading(true);
 
     try {
-      const result = await updateInfo(id, name, state.token);
+      const ali = name.replace(/\s+/g, "-").toLowerCase();
+      const result = await updateInfo(id, name, ali , image, state.token);
       // ---- Error Handler ---- //
       if (result.error) {
         setErrorMessage(result.error.msg);
         throw new Error(result.error.msg);
       }
 
-      const data = await fetchInfoTypesFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
+      await basicFetch();
 
-      const { myArr } = await imageGetter(data, "Info/", true);
-
-      // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null ) {
-        let tmp_error =
-          "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
-        setErrorMessage(tmp_error);
-        throw new Error(tmp_error);
-      }
-
-      setInfo(myArr);
       setShowEdit((s) => !s);
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -163,24 +142,7 @@ const InfoComponent = () => {
         throw new Error(result.error.msg);
       }
 
-      const data = await fetchInfoTypesFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
-
-      const { myArr } = await imageGetter(data, "Info/", true);
-
-      // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null ) {
-        let tmp_error =
-          "Hotel/InfoComponent/useEffect => Info imageGetter Problem";
-        setErrorMessage(tmp_error);
-        throw new Error(tmp_error);
-      }
-
-      setInfo(myArr);
+      await basicFetch();
 
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -188,6 +150,26 @@ const InfoComponent = () => {
       setIsSpinnerLoading(false);
     }
   };
+
+  const handleToggleInfoStatus = async (id, newStatus) => {
+    setIsSpinnerLoading(true);
+
+    try {
+      const result = await toggleInfoContentStatus(id, newStatus, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      await basicFetch();
+      setIsSpinnerLoading(false);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
+
   const allInfo = info.map((inf, i) => {
     return (
       <div className="info-flex-three" key={i}>
@@ -201,8 +183,18 @@ const InfoComponent = () => {
             {inf.featured ? <Star /> : <StarBorder />}
           </Button>
           <Button
-            variant="outlined"
             color="primary"
+            variant="outlined"
+            className="button__rounded"
+            onClick={() =>
+              handleToggleInfoStatus(inf._id, !inf.status)
+            }
+          >
+            {inf.status ? <ToggleOn /> : <ToggleOffOutlined />}
+          </Button>
+          <Button
+            variant="outlined"
+            color="warning"
             className="button__rounded"
             onClick={() => handleEditInfo(inf)}
           >
@@ -221,10 +213,7 @@ const InfoComponent = () => {
           to={`/info/view/${inf.alias}`}
           className="info-avatar text-center"
         >
-          <img
-            src={inf.image}
-            alt=""
-          />
+          <img src={inf.image} alt="" />
           <div className=" text-center info-description">
             <h2>{translate(inf.name)}</h2>
           </div>

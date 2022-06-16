@@ -8,6 +8,7 @@ import { ExitToApp } from "@mui/icons-material";
 
 import "./Error.css";
 import { actionTypes } from "../../reducer";
+import { removeUpperAccents } from "../../Helpers/Functions/functions";
 
 const Error = (props) => {
   const [open] = useState(true);
@@ -65,7 +66,7 @@ const Error = (props) => {
           <p>{message}</p>
           <form className="general-form">
             <IconButton
-              text={btnText}
+              text={removeUpperAccents(btnText)}
               icon={props.loggout && <ExitToApp className="mr-2" />}
               variant="contained"
               className="btn error-btn"

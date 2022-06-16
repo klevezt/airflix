@@ -1,6 +1,6 @@
 import React, {  useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchServicesTypesFromDB } from "../../../api_requests/hotel_requests";
+import { fetchServicesTypesFromDB } from "../../../api_requests/user_requests";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import "./ServicesLandingPage.css";
 import { useStateValue } from "../../../StateProvider";

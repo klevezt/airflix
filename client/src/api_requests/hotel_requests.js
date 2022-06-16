@@ -352,22 +352,19 @@ export const addFood = (n, t, i, ing, feat, desc, token) => {
 };
 
 export const addInfo = (n, i, c, alias, token) => {
-  const uploadImages = [];
-  for (const img of i) {
-    uploadImages.push(img.name);
-  }
+  const formData = new FormData();
+
+  formData.append("name", n);
+  formData.append("image", i);
+  formData.append("content", c);
+  formData.append("alias", alias);
+
   return fetch(base_url + "/info/add", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: n,
-      image: uploadImages[0],
-      content: c,
-      alias,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 
@@ -560,15 +557,15 @@ export const setFoodStatus = (id, stat, token) => {
   }).then((data) => data.json());
 };
 
-export const setInfoStatus = (id, stat, token) => {
-  return fetch(base_url + "/info/update/" + id, {
+export const setInfoStatus = (id, newFeatured, token) => {
+  return fetch(base_url + "/info/update/" + id + "/featured", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
     body: JSON.stringify({
-      featured: stat,
+      featured: newFeatured,
     }),
   }).then((data) => data.json());
 };
@@ -586,15 +583,28 @@ export const setInfoContentStatus = (id, content, token) => {
   }).then((data) => data.json());
 };
 
-export const setServiceContentStatus = (id, content, token) => {
-  return fetch(base_url + "/service/update/" + id, {
+export const toggleServiceContentStatus = (id, newStatus, token) => {
+  return fetch(base_url + "/service/status/" + id, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
     body: JSON.stringify({
-      content,
+      status: newStatus,
+    }),
+  }).then((data) => data.json());
+};
+
+export const toggleInfoContentStatus = (id, newStatus, token) => {
+  return fetch(base_url + "/info/status/" + id, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({
+      status: newStatus,
     }),
   }).then((data) => data.json());
 };
@@ -893,7 +903,6 @@ export const updateService = (
   serviceDesc,
   token
 ) => {
-
   const formData = new FormData();
 
   formData.append("name", serviceName);
@@ -914,16 +923,19 @@ export const updateService = (
   }).then((data) => data.json());
 };
 
-export const updateInfo = (id, infoName, token) => {
+export const updateInfo = (id, infoName, infoAlias, infoImage, token) => {
+  const formData = new FormData();
+
+  formData.append("name", infoName);
+  formData.append("alias", infoAlias);
+  infoImage && formData.append("image", infoImage);
+
   return fetch(base_url + "/info/update/" + id, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: infoName,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 
@@ -946,6 +958,19 @@ export const updateServiceType = (
       "x-access-token": token,
     },
     body: formData,
+  }).then((data) => data.json());
+};
+
+export const toggleServiceStatus = (id, newStatus, token) => {
+  return fetch(base_url + "/serviceType/status/" + id, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({
+      status: newStatus,
+    }),
   }).then((data) => data.json());
 };
 

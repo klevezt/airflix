@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import "./ServicesDetailsPage.css";
 import { PhoneAndroid, Email, LocationOn } from "@mui/icons-material";
-import { fetchServiceWithParamasFromDB } from "../../../api_requests/hotel_requests";
+import { fetchServiceWithParamasFromDB } from "../../../api_requests/user_requests";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 
@@ -13,7 +13,7 @@ import ErrorComponent from "../../Error/Error";
 
 const ServicesDetailsPage = () => {
   const { t } = useTranslation();
-  
+
   const [serviceDetails, setServiceDetails] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [state] = useStateValue();
@@ -30,7 +30,10 @@ const ServicesDetailsPage = () => {
     const exec = async () => {
       try {
         const data = await fetchServiceWithParamasFromDB(
-          "type=" + params.type,
+          {
+            type: params.type,
+            status: true,
+          },
           state.token
         );
 
@@ -110,6 +113,11 @@ const ServicesDetailsPage = () => {
               </div>
             </div>
             {allServiceDetails}
+            {allServiceDetails.length < 1 && (
+              <div>
+                <p className="text-center kp-warning">{t("no_services")}</p>
+              </div>
+            )}
           </div>
         </div>
       )}

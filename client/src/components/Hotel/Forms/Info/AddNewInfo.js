@@ -65,9 +65,9 @@ const AddNewInfo = () => {
     try {
       const name = infoNameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();
-      const images = infoImageRef.current.files;
+      const image = infoImageRef.current.files[0];
 
-      const res = await addInfo(name, images, newInfo, alias, state.token);
+      const res = await addInfo(name, image, newInfo, alias, state.token);
       // ---- Error Handler ---- //
       if (res.error) {
         setErrorMessage(res.error.msg);

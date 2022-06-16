@@ -8,9 +8,15 @@ import "./ServicesComponent.css";
 import {
   deleteServiceType,
   fetchServicesTypesFromDB,
+  toggleServiceStatus,
   updateServiceType,
 } from "../../../api_requests/hotel_requests";
-import { DeleteOutline, Edit } from "@mui/icons-material";
+import {
+  DeleteOutline,
+  Edit,
+  ToggleOffOutlined,
+  ToggleOn,
+} from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 import EditServiceType from "../Forms/Services/EditServiceType";
@@ -33,6 +39,27 @@ const ServicesComponent = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const basicFetch = async () =>{
+    const data = await fetchServicesTypesFromDB(state.token);
+    // ---- Error Handler ---- //
+    if (data.error) {
+      setErrorMessage(data.error.msg);
+      throw new Error(data.error.msg);
+    }
+
+    const { myArr } = await imageGetter(data, "Services/", true);
+
+    // ---- Error Handler ---- //
+    if (myArr === undefined || myArr === null) {
+      let tmp_error =
+        "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
+      setErrorMessage(tmp_error);
+      throw new Error(tmp_error);
+    }
+
+    setServices(myArr);
+  } 
+
   useEffect(() => {
     let controller = new AbortController();
 
@@ -40,24 +67,7 @@ const ServicesComponent = () => {
 
     const exec = async () => {
       try {
-        const data = await fetchServicesTypesFromDB(state.token);
-        // ---- Error Handler ---- //
-        if (data.error) {
-          setErrorMessage(data.error.msg);
-          throw new Error(data.error.msg);
-        }
-
-        const { myArr } = await imageGetter(data, "Services/", true);
-
-        // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
-          let tmp_error =
-            "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
-          setErrorMessage(tmp_error);
-          throw new Error(tmp_error);
-        }
-
-        setServices(myArr);
+        await basicFetch();
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -79,24 +89,7 @@ const ServicesComponent = () => {
         throw new Error(result.error.msg);
       }
 
-      const data = await fetchServicesTypesFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
-
-      const { myArr } = await imageGetter(data, "Services/", true);
-
-      // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null ) {
-        let tmp_error =
-          "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
-        setErrorMessage(tmp_error);
-        throw new Error(tmp_error);
-      }
-
-      setServices(myArr);
+      await basicFetch();
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
@@ -104,7 +97,12 @@ const ServicesComponent = () => {
     }
   };
 
-  const handleUpdateServiceType = async (e, id, serviceTypeName, serviceTypeImage) => {
+  const handleUpdateServiceType = async (
+    e,
+    id,
+    serviceTypeName,
+    serviceTypeImage
+  ) => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
@@ -122,24 +120,7 @@ const ServicesComponent = () => {
         throw new Error(result.error.msg);
       }
 
-      const data = await fetchServicesTypesFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
-
-      const { myArr } = await imageGetter(data, "Services/", true);
-
-      // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null ) {
-        let tmp_error =
-          "Hotel/ServicesComponent/useEffect => Services imageGetter Problem";
-        setErrorMessage(tmp_error);
-        throw new Error(tmp_error);
-      }
-
-      setServices(myArr);
+      await basicFetch();
       setShowEdit((s) => !s);
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -154,6 +135,25 @@ const ServicesComponent = () => {
     setSelectedServiceType(selectedServiceType);
   };
 
+  const handleToggleServiceStatus = async (id, newStatus) => {
+    setIsSpinnerLoading(true);
+
+    try {
+      const result = await toggleServiceStatus(id, newStatus, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      await basicFetch();
+      setIsSpinnerLoading(false);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
+
   const allServices = services.map((service, i) => {
     return (
       <Fragment key={i}>
@@ -161,6 +161,16 @@ const ServicesComponent = () => {
           <div className="w-100 buttons-wrapper">
             <Button
               color="primary"
+              variant="outlined"
+              className="button__rounded"
+              onClick={() =>
+                handleToggleServiceStatus(service._id, !service.status)
+              }
+            >
+              {service.status ? <ToggleOn /> : <ToggleOffOutlined />}
+            </Button>
+            <Button
+              color="warning"
               variant="outlined"
               className="button__rounded"
               onClick={() => handleEditServiceType(service)}

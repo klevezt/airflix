@@ -1,9 +1,7 @@
 import React, { useState, Fragment } from "react";
-// import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
-// import LoadingSpinner from "../../../UI/Spinners/LoadingSpinner";
 import AddIcon from "@mui/icons-material/Add";
 import { RemoveCircleOutline } from "@mui/icons-material";
 import { removeUpperAccents } from "../../../../Helpers/Functions/functions";
@@ -12,10 +10,6 @@ const AddNewInfoDetailsForm = (props) => {
   const { t } = useTranslation();
 
   const [newInfo, setNewInfo] = useState([...props.info]);
-
-  // useEffect(() => {
-  //   // console.log(newInfo);
-  // }, []);
 
   const handleChangeDescription = (i, e) => {
     let newFormValues = [...newInfo];

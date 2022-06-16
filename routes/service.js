@@ -79,7 +79,7 @@ router.route("/add").post((req, res, next) => {
 
 router.route("/status/:id").put((req, res, next) => {
   Service.findByIdAndUpdate(
-    req.params.name,
+    req.params.id,
     req.body,
     { new: true },
     (err, todo) => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import IconButton from "../../UI/Buttons/IconButton";
-import { Add, Undo, DeleteOutline, Edit } from "@mui/icons-material";
+import { Add, Undo, DeleteOutline, Edit, ToggleOn, ToggleOffOutlined } from "@mui/icons-material";
 
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import {
@@ -12,6 +12,7 @@ import {
   addService,
   getServiceEdit,
   updateService,
+  toggleServiceContentStatus,
 } from "../../../api_requests/hotel_requests";
 import { PhoneAndroid, Email, LocationOn } from "@mui/icons-material";
 import "./ServicesDetails.css";
@@ -46,6 +47,32 @@ const ServicesDetails = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
+  const basicFetch = async () => {
+    try {
+      const services = await fetchServiceFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (services.error) {
+        setErrorMessage(services.error.msg);
+        throw new Error(services.error.msg);
+      }
+
+      const { myArr } = await imageGetter(services, "Services/", true);
+
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
+
+      setServices(myArr);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
+
   // All useEffect Hooks
   useEffect(() => {
     let controller = new AbortController();
@@ -64,25 +91,7 @@ const ServicesDetails = () => {
         }
 
         setServiceType(data[0]);
-
-        const services = await fetchServiceFromDB(state.token);
-        // ---- Error Handler ---- //
-        if (services.error) {
-          setErrorMessage(services.error.msg);
-          throw new Error(services.error.msg);
-        }
-
-        const { myArr } = await imageGetter(services, "Services/", true);
-
-        // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
-          let tmp_error =
-            "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
-          setErrorMessage(tmp_error);
-          throw new Error(tmp_error);
-        }
-
-        setServices(myArr);
+        await basicFetch();
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -105,24 +114,8 @@ const ServicesDetails = () => {
         throw new Error(result.error.msg);
       }
 
-      const data = await fetchServiceFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
+      await basicFetch();
 
-      const { myArr } = await imageGetter(data, "Services/", true);
-
-      // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null ) {
-        let tmp_error =
-          "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
-        setErrorMessage(tmp_error);
-        throw new Error(tmp_error);
-      }
-
-      setServices(myArr);
       setAddNewService(false);
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -163,24 +156,8 @@ const ServicesDetails = () => {
         throw new Error(result.error.msg);
       }
 
-      const data = await fetchServiceFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
+      await basicFetch();
 
-      const { myArr } = await imageGetter(data, "Services/", true);
-
-      // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null ) {
-        let tmp_error =
-          "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
-        setErrorMessage(tmp_error);
-        throw new Error(tmp_error);
-      }
-
-      setServices(myArr);
       setAddNewService(false);
       setIsSpinnerLoading(false);
     } catch (err) {
@@ -200,24 +177,13 @@ const ServicesDetails = () => {
         setErrorMessage(data.error.msg);
         throw new Error(data.error.msg);
       }
-      
-      // const { myArr } = await imageGetter(data, "Services/", true);
-      // console.log(myArr);
-
-      // ---- Error Handler ---- //
-      // if (myArr === undefined || myArr === null) {
-      //   let tmp_error =
-      //     "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
-      //   setErrorMessage(tmp_error);
-      //   throw new Error(tmp_error);
-      // }
 
       customEditServices(data);
       setEditService(true);
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
-      setEditService(true);
+      setEditService(false);
       setIsSpinnerLoading(false);
     }
   };
@@ -254,25 +220,32 @@ const ServicesDetails = () => {
         throw new Error(result.error.msg);
       }
 
-      const data = await fetchServiceFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (data.error) {
-        setErrorMessage(data.error.msg);
-        throw new Error(data.error.msg);
-      }
+      await basicFetch();
 
-      const { myArr } = await imageGetter(data, "Services/", true);
-
-      // ---- Error Handler ---- //
-      if (myArr === undefined || myArr === null ) {
-        let tmp_error =
-          "Hotel/ServicesDetail/useEffect => Service Detail imageGetter Problem";
-        setErrorMessage(tmp_error);
-        throw new Error(tmp_error);
-      }
-
-      setServices(myArr);
       setEditService(false);
+      setIsSpinnerLoading(false);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
+
+  const handleToggleServiceStatus = async (id, newStatus) => {
+    setIsSpinnerLoading(true);
+
+    try {
+      const result = await toggleServiceContentStatus(
+        id,
+        newStatus,
+        state.token
+      );
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      await basicFetch();
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
@@ -286,6 +259,16 @@ const ServicesDetails = () => {
         <div className="buttons-wrapper">
           <Button
             color="primary"
+            variant="outlined"
+            className="button__rounded"
+            onClick={() =>
+              handleToggleServiceStatus(service._id, !service.status)
+            }
+          >
+            {service.status ? <ToggleOn /> : <ToggleOffOutlined />}
+          </Button>
+          <Button
+            color="warning"
             variant="outlined"
             className="button__rounded"
             onClick={() => handleSubmitEditService(service._id)}
