@@ -44,6 +44,7 @@ router.route("/add").post((req, res, next) => {
   const content = req.body.content;
   const alias = req.body.alias;
 
+
   const newInfo = new Info({
     name,
     image,

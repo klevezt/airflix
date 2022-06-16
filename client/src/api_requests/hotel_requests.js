@@ -356,8 +356,14 @@ export const addInfo = (n, i, c, alias, token) => {
 
   formData.append("name", n);
   formData.append("image", i);
-  formData.append("content", c);
+  c.forEach((item) => {
+    formData.append("content", JSON.stringify(item));
+  });
+  // formData.append("content", c);
   formData.append("alias", alias);
+
+console.log(formData.getAll("content"));
+
 
   return fetch(base_url + "/info/add", {
     method: "POST",
