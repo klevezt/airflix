@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
-import { fetchInfoTypesFromDB } from "../../../api_requests/hotel_requests";
+import { fetchInfoTypesFromDB } from "../../../api_requests/user_requests";
 import {
   Table,
   TableBody,
@@ -29,15 +29,33 @@ const Info = () => {
 
     const exec = async () => {
       try {
-        const all_info = await fetchInfoTypesFromDB(state.token);
+        const all_info = await fetchInfoTypesFromDB(
+          { status: true },
+          state.token
+        );
 
         // ---- Error Handler ---- //
         if (all_info.error) {
           setErrorMessage(all_info.error.msg);
           throw new Error(all_info.error.msg);
         }
+        const contentArray = [];
+        all_info.forEach((element) => {
+          const arr = [];
+          const tempContent = element.content;
 
-        setInfo(all_info);
+          tempContent.map((c) => {
+            arr.push(JSON.parse(c));
+          });
+          contentArray.push(arr);
+        });
+
+        const tmpInfo = [];
+        all_info.forEach((inf, i) => {
+          tmpInfo.push({ ...inf, content: contentArray[i] });
+        });
+
+        setInfo(tmpInfo);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -78,7 +96,7 @@ const Info = () => {
       {!error && isSpinnerLoading && <LoadingSpinner />}
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
-        <div className="row justify-content-center kp-events mb-5">
+        <div className="row kp-events mb-5">
           <div className="mt-3">
             <div className="user-home-general-headline-wrapper">
               <h2 className="user-home-general-headline">{t("info")}</h2>

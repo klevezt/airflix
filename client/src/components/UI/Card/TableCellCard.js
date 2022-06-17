@@ -30,6 +30,7 @@ import { updateFoodWeek } from "../../../api_requests/hotel_requests";
 import { fetchFoodFromDBWithParams } from "../../../api_requests/hotel_requests";
 // import LoadingSpinner from "../Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
+import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 
 const TableCellCard = (props) => {
   // Translation config
@@ -248,13 +249,21 @@ const TableCellCard = (props) => {
                 )
               }
               size="medium"
-              text={editClicked ? t("save") : t("edit")}
+              text={
+                editClicked
+                  ? removeUpperAccents(t("save"))
+                  : removeUpperAccents(t("edit"))
+              }
             />
             <IconButton
               onClick={editClicked ? handleEdit : handleClose}
               icon={<CancelPresentation className="mr-10" />}
               size="medium"
-              text={editClicked ? t("cancel") : t("close")}
+              text={
+                editClicked
+                  ? removeUpperAccents(t("cancel"))
+                  : removeUpperAccents(t("close"))
+              }
             />
           </div>
         </div>
@@ -270,7 +279,7 @@ const TableCellCard = (props) => {
           <CardContent></CardContent>
         </Card>
       )}
-      {!error && popup }
+      {!error && popup}
       {!error && (
         <Card
           key={props.custom_key}
@@ -303,7 +312,11 @@ const TableCellCard = (props) => {
                       <Visibility className="mr-10" />
                     )
                   }
-                  text={foodTypeKeys.length === 0 ? t("add") : t("view")}
+                  text={
+                    foodTypeKeys.length === 0
+                      ? removeUpperAccents(t("add"))
+                      : removeUpperAccents(t("view"))
+                  }
                 />
               </CardActions>
             </>

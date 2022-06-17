@@ -8,7 +8,7 @@ import { ReadMore } from "@mui/icons-material";
 import IconButton from "../../UI/Buttons/IconButton";
 
 import "./EventsComponent.css";
-import { truncateString } from "../../../Helpers/Functions/functions";
+import { removeUpperAccents, truncateString } from "../../../Helpers/Functions/functions";
 import { useTranslation } from "react-i18next";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import ErrorComponent from "../../Error/Error";
@@ -38,7 +38,7 @@ const EventsComponent = () => {
           throw new Error(data.error.msg);
         }
 
-        const { myArr: eventArr } = await imageGetter(data, "Events/");
+        const { myArr: eventArr } = await imageGetter(data, "Events/",true);
 
         // ---- Error Handler ---- //
         if (eventArr === undefined || eventArr === null) {
@@ -62,6 +62,7 @@ const EventsComponent = () => {
             });
         });
         setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+        // console.log(arr);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -174,7 +175,7 @@ const EventsComponent = () => {
               <div className="col-12">
                 <Link to="/events/all" className="user-more-button">
                   <IconButton
-                    text={t("all_events")}
+                    text={removeUpperAccents(t("all_events"))}
                     icon={<ReadMore className="mr-2" />}
                     color="warning"
                     variant="contained"

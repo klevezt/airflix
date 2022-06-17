@@ -63,7 +63,7 @@ const AddNewEvent = () => {
       const name = nameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();
       const time = value;
-      const images = imageRef.current.files;
+      const images = imageRef.current.files[0];
       const description = descriptionRef.current.value;
       const result = await addEvent(
         name,
@@ -127,6 +127,7 @@ const AddNewEvent = () => {
                   id="inputEventName"
                   autoComplete="off"
                   ref={nameRef}
+                  required
                 />
               </div>
             </div>
@@ -143,7 +144,7 @@ const AddNewEvent = () => {
                   className="datetime-picker"
                 >
                   <DateTimePicker
-                    renderInput={(props) => <TextField {...props} />}
+                    renderInput={(props) => <TextField required {...props} />}
                     value={value}
                     onChange={(newValue) => {
                       setValue(newValue);
@@ -161,6 +162,7 @@ const AddNewEvent = () => {
                   type="file"
                   autoComplete="off"
                   ref={imageRef}
+                  required
                 />
               </div>
             </div>

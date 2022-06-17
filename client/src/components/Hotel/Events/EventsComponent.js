@@ -1,19 +1,32 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
-import { fetchEventsFromDB } from "../../../api_requests/hotel_requests";
-import { ReadMore } from "@mui/icons-material";
+import { NavLink, Link, useHistory } from "react-router-dom";
+import {
+  deleteEvent,
+  fetchEventsFromDB,
+  toggleEventContentStatus,
+} from "../../../api_requests/hotel_requests";
+import {
+  DeleteOutline,
+  Edit,
+  ReadMore,
+  ToggleOffOutlined,
+  ToggleOn,
+} from "@mui/icons-material";
 import IconButton from "../../UI/Buttons/IconButton";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import ErrorComponent from "../../Error/Error";
 
 import "./EventsComponent.css";
-import { truncateString } from "../../../Helpers/Functions/functions";
+import { removeUpperAccents, truncateString } from "../../../Helpers/Functions/functions";
 import { useTranslation } from "react-i18next";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import Button from "@mui/material/Button";
 
 const EventsComponent = () => {
   const { t } = useTranslation();
+  const history = useHistory();
+
 
   const [state] = useStateValue();
   const [events, setEvents] = useState([]);
@@ -23,43 +36,52 @@ const EventsComponent = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
+  const basicFetch = async () => {
+    const arr = [];
+
+    try {
+      const data = await fetchEventsFromDB(state.token);
+      // ---- Error Handler ---- //
+      if (data.error) {
+        setErrorMessage(data.error.msg);
+        throw new Error(data.error.msg);
+      }
+
+      const { myArr } = await imageGetter(data, "Events/", true);
+
+      // ---- Error Handler ---- //
+      if (myArr === undefined || myArr === null) {
+        let tmp_error =
+          "Hotel/EventsComponent/useEffect => Events imageGetter Problem";
+        setErrorMessage(tmp_error);
+        throw new Error(tmp_error);
+      }
+
+      myArr.forEach((event) => {
+        if (new Date().getTime() < new Date(event.time).getTime())
+          arr.push({
+            id: event._id,
+            img: event.image,
+            alias: event.alias,
+            title: event.name,
+            time: event.time,
+            description: event.description,
+            status: event.status,
+          });
+      });
+      setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
+
   useEffect(() => {
     let controller = new AbortController();
 
     const exec = async () => {
-      const arr = [];
       try {
-        const data = await fetchEventsFromDB(state.token);
-        // ---- Error Handler ---- //
-        if (data.error) {
-          setErrorMessage(data.error.msg);
-          throw new Error(data.error.msg);
-        }
-
-        const { myArr } = await imageGetter(data, "Events/");
-
-        // ---- Error Handler ---- //
-        if (myArr === undefined || myArr === null) {
-          let tmp_error =
-            "Hotel/EventsComponent/useEffect => Events imageGetter Problem";
-          setErrorMessage(tmp_error);
-          throw new Error(tmp_error);
-        }
-
-        myArr.forEach((event) => {
-          if (
-            event.status &&
-            new Date().getTime() < new Date(event.time).getTime()
-          )
-            arr.push({
-              img: event.image,
-              alias: event.alias,
-              title: event.name,
-              time: event.time,
-              description: event.description,
-            });
-        });
-        setEvents(arr.sort((a, b) => new Date(a.time) - new Date(b.time)));
+        await basicFetch();
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -71,47 +93,90 @@ const EventsComponent = () => {
     return () => controller?.abort();
   }, [state.token]);
 
+  const handleToggleEventStatus = async (id, newStatus) => {
+    setIsSpinnerLoading(true);
+
+    try {
+      const result = await toggleEventContentStatus(id, newStatus, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+      await basicFetch();
+      setIsSpinnerLoading(false);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
+
+  const handleDeleteEvent = async (id) => {
+    setIsSpinnerLoading(true);
+    console.log(id);
+    try {
+      const result = await deleteEvent(id, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      await basicFetch();
+
+      setIsSpinnerLoading(false);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
+
   const upcomingEvent = events.map((event, i) => {
-    if (i === 0) {
-      return (
-        <Fragment key={i}>
-          <h4 className="mb-5">
-            {new Date(event.time).toLocaleString([], {
-              year: "numeric",
-              month: "numeric",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </h4>
-          <div className="col-md-12 col-lg-6">
-            <div className="latest-post-box">
-              <NavLink to={`/events/edit/${event.alias}`} className="post-img">
-                <img src={event.img} alt="Upcoming Blog" />
-              </NavLink>
-              <div className="post-desc">
-                <h4>
-                  <NavLink to={`/events/edit/${event.alias}`}>
-                    {t(event.title)}
-                  </NavLink>
-                </h4>
-                <p>{truncateString(t(event.description), 150)}</p>
-              </div>
+    if (i !== 0) return "";
+
+    return (
+      <Fragment key={i}>
+        <h4 className="mb-5">
+          {new Date(event.time).toLocaleString([], {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </h4>
+        <div className="col-md-12 col-lg-6">
+          <div className="kp-user">
+            <div className="buttons-wrapper">
+              <Button
+                color="primary"
+                variant="outlined"
+                className="button__rounded"
+                onClick={() => handleToggleEventStatus(event.id, !event.status)}
+              >
+                {event.status ? <ToggleOn /> : <ToggleOffOutlined />}
+              </Button>
+              <Button
+                variant="outlined"
+                color="warning"
+                className="button__rounded"
+                onClick={() => history.push(`/events/edit/${event.alias}`)}
+              >
+                <Edit />
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                className="button__rounded"
+                onClick={() => handleDeleteEvent(event.id)}
+              >
+                <DeleteOutline />
+              </Button>
             </div>
           </div>
-        </Fragment>
-      );
-    }
-    return "";
-  });
-
-  const recentEvents = events.map((event, i) => {
-    if (i !== 0) {
-      return (
-        <div className="col-lg-6" key={i}>
-          <div className="latest-post-box">
+          <div className="latest-post-box ">
             <NavLink to={`/events/edit/${event.alias}`} className="post-img">
-              <img src={event.img} alt="Event" />
+              <img src={event.img} alt="Upcoming Blog" />
             </NavLink>
             <div className="post-desc">
               <h4>
@@ -119,22 +184,70 @@ const EventsComponent = () => {
                   {t(event.title)}
                 </NavLink>
               </h4>
-              <h6>
-                {new Date(event.time).toLocaleString([], {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </h6>
               <p>{truncateString(t(event.description), 150)}</p>
             </div>
           </div>
         </div>
-      );
-    }
-    return "";
+      </Fragment>
+    );
+  });
+
+  const recentEvents = events.map((event, i) => {
+    if (i === 0) return "";
+    return (
+      <div className="col-lg-6" key={i}>
+        <div className="latest-post-box">
+          <div className="kp-user">
+            <div className="buttons-wrapper">
+              <Button
+                color="primary"
+                variant="outlined"
+                className="button__rounded"
+                onClick={() => handleToggleEventStatus(event.id, !event.status)}
+              >
+                {event.status ? <ToggleOn /> : <ToggleOffOutlined />}
+              </Button>
+              <Button
+                variant="outlined"
+                color="warning"
+                className="button__rounded"
+                // onClick={() => handleEditInfo(inf)}
+              >
+                <Edit />
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                className="button__rounded"
+                onClick={() => handleDeleteEvent(event.id)}
+              >
+                <DeleteOutline />
+              </Button>
+            </div>
+          </div>
+          <NavLink to={`/events/edit/${event.alias}`} className="post-img">
+            <img src={event.img} alt="Event" />
+          </NavLink>
+          <div className="post-desc">
+            <h4>
+              <NavLink to={`/events/edit/${event.alias}`}>
+                {t(event.title)}
+              </NavLink>
+            </h4>
+            <h6>
+              {new Date(event.time).toLocaleString([], {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </h6>
+            <p>{truncateString(t(event.description), 150)}</p>
+          </div>
+        </div>
+      </div>
+    );
   });
 
   return (
@@ -150,7 +263,7 @@ const EventsComponent = () => {
               ))}
             {upcomingEvent}
             {upcomingEvent === "" ||
-              (upcomingEvent.length <= 1 && (
+              (upcomingEvent.length < 1 && (
                 <div>
                   <p className="text-center kp-warning">
                     {t("no_upcoming_events_message")}
@@ -167,12 +280,12 @@ const EventsComponent = () => {
               </div>
             )}
           </div>
-          {events.length > 1 && (
+          {events.length > 0 && (
             <div className="row text-center">
               <Link to="/events/all" className="user-more-button">
                 <IconButton
                   className="w-auto m-auto"
-                  text={t("all_events")}
+                  text={removeUpperAccents(t("all_events"))}
                   icon={<ReadMore className="mr-2" />}
                   color="warning"
                   variant="contained"

@@ -16,7 +16,7 @@
     width: 100%;
 }
 .user-home-events-scroller .user-services-img img{
-    height: 240px;
+    height: 280px;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
     width:100%;
@@ -192,6 +192,7 @@
 }
 
 @media(min-width:768px) {
+    .user-home-events-date{display: none;}
     .user-home-todayFood-inner-wrapper {
         flex-basis: 48%;
         margin-right: 2%;

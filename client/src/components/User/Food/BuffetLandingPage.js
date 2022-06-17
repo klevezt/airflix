@@ -8,7 +8,7 @@ import { Fade, Backdrop, Modal, TextField } from "@mui/material";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { weekNamesAliases } from "../../../Helpers/Const/constants";
 import {
-  getSelectedDayBelongsWeekInMonth,
+  getSelectedDayBelongsWeekInMonth, removeUpperAccents,
   // removeUpperAccents,
 } from "../../../Helpers/Functions/functions";
 import { fetchTodaysMenuFromDB } from "../../../api_requests/user_requests";
@@ -185,7 +185,7 @@ const BuffetLandingPage = () => {
               )}
               <p>{t(previewSelectedFood[0].description)}</p>
               <IconButton
-                text={t("close")}
+                text={removeUpperAccents(t("close"))}
                 icon={<Close className="mr-2" />}
                 variant="contained"
                 onClick={handleClosePreview}
@@ -369,7 +369,7 @@ const BuffetLandingPage = () => {
                       </div>
                       <IconButton
                         className="search-button"
-                        text={t("search")}
+                        text={removeUpperAccents(t("search"))}
                         icon={<Search />}
                         color="warning"
                         variant="contained"

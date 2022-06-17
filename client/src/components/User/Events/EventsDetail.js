@@ -9,6 +9,7 @@ import "./EventsDetail.css";
 import IconButton from "../../UI/Buttons/IconButton";
 import { ReadMore } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 
 function EventsDetail() {
   const { t } = useTranslation();
@@ -37,7 +38,7 @@ function EventsDetail() {
           throw new Error(data.error.msg);
         }
 
-        const { myArr } = await imageGetter(data, "Events/");
+        const { myArr } = await imageGetter(data, "Events/",true);
 
         // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null) {
@@ -77,7 +78,7 @@ function EventsDetail() {
           </div>
           <Link to="/events/all" className="user-more-button">
             <IconButton
-              text={t("all_events")}
+              text={removeUpperAccents(t("all_events"))}
               icon={<ReadMore className="mr-2" />}
               color="warning"
               variant="contained"

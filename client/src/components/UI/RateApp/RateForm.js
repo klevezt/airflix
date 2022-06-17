@@ -10,6 +10,7 @@ import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfi
 import "./RateApp.css";
 import IconButton from "../Buttons/IconButton";
 import { Close } from "@mui/icons-material";
+import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 
 const RateAppForm = (props) => {
   const { t } = useTranslation();
@@ -115,11 +116,15 @@ const RateAppForm = (props) => {
         </div>
       </div>
       <hr />
-      <IconButton text={t("submit")} variant="contained" type="submit" />
+      <IconButton
+        text={removeUpperAccents(t("submit"))}
+        variant="contained"
+        type="submit"
+      />
 
       <div className="user-more-button">
         <IconButton
-          text={t("close")}
+          text={removeUpperAccents(t("close"))}
           icon={<Close className="mr-2" />}
           variant="contained"
           onClick={props.close}

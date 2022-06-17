@@ -26,6 +26,7 @@ import reactDom from "react-dom";
 import { rateTheApp } from "../../api_requests/user_requests";
 import { imageGetter } from "../../Helpers/Const/constants";
 import ErrorComponent from "../../components/Error/Error";
+import { removeUpperAccents } from "../../Helpers/Functions/functions";
 
 const MobileSidebarComponent = (props) => {
   const [state, dispatch] = useStateValue();
@@ -140,7 +141,7 @@ const MobileSidebarComponent = (props) => {
         <div className="modalRate-container p-4">
           <h2 className="text-center mb-4">{t("thanks_for_the_rating")}</h2>
           <IconButton
-            text={t("close")}
+            text={removeUpperAccents(t("close"))}
             icon={<Close className="mr-2" />}
             color="warning"
             variant="contained"
@@ -261,7 +262,7 @@ const MobileSidebarComponent = (props) => {
         <div className="color-white d-flex justify-content-evenly align-items-center flex-wrap">
           <p>© AirFlix {new Date().getFullYear()}</p>
           <IconButton
-            text={t("rate_us")}
+            text={removeUpperAccents(t("rate_us"))}
             icon={<ThumbsUpDown className="mr-2" />}
             color="warning"
             variant="contained"

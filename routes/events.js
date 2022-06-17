@@ -42,14 +42,14 @@ router.route("/add").post((req, res, next) => {
   const name = req.body.name;
   const alias = req.body.alias;
   const time = req.body.time;
-  const images = req.body.images;
+  const image = req.file.filename;
   const description = req.body.description;
 
   const newEvent = new Event({
     name,
     alias,
     time,
-    images,
+    image,
     description,
   });
 
@@ -93,9 +93,17 @@ router.route("/status/:id").put((req, res, next) => {
 });
 
 router.route("/update/:id").put((req, res, next) => {
+  const body = {
+    name: req.body.name,
+    alias: req.body.alias,
+    time: req.body.time,
+    ...(req.file && { image: req.file.filename }),
+    description: req.body.description,
+  };
+
   Event.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors

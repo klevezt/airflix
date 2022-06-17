@@ -44,7 +44,6 @@ router.route("/add").post((req, res, next) => {
   const content = req.body.content;
   const alias = req.body.alias;
 
-
   const newInfo = new Info({
     name,
     image,
@@ -135,19 +134,14 @@ router.route("/update/:id").put((req, res, next) => {
 });
 
 router.route("/content/update/:alias").put((req, res, next) => {
-  Info.findOneAndUpdate(
-    { alias: req.params.alias },
-    req.body,
-    { new: true },
-    (err, todo) => {
-      // Handle any possible database errors
-      if (err) {
-        const error = new Error("Info database error.");
-        throw error;
-      }
-      res.status(200).json({ message: "Info content successfully updated!" });
+  Info.findOneAndUpdate(req.params.id, req.body, { new: true }, (err, todo) => {
+    // Handle any possible database errors
+    if (err) {
+      const error = new Error("Info database error.");
+      throw error;
     }
-  ).catch((err) => {
+    res.status(200).json({ message: "Info content successfully updated!" });
+  }).catch((err) => {
     if (!err.statusCode) {
       err.statusCode = 500;
     }

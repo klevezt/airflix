@@ -33,7 +33,7 @@ const EventsAll = () => {
           throw new Error(data.error.msg);
         }
 
-        const { myArr: eventArr } = await imageGetter(data, "Events/");
+        const { myArr: eventArr } = await imageGetter(data, "Events/", true);
 
         // ---- Error Handler ---- //
         if (eventArr === undefined || eventArr === null) {
@@ -90,7 +90,7 @@ const EventsAll = () => {
       {!error && isSpinnerLoading && <LoadingSpinner />}
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
-        <div className="row justify-content-center kp-events mb-5">
+        <div className="row kp-events mb-5">
           <div className="mt-3">
             <div className="user-home-general-headline-wrapper">
               <h2 className="user-home-general-headline">{t("all_events")}</h2>

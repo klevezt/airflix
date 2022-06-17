@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
@@ -30,6 +30,7 @@ const EditEvent = (props) => {
   const [eventDescription, setEventDescription] = useState("");
   const [eventImage, setEventImage] = useState("");
   const [imageChange, setImageChange] = useState(false);
+  const newImageRef = useRef("");
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -75,9 +76,7 @@ const EditEvent = (props) => {
   const descriptionChangeHandler = (e) => {
     setEventDescription(e.target.value);
   };
-  const imageChangeHandler = (e) => {
-    setEventImage(e.target.files[0].name);
-  };
+  
   const changeImageHandler = () => {
     setImageChange((s) => !s);
   };
@@ -90,7 +89,7 @@ const EditEvent = (props) => {
         eventId,
         eventName,
         alias,
-        eventImage,
+        imageChange ? newImageRef.current.files[0] : eventImage,
         eventTime,
         eventDescription,
         state.token
@@ -194,7 +193,8 @@ const EditEvent = (props) => {
                     className="form-control form-control-sm"
                     type="file"
                     autoComplete="off"
-                    onChange={imageChangeHandler}
+                    ref={newImageRef}
+                    required
                   />
                 </div>
               )}

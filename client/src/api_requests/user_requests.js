@@ -1,5 +1,16 @@
 const base_url = process.env.REACT_APP_SERVER_URL;
 
+export const fetchInfoTypesFromDB = (prs,token) => {
+  const params = new URLSearchParams(prs);
+  return fetch(base_url + "/info?" + params, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+  }).then((info) => info.json());
+};
+
 export const fetchServiceWithParamasFromDB = (prs, token) => {
   const params = new URLSearchParams(prs);
   return fetch(base_url + "/service?" + params, {

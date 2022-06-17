@@ -12,6 +12,7 @@ import ErrorComponent from "../../Error/Error";
 
 import "./AlacarteDetails.css";
 import { imageGetter } from "../../../Helpers/Const/constants";
+import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 
 function AlacarteDetails() {
   const [state] = useStateValue();
@@ -75,7 +76,7 @@ function AlacarteDetails() {
               onClick={() => {
                 history.goBack();
               }}
-              text={`${t("back")}`}
+              text={removeUpperAccents(t("back"))}
               icon={<UndoIcon />}
               color="warning"
               variant="contained"

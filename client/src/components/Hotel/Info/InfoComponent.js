@@ -104,8 +104,8 @@ const InfoComponent = () => {
     setIsSpinnerLoading(true);
 
     try {
-      const ali = name.replace(/\s+/g, "-").toLowerCase();
-      const result = await updateInfo(id, name, ali , image, state.token);
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
+      const result = await updateInfo(id, name, alias , image, state.token);
       // ---- Error Handler ---- //
       if (result.error) {
         setErrorMessage(result.error.msg);

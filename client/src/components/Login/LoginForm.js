@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 
 import "./LoginForm.css";
 import { imageGetter } from "../../Helpers/Const/constants";
+import { removeUpperAccents } from "../../Helpers/Functions/functions";
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -176,7 +177,7 @@ const LoginForm = () => {
                 onClick={(e) => {
                   loginFormSubmitHandler(e);
                 }}
-                text="Είσοδος"
+                text={removeUpperAccents(t("Είσοδος"))}
                 variant="contained"
               />
             ) : (

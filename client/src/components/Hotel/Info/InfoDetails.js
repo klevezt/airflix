@@ -75,23 +75,18 @@ const InfoDetails = () => {
       setIsSpinnerLoading(true);
       try {
         const data = await fetchInfoDetailsFromDB(params.alias, state.token);
-        // console.log(data[0].content);
-        const content = data[0].content;
-
         // ---- Error Handler ---- //
         if (data.error) {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
+        const content = data[0].content;
 
-        // console.log(JSON.parse(data[0].content));
         const arr = [];
 
         content.map((c) => {
           arr.push(JSON.parse(c));
         });
-        // const tempData = [...data[0], arr];
-        console.log(arr);
 
         setAllInfoData(data);
         setTableState(arr);
@@ -142,14 +137,23 @@ const InfoDetails = () => {
   const handleInfoStatus = async (name, stat) => {
     setIsSpinnerLoading(true);
     try {
-      tableState.forEach((info) => {
+      let temp = [...tableState];
+       
+      tableState.forEach((info,i) => {
         if (info.newInfoName === name) {
-          info.newInfoStatus = stat;
+          temp[i]["newInfoStatus"] = stat;
         }
       });
+
+      const arr = [];
+
+      temp.forEach((t) => {
+        arr.push(JSON.stringify(t));
+      });
+
       const result = await setInfoContentStatus(
         allInfoData[0]._id,
-        tableState,
+        arr,
         state.token
       );
       // ---- Error Handler ---- //
@@ -159,13 +163,19 @@ const InfoDetails = () => {
       }
 
       const info = await fetchInfoDetailsFromDB(params.alias, state.token);
+      arr.length = 0;
       // ---- Error Handler ---- //
       if (info.error) {
         setErrorMessage(info.error.msg);
         throw new Error(info.error.msg);
       }
+      const content = info[0].content;
+      content.map((c) => {
+        arr.push(JSON.parse(c));
+      });
 
-      setTableState(info[0].content);
+      setAllInfoData(info);
+      setTableState(arr);
       setIsSpinnerLoading(false);
     } catch (err) {
       setError(true);
@@ -177,11 +187,12 @@ const InfoDetails = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
-      const result = await updateInfoContent(
-        params.alias,
-        newInfo,
-        state.token
-      );
+      const arr = [];
+
+      newInfo.forEach((t) => {
+        arr.push(JSON.stringify(t));
+      });
+      const result = await updateInfoContent(params.alias, arr, state.token);
       // ---- Error Handler ---- //
       if (result.error) {
         setErrorMessage(result.error.msg);
@@ -195,8 +206,14 @@ const InfoDetails = () => {
         throw new Error(data.error.msg);
       }
 
+      arr.length = 0;
+      const content = data[0].content;
+      content.map((c) => {
+        arr.push(JSON.parse(c));
+      });
+
       setAllInfoData(data);
-      setTableState(data[0].content);
+      setTableState(arr);
       setIsSpinnerLoading(false);
       setShowAddMoreInfoDetails(false);
     } catch (err) {

@@ -10,12 +10,14 @@ const AddNewInfoDetailsForm = (props) => {
   const { t } = useTranslation();
 
   const [newInfo, setNewInfo] = useState([...props.info]);
+    
 
   const handleChangeDescription = (i, e) => {
     let newFormValues = [...newInfo];
     newFormValues[i]["newInfoDescription"] = e.target.value;
     setNewInfo(newFormValues);
   };
+
   const handleChangeName = (i, e) => {
     let newFormValues = [...newInfo];
     newFormValues[i]["newInfoName"] = e.target.value;

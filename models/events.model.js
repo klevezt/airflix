@@ -21,10 +21,10 @@ const eventSchema = new Schema(
       unique: true,
       trim: true,
     },
-    images: {
-      type: Array,
+    image: {
+      type: String,
       required: true,
-      default: [],
+      default: "",
     },
     description: {
       type: String,
@@ -33,7 +33,7 @@ const eventSchema = new Schema(
     status: {
       type: Boolean,
       required: true,
-      default: true,
+      default: false,
     },
   },
   {

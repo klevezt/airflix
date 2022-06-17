@@ -5,15 +5,18 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import {
   fetchEventsFromDB,
   fetchFoodTypesFromDB,
-  fetchInfoTypesFromDB,
 } from "../../../api_requests/hotel_requests";
 import { Close, ReadMore } from "@mui/icons-material";
 import IconButton from "../../UI/Buttons/IconButton";
 import {
   getCurrentWeekInMonth,
+  removeUpperAccents,
   truncateString,
 } from "../../../Helpers/Functions/functions";
-import { fetchTodaysMenuFromDB } from "../../../api_requests/user_requests";
+import {
+  fetchInfoTypesFromDB,
+  fetchTodaysMenuFromDB,
+} from "../../../api_requests/user_requests";
 import {
   imageGetter,
   weekNamesAliases,
@@ -69,7 +72,7 @@ const Home = () => {
           throw new Error(dataaa.error.msg);
         }
 
-        const { myArr: eventArr } = await imageGetter(dataaa, "Events/");
+        const { myArr: eventArr } = await imageGetter(dataaa, "Events/", true);
 
         const arr = [];
 
@@ -164,15 +167,36 @@ const Home = () => {
         }
         setTodayBuffet(buffet);
 
-        const featured_info = await fetchInfoTypesFromDB(state.token);
-
+        const featured_info = await fetchInfoTypesFromDB(
+          {
+            status: true,
+            featured: true,
+          },
+          state.token
+        );
         // ---- Error Handler ---- //
         if (featured_info.error) {
           setErrorMessage(featured_info.error.msg);
           throw new Error(featured_info.error.msg);
         }
 
-        setInfo(featured_info);
+        const contentArray = [];
+        featured_info.forEach((element) => {
+          const arr = [];
+          const tempContent = element.content;
+
+          tempContent.map((c) => {
+            arr.push(JSON.parse(c));
+          });
+          contentArray.push(arr);
+        });
+
+        const tmpInfo = [];
+        featured_info.forEach((inf, i) => {
+          tmpInfo.push({ ...inf, content: contentArray[i] });
+        });
+
+        setInfo(tmpInfo);
         setIsSpinnerLoading(false);
       } catch (err) {
         setError(true);
@@ -246,7 +270,7 @@ const Home = () => {
               )}
               <p>{t(previewSelectedFood[0].description)}</p>
               <IconButton
-                text={t("close")}
+                text={removeUpperAccents(t("close"))}
                 icon={<Close className="mr-2" />}
                 variant="contained"
                 onClick={handleClose}
@@ -312,10 +336,28 @@ const Home = () => {
           key={i}
         >
           <div className="user-services-img">
-            <img src={event.img} alt="event" />
+            <div
+              style={{
+                backgroundImage: `url(${event.img})`,
+                backgroundSize: "cover",
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+              }}
+            ></div>
+            {/* <img src={event.img} alt="event" /> */}
           </div>
-          <div className="user-services-content justify-content-start">
+          <div className="user-services-content justify-content-start align-items-start">
             <h2>{t(event.title)}</h2>
+            <p>
+              {new Date(event.time).toLocaleString([], {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
             <div className="d-none d-md-block">
               <p>{truncateString(t(event.description), 150)}</p>
             </div>
@@ -375,7 +417,7 @@ const Home = () => {
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
         <div className="row">
-          {todayBuffet.lenght > 0 ? (
+          {todayBuffet.length > 0 ? (
             todaysMenu
           ) : (
             <>
@@ -387,21 +429,21 @@ const Home = () => {
               </div>
             </>
           )}
-          {open && previewSelectedFood.length >= 1 && previewFood}
+          {open && previewSelectedFood.length > 0 && previewFood}
           <div className="mt-3 mb-5">
             <div className="user-home-general-headline-wrapper">
               <h2 className="user-home-general-headline">
                 {t("upcoming_events")}
               </h2>
             </div>
-            {nextEvents.length > 1 ? (
+            {nextEvents.length > 0 ? (
               <>
                 <div className="user-home-events-scroller-outer-wrapper">
                   <div className="user-home-events-scroller">{nextEvents}</div>
                 </div>
                 <Link to="/events/all" className="user-more-button">
                   <IconButton
-                    text={t("all_events")}
+                    text={removeUpperAccents(t("all_events"))}
                     icon={<ReadMore className="mr-2" />}
                     color="warning"
                     variant="contained"
@@ -416,14 +458,14 @@ const Home = () => {
             <div className="user-home-general-headline-wrapper">
               <h2 className="user-home-general-headline">{t("info")}</h2>
             </div>
-            {featuredInfo.length > 1 ? (
+            {featuredInfo.length > 0 ? (
               <>
                 <div className="my-3 user-home-accordion-wrapper">
                   {featuredInfo}
                 </div>
                 <Link to="/info" className="user-more-button">
                   <IconButton
-                    text={t("read_more")}
+                    text={removeUpperAccents(t("read_more"))}
                     icon={<ReadMore className="mr-2" />}
                     color="warning"
                     variant="contained"
