@@ -7,7 +7,7 @@
   width: 100%;
   border-radius: 5px;
   margin-bottom: 20px;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 .user-services-wrapper:hover{
@@ -82,6 +82,7 @@
   .user-services-img{
     flex-basis: 60%;
     position: relative;
+    min-height: 200px;
   }
 
   .user-services-content{
@@ -118,9 +119,12 @@
 
 @media(max-width:767.98px){
   .user-services-img{
-    height: 180px;
+    height: 200px;
   }
-  
+  .user-services-content {
+    /* position: absolute; */
+    /* bottom: 0; */
+  }
 }
 
 @media (max-width: 574.98px) {

@@ -29,7 +29,7 @@ const ShowDrinks = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
-  const [isGridLoading, setIsGridLoading] = useState(true);
+  // const [isGridLoading, setIsGridLoading] = useState(true);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -44,7 +44,7 @@ const ShowDrinks = () => {
           throw new Error(data.error.msg);
         }
 
-        const { myArr } = await imageGetter(data, "Drinks/");
+        const { myArr } = await imageGetter(data, "Drinks/", true);
         // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null) {
           let tmp_error =
@@ -79,9 +79,9 @@ const ShowDrinks = () => {
         });
         setList(arr_2);
         setIsSpinnerLoading(false);
-        setTimeout(() => {
-          setIsGridLoading(false);
-        }, 500);
+        // setTimeout(() => {
+        //   setIsGridLoading(false);
+        // }, 500);
       } catch (err) {
         setError(true);
         setIsSpinnerLoading(false);
@@ -126,25 +126,27 @@ const ShowDrinks = () => {
   return (
     <>
       {!error && isSpinnerLoading && <LoadingSpinner />}
+      {/* {!error && isGridLoading && <CubeSpinner />} */}
+
       {error && <ErrorComponent errorMessage={errorMessage} />}
-      {!error && !isSpinnerLoading && (
+      {/* {!error && !isGridLoading && ( */}
+       {!error && !isSpinnerLoading && (
         <div className="d-flex justify-content-start">
-          {filteredDrinks.length > 1 && drinkListing}
+          {drinkListing}
           <div className="row margin-left-40 w-100">
             <div className="feature-box col-xl-12 col-lg-6 col-sm-12">
               <FadeUpLong>
-                {isGridLoading && <CubeSpinner />}
-                {filteredDrinks.length <= 1 && (
-                  <div>
-                    <h2 className="my-3">{t("drinks")}</h2>
+                {/* {!error && !isGridLoading && ( */}
+                <>
+                  <h2 className="my-3">{t("drinks")}</h2>
+                  {filteredDrinks.length < 1 && (
                     <p className="text-center kp-warning">
                       {t("no_drinks_exists")}
                     </p>
-                  </div>
-                )}
-                {!isGridLoading && (
+                  )}
                   <ImageGrid imagesPath="/bar/drink/" data={filteredDrinks} />
-                )}
+                </>
+                {/* )} */}
               </FadeUpLong>
             </div>
           </div>

@@ -37,7 +37,7 @@ const DrinksLandingPage = () => {
           throw new Error(drinks.error.msg);
         }
 
-        const { myArr } = await imageGetter(drinks, "Drinks/");
+        const { myArr } = await imageGetter(drinks, "Drinks/", true);
 
         // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null) {

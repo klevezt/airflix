@@ -36,6 +36,7 @@ import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
 import reactDom from "react-dom";
 import ErrorComponent from "../../Error/Error";
+import BackgroundImage from "../../UI/Image/BackgroundImage";
 
 const Home = () => {
   const [state] = useStateValue();
@@ -317,6 +318,7 @@ const Home = () => {
   });
 
   const nextEvents = events.map((event, i) => {
+    if (i > 1) return null;
     return (
       <div
         className={`user-home-events-inner-wrapper ${
@@ -336,20 +338,11 @@ const Home = () => {
           key={i}
         >
           <div className="user-services-img">
-            <div
-              style={{
-                backgroundImage: `url(${event.img})`,
-                backgroundSize: "cover",
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-              }}
-            ></div>
-            {/* <img src={event.img} alt="event" /> */}
+            <BackgroundImage image={event.img} />
           </div>
           <div className="user-services-content justify-content-start align-items-start">
             <h2>{t(event.title)}</h2>
-            <p>
+            <p className="d-none d-md-block">
               {new Date(event.time).toLocaleString([], {
                 year: "numeric",
                 month: "numeric",

@@ -67,7 +67,7 @@ const AddNewDrink = () => {
       const name = nameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();
       const type = typeRef.current.value;
-      const images = imageRef.current.files;
+      const image = imageRef.current.files[0];
       const description = descriptionRef.current.value;
       const price = priceRef.current.value;
 
@@ -75,7 +75,7 @@ const AddNewDrink = () => {
         name,
         alias,
         type,
-        images,
+        image,
         description,
         price,
         ingredients,
@@ -226,6 +226,7 @@ const AddNewDrink = () => {
                   type="file"
                   autoComplete="off"
                   ref={imageRef}
+                  required
                 />
               </div>
             </div>

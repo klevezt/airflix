@@ -14,6 +14,7 @@ const EditDrink = (props) => {
     props.selectedDrink.ingredients
   );
   const newIngredientRef = useRef("");
+  const newImageRef = useRef("");
 
   const [editDrinkName, setEditDrinkName] = useState(props.selectedDrink.name);
   const [editDrinkType, setEditDrinkType] = useState(props.selectedDrink.type);
@@ -75,7 +76,7 @@ const EditDrink = (props) => {
           e,
           editDrinkName,
           editDrinkType,
-          editDrinkImages,
+          imageChange ? newImageRef.current.files[0] : null,
           editDrinkDescription,
           editPrice,
           ingredients
@@ -208,7 +209,8 @@ const EditDrink = (props) => {
                 className="form-control form-control-sm"
                 type="file"
                 autoComplete="off"
-                onChange={imageChangeHandler}
+                ref={newImageRef}
+                required
               />
             </div>
           )}

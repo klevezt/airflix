@@ -463,31 +463,28 @@ export const addDrink = (
   n,
   alias,
   t,
-  images,
+  image,
   desc,
   price,
   ingredients,
   token
 ) => {
-  const uploadImages = [];
-  for (const img of images) {
-    uploadImages.push(img.name);
-  }
+  const formData = new FormData();
+
+  formData.append("name", n);
+  formData.append("alias", alias);
+  formData.append("image", image);
+  formData.append("type", t);
+  formData.append("description", desc);
+  formData.append("price", price);
+  formData.append("ingredients", ingredients);
+
   return fetch(base_url + "/drink/add", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: n,
-      alias: alias,
-      type: t,
-      images: uploadImages,
-      description: desc,
-      price: price,
-      ingredients: ingredients,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 
@@ -519,12 +516,6 @@ export const addEvent = (name, alias, time, image, description, token) => {
   formData.append("time", time);
   formData.append("description", description);
 
-  // console.log(name);
-  // console.log(alias);
-  // console.log(image);
-  // console.log(time);
-  // console.log(description);
-
   return fetch(base_url + "/events/add", {
     method: "POST",
     headers: {
@@ -534,21 +525,18 @@ export const addEvent = (name, alias, time, image, description, token) => {
   }).then((data) => data.json());
 };
 
-export const addDrinkType = (n, images, token) => {
-  const uploadImages = [];
-  for (const img of images) {
-    uploadImages.push(img.name);
-  }
+export const addDrinkType = (n, image, token) => {
+  const formData = new FormData();
+
+  formData.append("name", n);
+  formData.append("image", image);
+
   return fetch(base_url + "/drinkType/add", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: n,
-      images: uploadImages,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 
@@ -795,8 +783,11 @@ export const fetchServicesDetailsFromDB = (alias, token) => {
   }).then((service) => service.json());
 };
 
-export const fetchServiceFromDB = (token) => {
-  return fetch(base_url + "/service", {
+export const fetchServiceFromDB = (alias, token) => {
+  const params = new URLSearchParams({
+    type: alias,
+  });
+  return fetch(base_url + "/service?" + params.toString(), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -1058,20 +1049,21 @@ export const updateDrink = (
   ingredients,
   token
 ) => {
+   const formData = new FormData();
+
+   formData.append("name", drinkName);
+   formData.append("type", drinkType);
+   formData.append("image", drinkImage);
+   formData.append("price", price);
+   formData.append("ingredients", ingredients);
+   formData.append("description", drinkDesc);
+
   return fetch(base_url + "/drink/update/" + id, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: drinkName,
-      type: drinkType,
-      images: drinkImage,
-      description: drinkDesc,
-      price: price,
-      ingredients: ingredients,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 
@@ -1142,16 +1134,17 @@ export const updateFoodType = (id, foodTypeName, foodTypeImage, token) => {
   }).then((data) => data.json());
 };
 export const updateDrinkType = (id, drinkTypeName, image, token) => {
+  const formData = new FormData();
+
+  formData.append("name", drinkTypeName);
+  formData.append("image", image);
+
   return fetch(base_url + "/drinkType/update/" + id, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: drinkTypeName,
-      images: image,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 export const updateAlacarteType = (id, type, image, token) => {

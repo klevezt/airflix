@@ -8,7 +8,10 @@ import { ReadMore } from "@mui/icons-material";
 import IconButton from "../../UI/Buttons/IconButton";
 
 import "./EventsComponent.css";
-import { removeUpperAccents, truncateString } from "../../../Helpers/Functions/functions";
+import {
+  removeUpperAccents,
+  truncateString,
+} from "../../../Helpers/Functions/functions";
 import { useTranslation } from "react-i18next";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import ErrorComponent from "../../Error/Error";
@@ -38,7 +41,7 @@ const EventsComponent = () => {
           throw new Error(data.error.msg);
         }
 
-        const { myArr: eventArr } = await imageGetter(data, "Events/",true);
+        const { myArr: eventArr } = await imageGetter(data, "Events/", true);
 
         // ---- Error Handler ---- //
         if (eventArr === undefined || eventArr === null) {
@@ -158,7 +161,7 @@ const EventsComponent = () => {
                 </div>
               )}
             </div>
-            <div className="mt-3 mb-5">
+            <div className="mt-3 mb-3">
               <div className="user-home-general-headline-wrapper">
                 <h2 className="user-home-general-headline">
                   {t("next_events")}
@@ -171,19 +174,17 @@ const EventsComponent = () => {
                 </div>
               )}
             </div>
-            {events.length > 1 && (
-              <div className="col-12">
-                <Link to="/events/all" className="user-more-button">
-                  <IconButton
-                    text={removeUpperAccents(t("all_events"))}
-                    icon={<ReadMore className="mr-2" />}
-                    color="warning"
-                    variant="contained"
-                    className="my-2"
-                  />
-                </Link>
-              </div>
-            )}
+            <div className="col-12">
+              <Link to="/events/all" className="user-more-button">
+                <IconButton
+                  text={removeUpperAccents(t("all_events"))}
+                  icon={<ReadMore className="mr-2" />}
+                  color="warning"
+                  variant="contained"
+                  className="my-2"
+                />
+              </Link>
+            </div>
           </div>
         </>
       )}

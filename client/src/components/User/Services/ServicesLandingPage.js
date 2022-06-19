@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchServicesTypesFromDB } from "../../../api_requests/user_requests";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
@@ -10,6 +10,7 @@ import { actionTypes } from "../../../reducer";
 import ErrorComponent from "../../Error/Error";
 import { checkTokenExpiration } from "../../../Helpers/Functions/functions";
 import { issueNewToken } from "../../../api_requests/auth_requests";
+import BackgroundImage from "../../UI/Image/BackgroundImage";
 
 const ServicesLandingPage = () => {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ const ServicesLandingPage = () => {
             throw new Error(dataaa.error.msg);
           }
 
-          services = await fetchServicesTypesFromDB(dataaa.accessToken);
+          services = await fetchServicesTypesFromDB({status: true},dataaa.accessToken);
 
           // ---- Error Handler ---- //
           if (services.error) {
@@ -55,7 +56,7 @@ const ServicesLandingPage = () => {
             token: dataaa.accessToken,
           });
         } else {
-          services = await fetchServicesTypesFromDB(state.token);
+          services = await fetchServicesTypesFromDB({status:true},state.token);
 
           // ---- Error Handler ---- //
           if (services.error) {
@@ -101,12 +102,14 @@ const ServicesLandingPage = () => {
   const allServices = catalog.map((service, i) => {
     return (
       <Link
-        to={`/services/${service.name}/detail`}
+        to={`/services/${service.alias}/detail`}
         className="user-services-wrapper"
         key={i}
       >
         <div className="user-services-img">
-          <img src={service.image} alt="service" />
+          <BackgroundImage image={service.image} />
+
+          {/* <img src={service.image} alt="service" /> */}
         </div>
         <div className="user-services-content">
           <h2>{t(service.name)}</h2>
@@ -127,11 +130,7 @@ const ServicesLandingPage = () => {
             </div>
           </div>
           {allServices.length > 0 ? (
-            <div className="row">
-              <div className="user-services-total-wrapper mb-5">
-                {allServices}
-              </div>
-            </div>
+            <div className="user-services-total-wrapper">{allServices}</div>
           ) : (
             <div>
               <p className="text-center kp-warning">{t("no_services")}</p>

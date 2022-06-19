@@ -53,7 +53,7 @@ function BookContent(props) {
             <h1>{t(props.contentHeadline)}</h1>
             <img
               className="w-100 page-content-calligrafy-line"
-              src="https://raw.githubusercontent.com/klevezt/cudia-images-server/5a69bc8d02aa4c840eb7f7aec6f3601664e61f9b/svg/custom.svg"
+              src="/assets/svg/custom.svg"
               alt="book-caligrafic"
             />
             <div className="page-content-listing">{props.details}</div>

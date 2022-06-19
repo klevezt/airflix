@@ -22,10 +22,8 @@ export const fetchServiceWithParamasFromDB = (prs, token) => {
   }).then((service) => service.json());
 };
 
-export const fetchServicesTypesFromDB = (token) => {
-  const params = new URLSearchParams({
-    status: true,
-  });
+export const fetchServicesTypesFromDB = (prms,token) => {
+  const params = new URLSearchParams(prms);
   return fetch(base_url + "/serviceType?" + params, {
     method: "GET",
     headers: {

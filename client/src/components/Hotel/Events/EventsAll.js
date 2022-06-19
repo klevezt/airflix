@@ -8,6 +8,7 @@ import ErrorComponent from "../../Error/Error";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import Button from "@mui/material/Button";
 import { DeleteOutline, Edit, ToggleOffOutlined, ToggleOn } from "@mui/icons-material";
+import { truncateString } from "../../../Helpers/Functions/functions";
 
 const EventsAll = () => {
   const { t } = useTranslation();
@@ -167,7 +168,7 @@ const EventsAll = () => {
                 minute: "2-digit",
               })}
             </h6>
-            <p>{t(event.description)}</p>
+            <p>{truncateString(t(event.description), 150)}</p>
           </div>
         </div>
       </div>

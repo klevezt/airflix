@@ -3,20 +3,26 @@ import { useParams } from "react-router-dom";
 
 import "./ServicesDetailsPage.css";
 import { PhoneAndroid, Email, LocationOn } from "@mui/icons-material";
-import { fetchServiceWithParamasFromDB } from "../../../api_requests/user_requests";
+import {
+  fetchServiceWithParamasFromDB,
+  fetchServicesTypesFromDB,
+} from "../../../api_requests/user_requests";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 
 import { imageGetter } from "../../../Helpers/Const/constants";
 import { useTranslation } from "react-i18next";
 import ErrorComponent from "../../Error/Error";
+import { truncateString } from "../../../Helpers/Functions/functions";
+import BackgroundImage from "../../UI/Image/BackgroundImage";
 
 const ServicesDetailsPage = () => {
   const { t } = useTranslation();
+  const [state] = useStateValue();
 
   const [serviceDetails, setServiceDetails] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
-  const [state] = useStateValue();
+  const [title, setTitle] = useState("");
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -29,6 +35,14 @@ const ServicesDetailsPage = () => {
 
     const exec = async () => {
       try {
+        const result = await fetchServicesTypesFromDB({ alias: params.type }, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
+        setTitle(result[0].name);
+
         const data = await fetchServiceWithParamasFromDB(
           {
             type: params.type,
@@ -69,10 +83,14 @@ const ServicesDetailsPage = () => {
     return (
       <div className="user-services-details-wrapper" key={i}>
         <div className="user-services-details-img">
-          <img src={serviceDetail.image} alt="service" />
+          <BackgroundImage image={serviceDetail.image} />
+          {/* <img src={serviceDetail.image} alt="service" /> */}
         </div>
         <div className="user-services-details-content">
-          <h2>{serviceDetail.name}</h2>
+          <h2>{t(serviceDetail.name)}</h2>
+          {/* {serviceDetail.description && (
+            <p className="text-start mb-2">{truncateString(t(serviceDetail.description),100)}</p>
+          )} */}
           {serviceDetail.phone && (
             <a href={`tel:0030${serviceDetail.phone}`}>
               <PhoneAndroid />
@@ -109,7 +127,7 @@ const ServicesDetailsPage = () => {
           <div className="user-services-details-total-wrapper">
             <div className="mt-3">
               <div className="user-home-general-headline-wrapper mb-4">
-                <h2 className="user-home-general-headline">{t(params.type)}</h2>
+                <h2 className="user-home-general-headline">{t(title)}</h2>
               </div>
             </div>
             {allServiceDetails}

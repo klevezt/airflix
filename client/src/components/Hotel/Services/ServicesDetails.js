@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import IconButton from "../../UI/Buttons/IconButton";
-import { Add, Undo, DeleteOutline, Edit, ToggleOn, ToggleOffOutlined } from "@mui/icons-material";
+import {
+  Add,
+  Undo,
+  DeleteOutline,
+  Edit,
+  ToggleOn,
+  ToggleOffOutlined,
+} from "@mui/icons-material";
 
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import {
@@ -49,7 +56,7 @@ const ServicesDetails = () => {
 
   const basicFetch = async () => {
     try {
-      const services = await fetchServiceFromDB(state.token);
+      const services = await fetchServiceFromDB(params.alias, state.token);
       // ---- Error Handler ---- //
       if (services.error) {
         setErrorMessage(services.error.msg);
@@ -141,7 +148,7 @@ const ServicesDetails = () => {
 
       const result = await addService(
         name,
-        serviceType.name,
+        serviceType.alias,
         image,
         alias,
         phone,

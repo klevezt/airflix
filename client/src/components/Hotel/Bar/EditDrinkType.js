@@ -215,7 +215,7 @@ const EditDrinkType = () => {
       const result = await updateDrinkType(
         selectedDrinkType._id,
         name,
-        image,
+        image ? image : selectedDrinkType.image,
         state.token
       );
       // ---- Error Handler ---- //

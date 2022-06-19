@@ -30,7 +30,7 @@ const infoSchema = new Schema(
     status: {
       type: Boolean,
       required: true,
-      default: true,
+      default: false,
     },
     content: {
       type: Array,

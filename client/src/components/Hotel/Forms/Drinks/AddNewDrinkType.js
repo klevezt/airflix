@@ -35,7 +35,7 @@ const AddNewDrinkType = () => {
 
     try {
       const name = nameRef.current.value;
-      const image = imageRef.current.files;
+      const image = imageRef.current.files[0];
 
       const result = await addDrinkType(name, image, state.token);
       // ---- Error Handler ---- //

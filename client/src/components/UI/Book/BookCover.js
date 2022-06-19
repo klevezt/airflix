@@ -52,7 +52,7 @@ const BookCover = (props) => {
           </div>
         )}
       </div>
-      <div className="d-flex flex-wrap justify-content-center w-100">
+      <div className="d-flex flex-wrap w-100">
         {props.withSearch && (
           <>
             {myArray.length === 0 ? (

@@ -170,7 +170,7 @@ const EditDrink = () => {
         selectedDrink._id,
         name,
         type,
-        image,
+        image ? image : selectedDrink.image,
         description,
         price,
         ingredients,

@@ -12,3 +12,12 @@
 .user-events-details-content-wrapper img{
   max-width: 75%;
 }
+
+@media(max-width:767.98px){
+  .user-events-details-content-wrapper p{
+    font-size: 14px;
+  }
+  .user-events-details-content-wrapper img{
+    max-width: 90%;
+  }
+}

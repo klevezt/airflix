@@ -18,7 +18,10 @@ import { useStateValue } from "../../../StateProvider";
 import ErrorComponent from "../../Error/Error";
 
 import "./EventsComponent.css";
-import { removeUpperAccents, truncateString } from "../../../Helpers/Functions/functions";
+import {
+  removeUpperAccents,
+  truncateString,
+} from "../../../Helpers/Functions/functions";
 import { useTranslation } from "react-i18next";
 import { imageGetter } from "../../../Helpers/Const/constants";
 import Button from "@mui/material/Button";
@@ -26,7 +29,6 @@ import Button from "@mui/material/Button";
 const EventsComponent = () => {
   const { t } = useTranslation();
   const history = useHistory();
-
 
   const [state] = useStateValue();
   const [events, setEvents] = useState([]);
@@ -211,7 +213,7 @@ const EventsComponent = () => {
                 variant="outlined"
                 color="warning"
                 className="button__rounded"
-                // onClick={() => handleEditInfo(inf)}
+                onClick={() => history.push(`/events/edit/${event.alias}`)}
               >
                 <Edit />
               </Button>
@@ -257,10 +259,7 @@ const EventsComponent = () => {
       {!error && !isSpinnerLoading && (
         <>
           <div className="row kp-events">
-            {upcomingEvent.length > 1 ||
-              (upcomingEvent !== "" && (
-                <h2 className="mt-3 mb-3">{t("upcoming_event")}</h2>
-              ))}
+            <h2 className="mt-3 mb-3">{t("upcoming_event")}</h2>
             {upcomingEvent}
             {upcomingEvent === "" ||
               (upcomingEvent.length < 1 && (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
@@ -10,16 +10,13 @@ const EditDrinkType = (props) => {
   const [editDrinkTypeName, setEditDrinkTypeName] = useState(
     props.selectedDrinkType.name
   );
-  const [editDrinkImages, setDrinkImage] = useState("");
+  const newImageRef = useRef("");
   const [imageChange, setImageChange] = useState(false);
 
   const handleNewDrinkTypeName = (e) => {
     setEditDrinkTypeName(e.target.value);
   };
 
-  const imageChangeHandler = (e) => {
-    setDrinkImage(e.target.files[0].name);
-  };
   const changeImageHandler = () => {
     setImageChange((s) => !s);
   };
@@ -30,7 +27,11 @@ const EditDrinkType = (props) => {
       encType="multipart/form-data"
       className="general-form"
       onSubmit={(e) =>
-        props.handleUpdateDrinkType(e, editDrinkTypeName, editDrinkImages)
+        props.handleUpdateDrinkType(
+          e,
+          editDrinkTypeName,
+          imageChange ? newImageRef.current.files[0] : null
+        )
       }
     >
       <div className="form-header">
@@ -87,7 +88,8 @@ const EditDrinkType = (props) => {
                 className="form-control form-control-sm"
                 type="file"
                 autoComplete="off"
-                onChange={imageChangeHandler}
+                ref={newImageRef}
+                required
               />
             </div>
           )}
