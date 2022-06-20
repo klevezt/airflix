@@ -211,11 +211,14 @@ const EditFoodAlacarte = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
+
       const result = await updateAlacarte(
         selectedAlacarte._id,
         name,
+        alias,
         type,
-        image,
+        image ? image : selectedAlacarte.image,
         description,
         price,
         ingredients,

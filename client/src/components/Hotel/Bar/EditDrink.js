@@ -166,9 +166,12 @@ const EditDrink = () => {
     e.preventDefault();
     setIsSpinnerLoading(true);
     try {
+      const alias = name.replace(/\s+/g, "-").toLowerCase();
+
       const result = await updateDrink(
         selectedDrink._id,
         name,
+        alias,
         type,
         image ? image : selectedDrink.image,
         description,

@@ -23,7 +23,6 @@ const EditDrink = (props) => {
     props.selectedDrink.description
   );
 
-  const [editDrinkImages, setDrinkImage] = useState("");
   const [imageChange, setImageChange] = useState(false);
 
   const [showIngredientOptions, setShowIngredientOptions] = useState(true);
@@ -59,9 +58,6 @@ const EditDrink = (props) => {
     setIngredients(arr);
   };
 
-  const imageChangeHandler = (e) => {
-    setDrinkImage(e.target.files[0].name);
-  };
   const changeImageHandler = () => {
     setImageChange((s) => !s);
   };

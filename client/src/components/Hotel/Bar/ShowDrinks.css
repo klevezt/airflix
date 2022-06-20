@@ -1,10 +1,6 @@
 .column-3{
     /* width: 33% !important; */
     height: auto !important;
-    border: 1px solid #f7c6a2;
-    -webkit-box-shadow: 0px -1px 11px 0px #bb957a;
-    -moz-box-shadow: 0px -1px 11px 0px #bb957a;
-    box-shadow: 0px -1px 11px 0px #bb957a;
 }
 .drink-ul {
     flex: 0.2;

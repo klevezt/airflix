@@ -27,6 +27,8 @@ const en = {
     no_drinks_exists: "There are no drinks",
     default_select_option: "Select...",
     new_timetable: "New Timetable",
+    update_timetable: "Update Timetable",
+    delete_timetable: "Delete Timetable",
     name: "Name",
     description: "Description",
     new_food: "New Food",

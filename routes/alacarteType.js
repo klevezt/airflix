@@ -40,11 +40,11 @@ router.route("/:id").get((req, res, next) => {
 
 router.route("/add").post((req, res, next) => {
   const name = req.body.name;
-  const images = req.body.images;
+  const image = req.file.filename;
 
   const newAlacarteType = new AlacarteType({
     name,
-    images,
+    image,
   });
 
   newAlacarteType
@@ -89,9 +89,14 @@ router.route("/status/:id").put((req, res, next) => {
 });
 
 router.route("/update/:id").put((req, res, next) => {
+   const body = {
+     name: req.body.name,
+     ...(req.file && { image: req.file.filename }),
+   };
+
   AlacarteType.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors

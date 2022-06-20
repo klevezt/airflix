@@ -42,7 +42,7 @@ const ShowAlacarte = () => {
           throw new Error(data.error.msg);
         }
 
-        const { myArr } = await imageGetter(data, "Alacarte/");
+        const { myArr } = await imageGetter(data, "Alacarte/", true);
 
         // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null) {
@@ -62,6 +62,7 @@ const ShowAlacarte = () => {
               type: food.type,
             });
         });
+
 
         setAlacarte(arr);
         setFilteredAlacarte(arr);
@@ -130,12 +131,12 @@ const ShowAlacarte = () => {
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
         <div className="d-flex justify-content-start">
-          {filteredAlacarte.length > 1 && drinkListing}
+          {drinkListing}
           <div className="row margin-left-40 w-100">
             <div className="feature-box col-xl-12 col-lg-6 col-sm-12">
               <FadeUpLong>
                 {isGridLoading && <CubeSpinner />}
-                {filteredAlacarte.length <= 1 && (
+                {filteredAlacarte.length < 1 && (
                   <div>
                     <h2 className="my-3">{t("à la carte")}</h2>
                     <p className="text-center kp-warning">

@@ -41,7 +41,7 @@ router.route("/:id").get((req, res, next) => {
 router.route("/add").post((req, res, next) => {
   const name = req.body.name;
   const property = req.body.weekPropertyName;
-  const image = req.body.image;
+  const image = req.file.filename;
 
   const newFoodType = new FoodType({
     name,

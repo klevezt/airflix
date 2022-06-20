@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { MDBDataTableV5 } from "mdbreact";
 import { useTranslation } from "react-i18next";
-import { Add } from "@mui/icons-material";
+import { Add, Delete, Update } from "@mui/icons-material";
 
 import {
   addNewMonth,
+  deleteMonth,
   fetchWeekFromDB,
+  updateNewMonth,
 } from "../../../api_requests/hotel_requests";
 
 import "./FoodComponent.css";
@@ -17,11 +19,15 @@ import {
   monthTableRow,
 } from "../../../Helpers/Const/constants";
 import PrimaryButton from "../../UI/Buttons/PrimaryButton";
-import { getWeeksInMonth, removeUpperAccents } from "../../../Helpers/Functions/functions";
+import {
+  getWeeksInMonth,
+  removeUpperAccents,
+} from "../../../Helpers/Functions/functions";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import FadeUp from "../../hoc/FadeUp";
 import { useStateValue } from "../../../StateProvider";
 import ErrorComponent from "../../Error/Error";
+import IconButton from "../../UI/Buttons/IconButton";
 
 const Food = () => {
   const [state] = useStateValue();
@@ -94,6 +100,7 @@ const Food = () => {
       let fact = false;
       try {
         const week = await fetchWeekFromDB(month, year, state.token);
+        // console.log(week);
         // ---- Error Handler ---- //
         if (week.error) {
           setErrorMessage(week.error.msg);
@@ -132,7 +139,7 @@ const Food = () => {
           setErrorMessage(result.error.msg);
           throw new Error(result.error.msg);
         }
-        
+
         const w = await fetchWeekFromDB(month, year, state.token);
         // ---- Error Handler ---- //
         if (w.error) {
@@ -151,6 +158,66 @@ const Food = () => {
     });
   };
 
+  const handleUpdateMonthTimetable = async () => {
+    setIsSpinnerLoading(true);
+    const [weeks] = getWeeksInMonth(year, month);
+
+    weeks.forEach(async (_, i) => {
+      try {
+        const result = await updateNewMonth(month, year, i + 1, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
+
+        const w = await fetchWeekFromDB(month, year, state.token);
+        // ---- Error Handler ---- //
+        if (w.error) {
+          setErrorMessage(w.error.msg);
+          throw new Error(w.error.msg);
+        }
+
+        const menu_week = assignWeeksToTable(year, month, w);
+        setTableMenu(menu_week);
+        setTimeout(() => {
+          setMonthIsInitialized(true);
+          setIsSpinnerLoading(false);
+        }, 500);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    });
+  };
+
+  const handleDeleteMonthTimetable = async () => {
+    setIsSpinnerLoading(true);
+    try {
+      const result = await deleteMonth(month, year, state.token);
+      // ---- Error Handler ---- //
+      if (result.error) {
+        setErrorMessage(result.error.msg);
+        throw new Error(result.error.msg);
+      }
+
+      const w = await fetchWeekFromDB(month, year, state.token);
+      // ---- Error Handler ---- //
+      if (w.error) {
+        setErrorMessage(w.error.msg);
+        throw new Error(w.error.msg);
+      }
+
+      const menu_week = assignWeeksToTable(year, month, w);
+      setTableMenu(menu_week);
+      setMonthIsInitialized(false);
+      setIsSpinnerLoading(false);
+    } catch (err) {
+      setError(true);
+      setIsSpinnerLoading(false);
+    }
+  };
+
   /* Month and Year Handlers */
 
   const handleMonthChange = (e) => {
@@ -163,13 +230,14 @@ const Food = () => {
 
   return (
     <>
+      {!error && isSpinnerLoading && <LoadingSpinner />}
       {error && <ErrorComponent errorMessage={errorMessage} />}
       {!error && !isSpinnerLoading && (
-        <div className="row">
+        <div className="row hotel-food-wrapper">
           <div className="col-xl-12">
-            <div className={`d-flex justify-content-center flex-wrap showMenu`}>
-              <div className="d-flex flex-direction-column">
-                <div className="d-flex justify-content-center align-items-center flex-wrap mb-4">
+            <div className="d-flex justify-content-center flex-wrap showMenu">
+              <div className="d-flex flex-direction-column flex-basis-100">
+                <div className="d-flex justify-content-between align-items-center flex-wrap mb-4">
                   <div className="d-flex">
                     <div className="mx-2">
                       <label htmlFor="month" className="mr-2">
@@ -223,6 +291,25 @@ const Food = () => {
                       </select>
                     </div>
                   </div>
+                  {monthIsInitialized && !isSpinnerLoading && (
+                    <IconButton
+                      text={removeUpperAccents(t("update_timetable"))}
+                      icon={<Update className="mr-2" />}
+                      color="warning"
+                      variant="contained"
+                      className="w-auto"
+                      onClick={handleUpdateMonthTimetable}
+                    />
+                  )}
+                  {!monthIsInitialized && !isSpinnerLoading && (
+                    <PrimaryButton
+                      show
+                      icon={<Add className="mr-2 " />}
+                      text={removeUpperAccents(t("new_timetable"))}
+                      onClick={handleCreateMonthTimetable}
+                      className="m-0"
+                    />
+                  )}
                 </div>
                 {!isSpinnerLoading && (
                   <FadeUp>
@@ -239,20 +326,21 @@ const Food = () => {
                     )}
                   </FadeUp>
                 )}
-
-                {!monthIsInitialized && !isSpinnerLoading && (
-                  <PrimaryButton
-                    show
-                    icon={<Add className="mr-2 " />}
-                    text={removeUpperAccents(t("new_timetable"))}
-                    onClick={handleCreateMonthTimetable}
-                  />
-                )}
               </div>
             </div>
-
-            {isSpinnerLoading && !monthIsInitialized && <LoadingSpinner />}
           </div>
+          {monthIsInitialized && !isSpinnerLoading && (
+            <div className="row justify-content-end mt-5 mb-4">
+              <IconButton
+                text={removeUpperAccents(t("delete_timetable"))}
+                icon={<Delete className="mr-2" />}
+                color="error"
+                variant="contained"
+                className="w-auto"
+                onClick={handleDeleteMonthTimetable}
+              />
+            </div>
+          )}
         </div>
       )}
     </>

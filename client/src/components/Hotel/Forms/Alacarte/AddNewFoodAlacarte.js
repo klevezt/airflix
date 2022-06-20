@@ -67,15 +67,15 @@ const AddNewFoodForm = () => {
       const name = nameRef.current.value;
       const alias = name.replace(/\s+/g, "-").toLowerCase();
       const type = typeRef.current.value;
-      const images = imageRef.current.files;
+      const image = imageRef.current.files[0];
       const description = descriptionRef.current.value;
       const price = priceRef.current.value;
-
+ 
       const result = await addAlacarte(
         name,
         alias,
         type,
-        images,
+        image,
         description,
         price,
         ingredients,
@@ -228,7 +228,9 @@ const AddNewFoodForm = () => {
                 <input
                   className="form-control form-control-sm"
                   type="file"
+                  autoComplete="off"
                   ref={imageRef}
+                  required
                 />
               </div>
             </div>

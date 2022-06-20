@@ -99,6 +99,7 @@ router.route("/status/:id").put((req, res, next) => {
 router.route("/update/:id").put((req, res, next) => {
   const body = {
     name: req.body.name,
+    alias: req.body.alias,
     type: req.body.type,
     ...(req.file && { image: req.file.filename }),
     description: req.body.description,

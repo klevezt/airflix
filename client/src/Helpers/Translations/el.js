@@ -27,6 +27,8 @@ const el = {
     no_drinks_exists: "Δεν υπάρχουν ποτά",
     default_select_option: "Επιλογή...",
     new_timetable: "Δημιουργία Μηνιαίου Χρονοδιαγράμματος",
+    update_timetable: "Ενημέρωση Μηνιαίου Χρονοδιαγράμματος",
+    delete_timetable: "Διαγραφή Μηνιαίου Χρονοδιαγράμματος",
     name: "Ονομασία",
     description: "Περιγραφή",
     new_food: "Νέο Φαγητό",

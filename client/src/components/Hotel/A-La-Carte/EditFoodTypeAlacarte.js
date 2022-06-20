@@ -223,7 +223,7 @@ const EditFoodTypeAlacarte = () => {
       const result = await updateAlacarteType(
         selectedAlacarteType._id,
         name,
-        image,
+        image ? image : selectedAlacarteType.image,
         state.token
       );
       // ---- Error Handler ---- //

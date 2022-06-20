@@ -31,6 +31,7 @@ import { fetchFoodFromDBWithParams } from "../../../api_requests/hotel_requests"
 // import LoadingSpinner from "../Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import { removeUpperAccents } from "../../../Helpers/Functions/functions";
+import LoadingSpinner from "../Spinners/LoadingSpinner";
 
 const TableCellCard = (props) => {
   // Translation config
@@ -72,6 +73,7 @@ const TableCellCard = (props) => {
         food.forEach((f) => {
           arr.push({ name: f.name, type: f.type });
         });
+
         setOptionsSelect(arr);
       } catch (err) {
         setError(true);
@@ -111,8 +113,9 @@ const TableCellCard = (props) => {
         setErrorMessage(res.error.msg);
         throw new Error(res.error.msg);
       }
-
-      setIsModalSpinning(false);
+      setTimeout(() => {
+        setIsModalSpinning(false);
+      }, 100);
     } catch (err) {
       setError(true);
       setIsModalSpinning(false);
@@ -124,7 +127,7 @@ const TableCellCard = (props) => {
     setIsModalSpinning(true);
     setTimeout(() => {
       setIsModalSpinning(false);
-    }, 10);
+    }, 100);
   };
 
   const handleDeleteInputField = (id, foodType) => {
@@ -137,6 +140,7 @@ const TableCellCard = (props) => {
     if (data[foodType][data[foodType].length - 1] === "") {
       return;
     }
+
     setData((state) => ({ ...state, [foodType]: [...state[foodType], ""] }));
   };
 
@@ -165,107 +169,118 @@ const TableCellCard = (props) => {
     >
       <Fade in={open}>
         <div className="modalMenu-container">
-          <h2 style={{ marginBottom: 10, padding: 20 }}>
-            {t(props.day)} {props.week}
-          </h2>
-          <hr />
+          {isModalSpinning ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <h2 style={{ marginBottom: 10, padding: 20 }}>
+                {t(props.day)} {props.week}
+              </h2>
+              <hr />
 
-          <div className="modalMenu-content">
-            {foodTypeKeys.map((food, key) => {
-              return (
-                <div className="food-table-card-container" key={key}>
-                  <div className="food-table-card-header">
-                    <h5>{t(food)}</h5>
-                  </div>
+              <div className="modalMenu-content">
+                {foodTypeKeys.map((food, key) => {
+                  return (
+                    <div className="food-table-card-container" key={key}>
+                      <div className="food-table-card-header">
+                        <h5>{t(food)}</h5>
+                      </div>
 
-                  {!editClicked && (
-                    <ul className="list-group">
-                      {data[food] !== undefined && data[food].length !== 0 ? (
-                        data[food].map((item, i) => {
-                          return (
-                            <li
-                              className="list-group-item list-group-item-theme-color"
-                              key={i}
-                            >
-                              {item}
+                      {!editClicked && (
+                        <ul className="list-group">
+                          {data[food] !== undefined &&
+                          data[food].length !== 0 ? (
+                            data[food].map((item, i) => {
+                              return (
+                                <li
+                                  className="list-group-item list-group-item-theme-color"
+                                  key={i}
+                                >
+                                  {item}
+                                </li>
+                              );
+                            })
+                          ) : (
+                            <li className="list-group-item list-group-item-secondary">
+                              {t("no_food_exists")}
                             </li>
-                          );
-                        })
-                      ) : (
-                        <li className="list-group-item list-group-item-secondary">
-                          {t("no_food_exists")}
-                        </li>
+                          )}
+                        </ul>
                       )}
-                    </ul>
-                  )}
-                  {editClicked && (
-                    <div className="food-table-card-input">
-                      {data !== undefined &&
-                        data[food] !== undefined &&
-                        data[food].map((item, i) => {
-                          return (
-                            <div className="basic-flex mt-2" key={i}>
-                              <CardSelectDropdown
-                                onChange={(e) => handleSelectChange(e, i, food)}
-                                index={i}
-                                food={food}
-                                item={item}
-                                optionsSelect={optionsSelect}
-                              />
+                      {editClicked && (
+                        <div className="food-table-card-input">
+                          {data !== undefined &&
+                            data[food] !== undefined &&
+                            data[food].map((item, i) => {
+                              return (
+                                <div className="basic-flex mt-2" key={i}>
+                                  <CardSelectDropdown
+                                    onChange={(e) =>
+                                      handleSelectChange(e, i, food)
+                                    }
+                                    index={i}
+                                    food={food}
+                                    item={item}
+                                    optionsSelect={optionsSelect}
+                                  />
 
-                              <IconButton2
-                                onClick={() => handleDeleteInputField(i, food)}
-                                size="small"
-                                component="span"
-                                color="error"
-                              >
-                                <RemoveCircleOutline />
-                              </IconButton2>
-                            </div>
-                          );
-                        })}
-                      <IconButton2
-                        onClick={() => handleAddNewInputField(food)}
-                        size="small"
-                        component="span"
-                        style={{ color: "#52b202" }}
-                      >
-                        <AddCircleOutline />
-                      </IconButton2>
+                                  <IconButton2
+                                    onClick={() =>
+                                      handleDeleteInputField(i, food)
+                                    }
+                                    size="small"
+                                    component="span"
+                                    color="error"
+                                  >
+                                    <RemoveCircleOutline />
+                                  </IconButton2>
+                                </div>
+                              );
+                            })}
+                          <IconButton2
+                            onClick={() => handleAddNewInputField(food)}
+                            size="small"
+                            component="span"
+                            style={{ color: "#52b202" }}
+                          >
+                            <AddCircleOutline />
+                          </IconButton2>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <div className="modalMenu-footer">
-            <IconButton
-              onClick={editClicked ? handleSave : handleEdit}
-              icon={
-                editClicked ? (
-                  <Save className="mr-10" />
-                ) : (
-                  <Edit className="mr-10" />
-                )
-              }
-              size="medium"
-              text={
-                editClicked
-                  ? removeUpperAccents(t("save"))
-                  : removeUpperAccents(t("edit"))
-              }
-            />
-            <IconButton
-              onClick={editClicked ? handleEdit : handleClose}
-              icon={<CancelPresentation className="mr-10" />}
-              size="medium"
-              text={
-                editClicked
-                  ? removeUpperAccents(t("cancel"))
-                  : removeUpperAccents(t("close"))
-              }
-            />
-          </div>
+                  );
+                })}
+              </div>
+              <div className="modalMenu-footer">
+                <IconButton
+                  onClick={editClicked ? handleSave : handleEdit}
+                  icon={
+                    editClicked ? (
+                      <Save className="mr-10" />
+                    ) : (
+                      <Edit className="mr-10" />
+                    )
+                  }
+                  size="medium"
+                  text={
+                    editClicked
+                      ? removeUpperAccents(t("save"))
+                      : removeUpperAccents(t("edit"))
+                  }
+                />
+                <IconButton
+                  onClick={editClicked ? handleEdit : handleClose}
+                  icon={<CancelPresentation className="mr-10" />}
+                  size="medium"
+                  text={
+                    editClicked
+                      ? removeUpperAccents(t("cancel"))
+                      : removeUpperAccents(t("close"))
+                  }
+                />
+              </div>
+            </>
+          )}
         </div>
       </Fade>
     </Modal>,

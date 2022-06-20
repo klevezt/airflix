@@ -36,7 +36,7 @@ const AlacarteDetailsPage = () => {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
-        const { myArr } = await imageGetter(data, "Alacarte/");
+        const { myArr } = await imageGetter(data, "Alacarte/", true);
 
         // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null) {

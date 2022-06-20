@@ -30,10 +30,10 @@ const alacarteSchema = new Schema(
       required: false,
       default: [],
     },
-    images: {
-      type: Array,
+    image: {
+      type: String,
       required: true,
-      default: [],
+      default: "",
     },
     description: {
       type: String,
@@ -46,7 +46,7 @@ const alacarteSchema = new Schema(
     },
     featured: {
       type: Boolean,
-      required: true,
+      required: false,
       default: false,
     },
   },

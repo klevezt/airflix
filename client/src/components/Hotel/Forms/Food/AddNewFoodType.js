@@ -23,8 +23,9 @@ const AddNewFoodTypeForm = (props) => {
         props.handleAddNewFoodType(
           e,
           newFoodTypeName.current.value,
-          newFoodTypeProperty.current.value,
-          imageRef.current.files
+          newFoodTypeName.current.value.replace(/\s+/g, "-").toLowerCase(),
+          // newFoodTypeProperty.current.value,
+          imageRef.current.files[0]
         )
       }
     >
@@ -70,7 +71,7 @@ const AddNewFoodTypeForm = (props) => {
             />
           </div>
         </div>
-        <div className="row mb-3">
+        {/* <div className="row mb-3">
           <label
             htmlFor="property_type_name"
             className="col-sm-2 col-form-label"
@@ -88,7 +89,7 @@ const AddNewFoodTypeForm = (props) => {
               required
             />
           </div>
-        </div>
+        </div> */}
         <div className="row ">
           <div className="offset-sm-2 offset-0 col-sm-4 col-12">
             <button type="submit" className="btn btn-primary-theme ">

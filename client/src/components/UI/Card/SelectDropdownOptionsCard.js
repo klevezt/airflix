@@ -7,15 +7,15 @@ const SelectDropdownOptionsCard = (props) => {
     <>
       <option value="">{t("default_select_option")}</option>
       {props.options !== undefined &&
-        props.options.map((soup, j) => {
+        props.options.map((opt, j) => {
           return (
-            soup.type === t(props.food) && (
+            opt.type === props.food && (
               <option
-                defaultChecked={soup.name === props.item}
-                value={soup.name}
+                defaultChecked={opt.name === props.item}
+                value={opt.name}
                 key={j}
               >
-                {soup.name}
+                {opt.name}
               </option>
             )
           );

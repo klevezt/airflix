@@ -8,6 +8,11 @@
     padding: .375rem 2.25rem .375rem .75rem !important;
     margin: 0 !important;
 }
+
+.modalMenu-content .form-select{
+    flex-basis: 80%;
+}
+
 .showMenu .mdb-dataTables_paginate {
     display: none;
 }
@@ -19,4 +24,11 @@
     height: 100vh;
     z-index: 10;
     background: rgba(0, 0, 0, 0.75);
+}
+.hotel-food-wrapper label{
+    margin-bottom: 10px;
+}
+.hotel-food-wrapper label strong{
+    color: white;
+    font-size: 20px;
 }

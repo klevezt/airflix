@@ -18,10 +18,11 @@ const EditAlacarte = (props) => {
   const [editDrinkDescription, setEditDrinkDescription] = useState(
     props.selected.description
   );
-  const [editDrinkImages, setAlacarteImage] = useState("");
   const [imageChange, setImageChange] = useState(false);
 
   const [editPrice, setEditPrice] = useState(props.selected.price);
+
+  const newImageRef = useRef("");
 
   const handleNewDrinkDescription = (e) => {
     setEditDrinkDescription(e.target.value);
@@ -47,9 +48,7 @@ const EditAlacarte = (props) => {
     const arr = ingredients.filter((_, i) => i !== index);
     setIngredients(arr);
   };
-  const imageChangeHandler = (e) => {
-    setAlacarteImage(e.target.files[0].name);
-  };
+
   const changeImageHandler = () => {
     setImageChange((s) => !s);
   };
@@ -64,7 +63,7 @@ const EditAlacarte = (props) => {
           e,
           editDrinkName,
           editDrinkType,
-          editDrinkImages,
+          imageChange ? newImageRef.current.files[0] : null,
           editDrinkDescription,
           editPrice,
           ingredients
@@ -194,7 +193,8 @@ const EditAlacarte = (props) => {
                 className="form-control form-control-sm"
                 type="file"
                 autoComplete="off"
-                onChange={imageChangeHandler}
+                ref={newImageRef}
+                required
               />
             </div>
           )}

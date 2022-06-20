@@ -42,7 +42,7 @@ router.route("/add").post((req, res, next) => {
   const name = req.body.name;
   const alias = req.body.alias;
   const type = req.body.type;
-  const images = req.body.images;
+  const image = req.file.filename;
   const description = req.body.description;
   const price = req.body.price;
   const ingredients = req.body.ingredients;
@@ -51,7 +51,7 @@ router.route("/add").post((req, res, next) => {
     name,
     alias,
     type,
-    images,
+    image,
     description,
     price,
     ingredients,
@@ -97,9 +97,19 @@ router.route("/status/:id").put((req, res, next) => {
 });
 
 router.route("/update/:id").put((req, res, next) => {
+  const body = {
+    name: req.body.name,
+    alias: req.body.alias,
+    type: req.body.type,
+    ...(req.file && { image: req.file.filename }),
+    description: req.body.description,
+    price: req.body.price,
+    ingredients: req.body.ingredients,
+  };
+
   Alacarte.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    body,
     { new: true },
     (err, todo) => {
       // Handle any possible database errors

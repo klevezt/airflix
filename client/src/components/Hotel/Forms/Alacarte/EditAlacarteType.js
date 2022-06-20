@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../../UI/Buttons/IconButton";
@@ -10,16 +10,13 @@ const EditAlacarteType = (props) => {
   const [editAlacarteTypeName, setEditAlacarteTypeName] = useState(
     props.selectedAlacartType.name
   );
-  const [editAlacarteImages, setAlacarteImage] = useState("");
   const [imageChange, setImageChange] = useState(false);
+  const newImageRef = useRef("");
 
   const handleNewAlacarteTypeName = (e) => {
     setEditAlacarteTypeName(e.target.value);
   };
 
-  const imageChangeHandler = (e) => {
-    setAlacarteImage(e.target.files[0].name);
-  };
   const changeImageHandler = () => {
     setImageChange((s) => !s);
   };
@@ -33,7 +30,9 @@ const EditAlacarteType = (props) => {
         props.handleUpdateAlacarteType(
           e,
           editAlacarteTypeName,
-          editAlacarteImages
+          imageChange
+            ? newImageRef.current.files[0]
+            : null
         )
       }
     >
@@ -91,7 +90,8 @@ const EditAlacarteType = (props) => {
                 className="form-control form-control-sm"
                 type="file"
                 autoComplete="off"
-                onChange={imageChangeHandler}
+                ref={newImageRef}
+                required
               />
             </div>
           )}

@@ -30,7 +30,7 @@ const AddNewFoodTypeFormAlacarte = () => {
     setIsSpinnerLoading(true);
     try {
       const name = newFoodTypeName.current.value;
-      const image = imageRef.current.files;
+      const image = imageRef.current.files[0];
 
       const res1 = await addFoodTypeAlacarte(name, image, state.token);
       // ---- Error Handler ---- //
@@ -110,6 +110,7 @@ const AddNewFoodTypeFormAlacarte = () => {
                   type="file"
                   autoComplete="off"
                   ref={imageRef}
+                  required
                 />
               </div>
             </div>

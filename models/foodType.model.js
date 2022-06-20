@@ -16,9 +16,9 @@ const foodTypeSchema = new Schema(
       trim: true,
     },
     image: {
-      type: Array,
+      type: String,
       required: true,
-      default: [],
+      default: "",
     },
     status: {
       type: Boolean,

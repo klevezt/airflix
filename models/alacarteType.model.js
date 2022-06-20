@@ -10,10 +10,10 @@ const AlacarteTypeSchema = new Schema(
       unique: true,
       trim: true,
     },
-    images: {
-      type: Array,
+    image: {
+      type: String,
       required: true,
-      default: [],
+      default: "",
     },
     status: {
       type: Boolean,
