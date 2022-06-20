@@ -92,7 +92,7 @@ export const updateNewMonth = async (month, year, index, token) => {
     year: year,
   });
   const foodWeek = await fetch(
-    "http://localhost:5000/weekMenu/getFullDay?" + params.toString(),
+    base_url + "/weekMenu/getFullDay?" + params.toString(),
     {
       method: "GET",
       headers: {
@@ -101,52 +101,83 @@ export const updateNewMonth = async (month, year, index, token) => {
       },
     }
   ).then((data) => data.json());
-  console.log(foodWeek[0]);
 
   let dayObject = {};
 
-  dayObject.monday = foodWeek[0].monday;
-  dayObject.tuesday = foodWeek[0].tuesday;
-  dayObject.wednesday = foodWeek[0].wednesday;
-  dayObject.thursday = foodWeek[0].thursday;
-  dayObject.friday = foodWeek[0].friday;
-  dayObject.saturday = foodWeek[0].saturday;
-  dayObject.sunday = foodWeek[0].sunday;
+  if (foodTypes.length < Object.keys(foodWeek[0].monday).length) {
 
-  // console.log(dayObject);
-  // console.log(dayObject.wednesday);
-  // console.log(foodTypes.length);
-  // console.log(Object.keys(foodWeek[0].monday).length);
-  if (foodTypes.length < Object.keys(foodWeek[0].monday).length)
-    console.log("JACKPOT");
-  foodTypes.forEach((type) => {
-    const property = type.weekPropertyName;
-    if (!dayObject.monday[property]) {
-      dayObject.monday = { ...dayObject.monday, [property]: [] };
-    }
-    if (!dayObject.tuesday[property]) {
-      dayObject.tuesday = { ...dayObject.tuesday, [property]: [] };
-    }
-    if (!dayObject.wednesday[property]) {
-      dayObject.wednesday = { ...dayObject.wednesday, [property]: [] };
-    }
-    if (!dayObject.thursday[property]) {
-      dayObject.thursday = { ...dayObject.thursday, [property]: [] };
-    }
-    if (!dayObject.friday[property]) {
-      dayObject.friday = { ...dayObject.friday, [property]: [] };
-    }
-    if (!dayObject.saturday[property]) {
-      dayObject.saturday = { ...dayObject.saturday, [property]: [] };
-    }
-    if (!dayObject.sunday[property]) {
-      dayObject.sunday = { ...dayObject.sunday, [property]: [] };
-    }
-  });
+    const prevFoodTypes = Object.keys(foodWeek[0].monday);
+    prevFoodTypes.forEach((foodType) => {
+      foodTypes.forEach((type) => {
+        const property = type.weekPropertyName;
+        if (property === foodType) {
+          dayObject.monday = {
+            ...dayObject.monday,
+            [property]: foodWeek[0].monday[property],
+          };
+          dayObject.tuesday = {
+            ...dayObject.tuesday,
+            [property]: foodWeek[0].tuesday[property],
+          };
+          dayObject.wednesday = {
+            ...dayObject.wednesday,
+            [property]: foodWeek[0].wednesday[property],
+          };
+          dayObject.thursday = {
+            ...dayObject.thursday,
+            [property]: foodWeek[0].thursday[property],
+          };
+          dayObject.friday = {
+            ...dayObject.friday,
+            [property]: foodWeek[0].friday[property],
+          };
+          dayObject.saturday = {
+            ...dayObject.saturday,
+            [property]: foodWeek[0].saturday[property],
+          };
+          dayObject.sunday = {
+            ...dayObject.sunday,
+            [property]: foodWeek[0].sunday[property],
+          };
+        }
 
-  console.log("-----\n");
-  console.log(dayObject);
-  console.log("*****\n");
+      });
+    });
+  } else {
+
+    dayObject.monday = foodWeek[0].monday;
+    dayObject.tuesday = foodWeek[0].tuesday;
+    dayObject.wednesday = foodWeek[0].wednesday;
+    dayObject.thursday = foodWeek[0].thursday;
+    dayObject.friday = foodWeek[0].friday;
+    dayObject.saturday = foodWeek[0].saturday;
+    dayObject.sunday = foodWeek[0].sunday;
+
+    foodTypes.forEach((type) => {
+      const property = type.weekPropertyName;
+      if (!dayObject.monday[property]) {
+        dayObject.monday = { ...dayObject.monday, [property]: [] };
+      }
+      if (!dayObject.tuesday[property]) {
+        dayObject.tuesday = { ...dayObject.tuesday, [property]: [] };
+      }
+      if (!dayObject.wednesday[property]) {
+        dayObject.wednesday = { ...dayObject.wednesday, [property]: [] };
+      }
+      if (!dayObject.thursday[property]) {
+        dayObject.thursday = { ...dayObject.thursday, [property]: [] };
+      }
+      if (!dayObject.friday[property]) {
+        dayObject.friday = { ...dayObject.friday, [property]: [] };
+      }
+      if (!dayObject.saturday[property]) {
+        dayObject.saturday = { ...dayObject.saturday, [property]: [] };
+      }
+      if (!dayObject.sunday[property]) {
+        dayObject.sunday = { ...dayObject.sunday, [property]: [] };
+      }
+    });
+  }
 
   const food = await fetch(
     base_url + "/weekMenu/update/all?" + params.toString(),

@@ -80,7 +80,7 @@ const BuffetLandingPage = () => {
               return key;
             }
           );
-
+          // console.log(allCategoriesObject);
           setTodaysFoodCategories(allCategoriesArray);
         }
 
@@ -95,7 +95,7 @@ const BuffetLandingPage = () => {
           throw new Error(foodd.error.msg);
         }
 
-        const { myArr } = await imageGetter(foodd, "Food/");
+        const { myArr } = await imageGetter(foodd, "Food/", true);
 
         // ---- Error Handler ---- //
         if (myArr === undefined || myArr === null) {
@@ -289,7 +289,7 @@ const BuffetLandingPage = () => {
         throw new Error(foodd.error.msg);
       }
 
-      const { myArr } = await imageGetter(foodd, "Food/");
+      const { myArr } = await imageGetter(foodd, "Food/",true);
 
       // ---- Error Handler ---- //
       if (myArr === undefined || myArr === null) {

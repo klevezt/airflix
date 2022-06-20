@@ -11,7 +11,8 @@ const BookCover = (props) => {
   useEffect(() => {
     let controller = new AbortController();
 
-    const arr = props.catalog.filter((cat) => cat !== undefined);
+    const arr = props.catalog.filter((cat) => cat !== undefined && cat !== 0);
+    // console.log(arr);
     setArr(arr);
 
     controller = null;
