@@ -145,6 +145,7 @@ const el = {
     comments: "Σχόλια",
     score: "Βαθμολογία!",
     new_review: "Νέα κριτική",
+    food: "Φαγητό",
     drink: "Ποτό",
     menu: "Μενού",
     upcoming_event: "Προσεχής εκδήλωση",

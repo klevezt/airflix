@@ -29,14 +29,6 @@ const ImageGrid = (props) => {
 
   return (
     <div className={classes.root}>
-      {/* <Link to={`${props.imagesPath}${item.alias}`} key={i}>
-        <div
-          style={{
-            paddingBottom: "50%",
-            backgroundImage: `url(${item.img})`,
-          }}
-        ></div>
-      </Link> */}
       <ImageList rowHeight={200} gap={1} className="image-list">
         {props.data.map((item, i) => (
           <Link to={`${props.imagesPath}${item.alias}`} key={i}>

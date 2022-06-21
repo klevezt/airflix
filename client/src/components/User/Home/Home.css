@@ -11,7 +11,7 @@
 .user-more-button button:hover{
     background: #0091a480;
 }
-.user-home-events-scroller{
+.user-home-events-scroller.user-home-todayFood-scroller{
     display: -webkit-inline-box;
     width: 100%;
 }
@@ -23,7 +23,7 @@
     object-fit: cover;
 }
 .user-home-events-inner-wrapper{
-    width: 75vw;
+    /* width: 75vw; */
     position: relative
 }
 .user-home-events-inner-wrapper__next-event{
@@ -216,15 +216,14 @@
     cursor: pointer;
 }
 
+ .user-home-events-scroller.user-home-todayFood-scroller .user-services-content p{
+    color: white;
+}
+
 @media(min-width:768px) {
 
     .user-home-events-date{display: none;}
-    .user-home-todayFood-inner-wrapper {
-        flex-basis: 48%;
-        margin-right: 2%;
-        margin-left: 0;
-        margin-bottom: 2%;
-    }
+    
 
     .user-home-general-headline{
         font-size: 30px;
@@ -234,7 +233,6 @@
         flex-wrap: wrap;
         justify-content: space-around;
     }
-    .user-home-events-scroller{display: flex;flex-wrap: wrap;}
     .user-buffet-general-headline{
         margin: 10px 0;
         text-align: start;
@@ -257,9 +255,7 @@
     .user-home-general-headline {
         font-size: 26px;
     }
-    .user-home-events-inner-wrapper{
-        margin-right: 10px;
-    }
+    
     
     .user-more-button{
         width: 100%;
@@ -267,6 +263,38 @@
     .user-home-events-scroller-outer-wrapper{
       overflow-x: scroll;
     }
+    
+    
+  }
+
+  @media(min-width: 575px){
+
+    .user-home-events-scroller .user-services-img {
+        flex-basis: 60%;
+        position: relative;
+        min-height: 200px;
+        height: unset;
+    }
+
+    .user-home-events-scroller.user-home-todayFood-scroller .user-services-content{
+        padding: 20px;
+        flex-basis: 40%;
+        min-height: 60px;
+        background: #0091a4;
+      }
+    .user-home-events-scroller.user-home-todayFood-scroller{display: flex;flex-wrap: wrap;}
+
+    .user-home-todayFood-inner-wrapper {
+        flex-basis: 48%;
+        margin-right: 2%;
+        margin-left: 0;
+        margin-bottom: 2%;
+    }
+    .user-home-events-inner-wrapper {
+            /* margin-right: 10px; */
+        }
+  }
+  @media(max-width: 574.98px) {
     
     .user-home-todayFood-inner-wrapper {
         width: 75vw;

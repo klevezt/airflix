@@ -126,17 +126,13 @@ const ShowDrinks = () => {
   return (
     <>
       {!error && isSpinnerLoading && <LoadingSpinner />}
-      {/* {!error && isGridLoading && <CubeSpinner />} */}
-
       {error && <ErrorComponent errorMessage={errorMessage} />}
-      {/* {!error && !isGridLoading && ( */}
        {!error && !isSpinnerLoading && (
         <div className="d-flex justify-content-start">
           {drinkListing}
           <div className="row margin-left-40 w-100">
             <div className="feature-box col-xl-12 col-lg-6 col-sm-12">
               <FadeUpLong>
-                {/* {!error && !isGridLoading && ( */}
                 <>
                   <h2 className="my-3">{t("drinks")}</h2>
                   {filteredDrinks.length < 1 && (
@@ -146,7 +142,6 @@ const ShowDrinks = () => {
                   )}
                   <ImageGrid imagesPath="/bar/drink/" data={filteredDrinks} />
                 </>
-                {/* )} */}
               </FadeUpLong>
             </div>
           </div>

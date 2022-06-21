@@ -44,12 +44,12 @@ router.route("/login").post(async (req, res) => {
 
   // Send JWT access token
   const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
-    expiresIn: "10s",
+    expiresIn: "1000s",
   });
 
   // Refresh token
   const refreshToken = await JWT.sign({ username }, process.env.REFRESH_KEY, {
-    expiresIn: "600s",
+    expiresIn: "6000s",
   });
 
   // Set refersh token in refreshTokens array

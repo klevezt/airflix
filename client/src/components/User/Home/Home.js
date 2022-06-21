@@ -352,7 +352,7 @@ const Home = () => {
           </div>
           <div className="user-services-content justify-content-start align-items-start">
             <h2>{t(event.title)}</h2>
-            <p className="d-none d-md-block">
+            <p className="d-none d-sm-block">
               {new Date(event.time).toLocaleString([], {
                 year: "numeric",
                 month: "numeric",
@@ -361,7 +361,7 @@ const Home = () => {
                 minute: "2-digit",
               })}
             </p>
-            <div className="d-none d-md-block">
+            <div className="d-none d-sm-block text-start">
               <p>{truncateString(t(event.description), 150)}</p>
             </div>
           </div>
@@ -379,7 +379,9 @@ const Home = () => {
         </div>
         {isThereFoodToday && (
           <div className="user-home-events-scroller-outer-wrapper">
-            <div className="user-home-events-scroller">{showAllCategories}</div>
+            <div className="user-home-events-scroller user-home-todayFood-scroller">
+              {showAllCategories}
+            </div>
           </div>
         )}
         {!isThereFoodToday && (

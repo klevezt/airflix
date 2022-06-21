@@ -143,6 +143,7 @@ const en = {
     score: "Rate!",
     new_review: "New review",
     drink: "Drink",
+    food: "Food",
     menu: "Menu",
     upcoming_event: "Upcoming event",
     upcoming_events: "Upcoming events",
