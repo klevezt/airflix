@@ -5,16 +5,17 @@ import { fetchDrinksWithParamasFromDB } from "../../../api_requests/hotel_reques
 import "./DrinksDetailsPage.css";
 import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
-import { imageGetter } from "../../../Helpers/Const/constants";
+import { checkToken, imageGetter } from "../../../Helpers/Const/constants";
 // import ErrorComponent from "../../Error/Error";
 import { useTranslation } from "react-i18next";
+import { actionTypes } from "../../../reducer";
 
 const DrinksDetailsPage = (props) => {
   const params = useParams();
   const { t } = useTranslation();
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -27,9 +28,15 @@ const DrinksDetailsPage = (props) => {
     setIsSpinnerLoading(true);
     const exec = async () => {
       try {
+        const { isExpired, dataaa } = await checkToken(
+          state.token,
+          state.refreshToken
+        );
+        const token = isExpired ? dataaa.accessToken : state.token;
+
         const data = await fetchDrinksWithParamasFromDB(
-          "type=" + params.type,
-          state.token
+          { type: params.type },
+          token
         );
 
         // ---- Error Handler ---- //
@@ -37,6 +44,11 @@ const DrinksDetailsPage = (props) => {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
+        });
 
         const { myArr } = await imageGetter(data, "Drinks/", true);
 

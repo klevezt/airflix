@@ -10,15 +10,16 @@ import {
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 
-import { imageGetter } from "../../../Helpers/Const/constants";
+import { checkToken, imageGetter } from "../../../Helpers/Const/constants";
 import { useTranslation } from "react-i18next";
 import ErrorComponent from "../../Error/Error";
 import { truncateString } from "../../../Helpers/Functions/functions";
 import BackgroundImage from "../../UI/Image/BackgroundImage";
+import { actionTypes } from "../../../reducer";
 
 const ServicesDetailsPage = () => {
   const { t } = useTranslation();
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
 
   const [serviceDetails, setServiceDetails] = useState([]);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
@@ -35,7 +36,16 @@ const ServicesDetailsPage = () => {
 
     const exec = async () => {
       try {
-        const result = await fetchServicesTypesFromDB({ alias: params.type }, state.token);
+        const { isExpired, dataaa } = await checkToken(
+          state.token,
+          state.refreshToken
+        );
+        const token = isExpired ? dataaa.accessToken : state.token;
+
+        const result = await fetchServicesTypesFromDB(
+          { alias: params.type },
+          token
+        );
         // ---- Error Handler ---- //
         if (result.error) {
           setErrorMessage(result.error.msg);
@@ -48,7 +58,7 @@ const ServicesDetailsPage = () => {
             type: params.type,
             status: true,
           },
-          state.token
+          token
         );
 
         // ---- Error Handler ---- //
@@ -56,6 +66,11 @@ const ServicesDetailsPage = () => {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
+        });
 
         const { myArr } = await imageGetter(data, "Services/", true);
 
@@ -125,10 +140,8 @@ const ServicesDetailsPage = () => {
       {!error && !isSpinnerLoading && (
         <div className="row">
           <div className="user-services-details-total-wrapper">
-            <div className="mt-3">
-              <div className="user-home-general-headline-wrapper mb-4">
-                <h2 className="user-home-general-headline">{t(title)}</h2>
-              </div>
+            <div className="user-home-general-headline-wrapper mb-4 mt-3">
+              <h2 className="user-home-general-headline">{t(title)}</h2>
             </div>
             {allServiceDetails}
             {allServiceDetails.length < 1 && (

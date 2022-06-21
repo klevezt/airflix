@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchEventWithParamasFromDB } from "../../../api_requests/hotel_requests";
-import { imageGetter } from "../../../Helpers/Const/constants";
+import { checkToken, imageGetter } from "../../../Helpers/Const/constants";
 import { useStateValue } from "../../../StateProvider";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import ErrorComponent from "../../Error/Error";
@@ -10,11 +10,12 @@ import IconButton from "../../UI/Buttons/IconButton";
 import { ReadMore } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { removeUpperAccents } from "../../../Helpers/Functions/functions";
+import { actionTypes } from "../../../reducer";
 
 function EventsDetail() {
   const { t } = useTranslation();
   const params = useParams();
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -26,10 +27,16 @@ function EventsDetail() {
     let controller = new AbortController();
 
     const exec = async () => {
+      const { isExpired, dataaa } = await checkToken(
+        state.token,
+        state.refreshToken
+      );
+      const token = isExpired ? dataaa.accessToken : state.token;
+
       try {
         const data = await fetchEventWithParamasFromDB(
-          "alias=" + params.eventAlias,
-          state.token
+          {alias: params.eventAlias},
+          token
         );
 
         // ---- Error Handler ---- //
@@ -37,6 +44,11 @@ function EventsDetail() {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
+        });
 
         const { myArr } = await imageGetter(data, "Events/",true);
 
@@ -68,7 +80,7 @@ function EventsDetail() {
       {!error && !isSpinnerLoading && (
         <div className="row mb-80">
           <div className="user-services-details-total-wrapper">
-            <div className="user-home-general-headline-wrapper mb-4">
+            <div className="user-home-general-headline-wrapper mb-4 mt-3">
               <h2 className="user-home-general-headline">{t(event.name)}</h2>
             </div>
             <div className="user-events-details-content-wrapper">

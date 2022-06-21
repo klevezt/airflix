@@ -5,8 +5,9 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { useStateValue } from "../../../StateProvider";
 import { truncateString } from "../../../Helpers/Functions/functions";
 import { useTranslation } from "react-i18next";
-import { imageGetter } from "../../../Helpers/Const/constants";
+import { checkToken, imageGetter } from "../../../Helpers/Const/constants";
 import ErrorComponent from "../../Error/Error";
+import { actionTypes } from "../../../reducer";
 
 const EventsAll = () => {
   const { t } = useTranslation();
@@ -14,7 +15,7 @@ const EventsAll = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
   const [events, setEvents] = useState([]);
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
@@ -25,13 +26,24 @@ const EventsAll = () => {
     const exec = async () => {
       const arr = [];
       try {
-        const data = await fetchEventsFromDB(state.token);
+        const { isExpired, dataaa } = await checkToken(
+          state.token,
+          state.refreshToken
+        );
+        const token = isExpired ? dataaa.accessToken : state.token;
+
+        const data = await fetchEventsFromDB(token);
 
         // ---- Error Handler ---- //
         if (data.error) {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
+        });
 
         const { myArr: eventArr } = await imageGetter(data, "Events/", true);
 

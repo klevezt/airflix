@@ -6,7 +6,6 @@ import { Add, Delete, Update } from "@mui/icons-material";
 import {
   addNewMonth,
   deleteMonth,
-  fetchFoodFromDBWithParams,
   fetchWeekFromDB,
   updateNewMonth,
 } from "../../../api_requests/hotel_requests";

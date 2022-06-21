@@ -1,23 +1,17 @@
 import { DeleteForeverSharp, Edit } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import Card from "../../components/UI/Card/TableCellCard";
-import { getWeeksInMonth } from "../Functions/functions";
+import { checkTokenExpiration, getWeeksInMonth } from "../Functions/functions";
 import i18next from "i18next";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  // , getDownloadURL
-} from "firebase/storage";
-// import { storage } from "../../firebase";
+import { issueNewToken } from "../../api_requests/auth_requests";
 
-export const imageUpload = (image) => {
-  const storage = getStorage();
-  const storageRef = ref(storage, image.name);
-
-  uploadBytes(storageRef, image).then((snapshot) => {
-    console.log("Uploaded a blob or file!");
-  });
+export const checkToken = async (token, refreshToken) => {
+  const { isExpired } = checkTokenExpiration(token, refreshToken);
+  var dataaa = null;
+  if (isExpired) {
+    dataaa = await issueNewToken(refreshToken);
+  }
+  return { isExpired, dataaa };
 };
 
 export const imageGetter = async (

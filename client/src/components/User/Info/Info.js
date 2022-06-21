@@ -12,6 +12,8 @@ import {
   Paper,
 } from "@mui/material";
 import ErrorComponent from "../../Error/Error";
+import { checkToken } from "../../../Helpers/Const/constants";
+import { actionTypes } from "../../../reducer";
 
 const Info = () => {
   const { t } = useTranslation();
@@ -19,7 +21,7 @@ const Info = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
   const [info, setInfo] = useState([]);
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
@@ -29,9 +31,15 @@ const Info = () => {
 
     const exec = async () => {
       try {
+        const { isExpired, dataaa } = await checkToken(
+          state.token,
+          state.refreshToken
+        );
+        const token = isExpired ? dataaa.accessToken : state.token;
+
         const all_info = await fetchInfoTypesFromDB(
           { status: true },
-          state.token
+          token
         );
 
         // ---- Error Handler ---- //
@@ -53,6 +61,11 @@ const Info = () => {
         const tmpInfo = [];
         all_info.forEach((inf, i) => {
           tmpInfo.push({ ...inf, content: contentArray[i] });
+        });
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
         });
 
         setInfo(tmpInfo);

@@ -5,11 +5,9 @@ import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import "./ServicesLandingPage.css";
 import { useStateValue } from "../../../StateProvider";
 import { useTranslation } from "react-i18next";
-import { imageGetter } from "../../../Helpers/Const/constants";
+import { checkToken, imageGetter } from "../../../Helpers/Const/constants";
 import { actionTypes } from "../../../reducer";
 import ErrorComponent from "../../Error/Error";
-import { checkTokenExpiration } from "../../../Helpers/Functions/functions";
-import { issueNewToken } from "../../../api_requests/auth_requests";
 import BackgroundImage from "../../UI/Image/BackgroundImage";
 
 const ServicesLandingPage = () => {
@@ -28,53 +26,26 @@ const ServicesLandingPage = () => {
     setIsSpinnerLoading(true);
     const exec = async () => {
       try {
-        const { isExpired } = checkTokenExpiration(
+        const { isExpired, dataaa } = await checkToken(
           state.token,
           state.refreshToken
         );
+        const token = isExpired ? dataaa.accessToken : state.token;
 
-        let services;
-
-        if (isExpired) {
-          const dataaa = await issueNewToken(state.refreshToken);
-
-          // ---- Error Handler ---- //
-          if (dataaa.error) {
-            setErrorMessage(dataaa.error.msg);
-            throw new Error(dataaa.error.msg);
-          }
-
-          services = await fetchServicesTypesFromDB({status: true},dataaa.accessToken);
-
-          // ---- Error Handler ---- //
-          if (services.error) {
-            setErrorMessage(services.error.msg);
-            throw new Error(services.error.msg);
-          }
-          dispatch({
-            type: actionTypes.SET_NEW_JWT_TOKEN,
-            token: dataaa.accessToken,
-          });
-        } else {
-          services = await fetchServicesTypesFromDB({status:true},state.token);
-
-          // ---- Error Handler ---- //
-          if (services.error) {
-            setErrorMessage(services.error.msg);
-            throw new Error(services.error.msg);
-          }
+        const services = await fetchServicesTypesFromDB(
+          { status: true },
+          token
+        );
+        // ---- Error Handler ---- //
+        if (services.error) {
+          setErrorMessage(services.error.msg);
+          throw new Error(services.error.msg);
         }
 
-        if (services.errors) {
-          dispatch({
-            type: actionTypes.REMOVE_JWT_TOKEN,
-            authenticated: false,
-            token: "",
-            refreshToken: "",
-          });
-          localStorage.clear();
-          return;
-        }
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
+        });
 
         const { myArr } = await imageGetter(services, "Services/", true);
 

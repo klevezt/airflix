@@ -85,7 +85,7 @@ const BuffetLandingPage = () => {
         }
 
         const foodd = await fetchFoodFromDBWithParams(
-          "status=true",
+          { status: true },
           state.token
         );
 
@@ -114,7 +114,7 @@ const BuffetLandingPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [search, state.token, date]);
+  }, [search, state.token]);
 
   const handleOpen = () => {
     setOpenSearch(true);
@@ -281,7 +281,10 @@ const BuffetLandingPage = () => {
         );
         setTodaysFoodCategories(allCategoriesArray);
       }
-      const foodd = await fetchFoodFromDBWithParams("status=true", state.token);
+      const foodd = await fetchFoodFromDBWithParams(
+        { status: true },
+        state.token
+      );
 
       // ---- Error Handler ---- //
       if (foodd.error) {

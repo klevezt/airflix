@@ -7,12 +7,13 @@ import { fetchDrinksTypesFromDB } from "../../../api_requests/hotel_requests";
 import { useStateValue } from "../../../StateProvider";
 
 import BookCover from "../../UI/Book/BookCover";
-import { imageGetter } from "../../../Helpers/Const/constants";
+import { checkToken, imageGetter } from "../../../Helpers/Const/constants";
 import ErrorComponent from "../../Error/Error";
 import { useTranslation } from "react-i18next";
+import { actionTypes } from "../../../reducer";
 
 const DrinksLandingPage = () => {
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
 
   const [error, setError] = useState(false);
@@ -29,13 +30,24 @@ const DrinksLandingPage = () => {
     setIsSpinnerLoading(true);
     const exec = async () => {
       try {
-        const drinks = await fetchDrinksTypesFromDB(state.token);
+        const { isExpired, dataaa } = await checkToken(
+          state.token,
+          state.refreshToken
+        );
+        const token = isExpired ? dataaa.accessToken : state.token;
+
+        const drinks = await fetchDrinksTypesFromDB(token);
 
         // ---- Error Handler ---- //
         if (drinks.error) {
           setErrorMessage(drinks.error.msg);
           throw new Error(drinks.error.msg);
         }
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
+        });
 
         const { myArr } = await imageGetter(drinks, "Drinks/", true);
 

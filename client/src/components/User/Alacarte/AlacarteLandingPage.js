@@ -7,11 +7,12 @@ import "./AlacarteLandingPage.css";
 import { fetchAlacarteTypeFromDB } from "../../../api_requests/hotel_requests";
 import BookCover from "../../UI/Book/BookCover";
 import { useStateValue } from "../../../StateProvider";
-import { imageGetter } from "../../../Helpers/Const/constants";
+import { checkToken, imageGetter } from "../../../Helpers/Const/constants";
 import ErrorComponent from "../../Error/Error";
+import { actionTypes } from "../../../reducer";
 
 const AlacarteLandingPage = () => {
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -28,13 +29,24 @@ const AlacarteLandingPage = () => {
     setIsSpinnerLoading(true);
     const exec = async () => {
       try {
-        const alacarte = await fetchAlacarteTypeFromDB(state.token);
+        const { isExpired, dataaa } = await checkToken(
+          state.token,
+          state.refreshToken
+        );
+        const token = isExpired ? dataaa.accessToken : state.token;
+
+        const alacarte = await fetchAlacarteTypeFromDB(token);
 
         // ---- Error Handler ---- //
         if (alacarte.error) {
           setErrorMessage(alacarte.error.msg);
           throw new Error(alacarte.error.msg);
         }
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
+        });
 
         const { myArr } = await imageGetter(alacarte, "Alacarte/", true);
 

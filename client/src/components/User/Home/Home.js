@@ -18,6 +18,7 @@ import {
   fetchTodaysMenuFromDB,
 } from "../../../api_requests/user_requests";
 import {
+  checkToken,
   imageGetter,
   weekNamesAliases,
 } from "../../../Helpers/Const/constants";
@@ -37,9 +38,10 @@ import { useTranslation } from "react-i18next";
 import reactDom from "react-dom";
 import ErrorComponent from "../../Error/Error";
 import BackgroundImage from "../../UI/Image/BackgroundImage";
+import { actionTypes } from "../../../reducer";
 
 const Home = () => {
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
@@ -66,14 +68,20 @@ const Home = () => {
 
     const exec = async () => {
       try {
-        const dataaa = await fetchEventsFromDB(state.token);
+        const { isExpired, dataaa } = await checkToken(
+          state.token,
+          state.refreshToken
+        );
+        const token = isExpired ? dataaa.accessToken : state.token;
+
+        const dataa = await fetchEventsFromDB(token);
         // ---- Error Handler ---- //
-        if (dataaa.error) {
-          setErrorMessage(dataaa.error.msg);
-          throw new Error(dataaa.error.msg);
+        if (dataa.error) {
+          setErrorMessage(dataa.error.msg);
+          throw new Error(dataa.error.msg);
         }
 
-        const { myArr: eventArr } = await imageGetter(dataaa, "Events/", true);
+        const { myArr: eventArr } = await imageGetter(dataa, "Events/", true);
 
         const arr = [];
 
@@ -110,7 +118,7 @@ const Home = () => {
           currentWeekNumber,
           todaysMonth,
           todaysYear,
-          state.token
+          token
         );
         if (data.length !== 0) {
           // ---- Error Handler ---- //
@@ -132,10 +140,7 @@ const Home = () => {
         }
         const arr2 = [];
 
-        const foodd = await fetchFoodFromDBWithParams(
-          "status=true",
-          state.token
-        );
+        const foodd = await fetchFoodFromDBWithParams({ status: true }, token);
 
         // ---- Error Handler ---- //
         if (foodd.error) {
@@ -159,7 +164,7 @@ const Home = () => {
           setFoodWithImages(arr2);
         }
 
-        const buffet = await fetchFoodTypesFromDB(state.token);
+        const buffet = await fetchFoodTypesFromDB(token);
 
         // ---- Error Handler ---- //
         if (buffet.error) {
@@ -173,7 +178,7 @@ const Home = () => {
             status: true,
             featured: true,
           },
-          state.token
+          token
         );
         // ---- Error Handler ---- //
         if (featured_info.error) {
@@ -195,6 +200,11 @@ const Home = () => {
         const tmpInfo = [];
         featured_info.forEach((inf, i) => {
           tmpInfo.push({ ...inf, content: contentArray[i] });
+        });
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
         });
 
         setInfo(tmpInfo);

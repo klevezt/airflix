@@ -6,12 +6,13 @@ import { fetchAlacarteWithParamasFromDB } from "../../../api_requests/hotel_requ
 import "./AlacarteDetailsPage.css";
 import BookContent from "../../UI/Book/BookContent";
 import { useStateValue } from "../../../StateProvider";
-import { imageGetter } from "../../../Helpers/Const/constants";
+import { checkToken, imageGetter } from "../../../Helpers/Const/constants";
 import ErrorComponent from "../../Error/Error";
+import { actionTypes } from "../../../reducer";
 
 const AlacarteDetailsPage = () => {
   const params = useParams();
-  const [state] = useStateValue();
+  const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
 
   const [error, setError] = useState(false);
@@ -26,9 +27,15 @@ const AlacarteDetailsPage = () => {
     setIsSpinnerLoading(true);
     const exec = async () => {
       try {
+        const { isExpired, dataaa } = await checkToken(
+          state.token,
+          state.refreshToken
+        );
+        const token = isExpired ? dataaa.accessToken : state.token;
+
         const data = await fetchAlacarteWithParamasFromDB(
-          "type=" + params.type,
-          state.token
+          {type :  params.type},
+          token
         );
 
         // ---- Error Handler ---- //
@@ -36,6 +43,12 @@ const AlacarteDetailsPage = () => {
           setErrorMessage(data.error.msg);
           throw new Error(data.error.msg);
         }
+
+        dispatch({
+          type: actionTypes.SET_NEW_JWT_TOKEN,
+          token: token,
+        });
+
         const { myArr } = await imageGetter(data, "Alacarte/", true);
 
         // ---- Error Handler ---- //

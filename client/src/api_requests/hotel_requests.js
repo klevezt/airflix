@@ -235,7 +235,7 @@ export const fetchDrinksFromDB = (token) => {
 
 export const fetchDrinksWithParamasFromDB = (prs, token) => {
   const params = new URLSearchParams(prs);
-  return fetch(base_url + "/drink?" + params, {
+  return fetch(base_url + "/drink?" + params.toString(), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -246,7 +246,7 @@ export const fetchDrinksWithParamasFromDB = (prs, token) => {
 
 export const fetchAlacarteWithParamasFromDB = (prs, token) => {
   const params = new URLSearchParams(prs);
-  return fetch(base_url + "/alacarte?" + params, {
+  return fetch(base_url + "/alacarte?" + params.toString(), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -279,7 +279,7 @@ export const fetchServiceWithParamasFromDB = (prs, token) => {
 
 export const fetchEventWithParamasFromDB = (prs, token) => {
   const params = new URLSearchParams(prs);
-  return fetch(base_url + "/events?" + params, {
+  return fetch(base_url + "/events?" + params.toString(), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -373,7 +373,7 @@ export const fetchSingleEventFromDB = (prs, token) => {
 
 export const fetchFoodFromDBWithParams = (prs, token) => {
   const params = new URLSearchParams(prs);
-  return fetch(base_url + "/food?" + params, {
+  return fetch(base_url + "/food?" + params.toString(), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
