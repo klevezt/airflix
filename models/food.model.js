@@ -25,10 +25,10 @@ const foodSchema = new Schema(
       required: false,
       default: [],
     },
-    images: {
-      type: Array,
+    image: {
+      type: String,
       required: true,
-      default: [],
+      default: "",
     },
     description: {
       type: String,

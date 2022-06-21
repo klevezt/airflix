@@ -6,6 +6,7 @@ import { Add, Delete, Update } from "@mui/icons-material";
 import {
   addNewMonth,
   deleteMonth,
+  fetchFoodFromDBWithParams,
   fetchWeekFromDB,
   updateNewMonth,
 } from "../../../api_requests/hotel_requests";
@@ -65,23 +66,6 @@ const Food = () => {
     return () => controller?.abort();
   }, []);
 
-  // const handleWeekMenu = async () => {
-  //   try {
-  //     const week = await fetchWeekFromDB(month, year, state.token);
-  //     // ---- Error Handler ---- //
-  //     if (week.error) {
-  //       setErrorMessage(week.error.msg);
-  //       throw new Error(week.error.msg);
-  //     }
-
-  //     const menu_week = assignWeeksToTable(year, month, week);
-  //     setTableMenu(menu_week);
-  //   } catch (err) {
-  //     setError(true);
-  //     setIsSpinnerLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     let controller = new AbortController();
 
@@ -100,7 +84,6 @@ const Food = () => {
       let fact = false;
       try {
         const week = await fetchWeekFromDB(month, year, state.token);
-        // console.log(week);
         // ---- Error Handler ---- //
         if (week.error) {
           setErrorMessage(week.error.msg);
@@ -111,7 +94,7 @@ const Food = () => {
           w.month === month && w.year === year ? (fact = true) : (fact = false);
         });
         fact ? setMonthIsInitialized(true) : setMonthIsInitialized(false);
-        // handleWeekMenu();
+
         const menu_week = assignWeeksToTable(year, month, week);
         setTableMenu(menu_week);
         setIsSpinnerLoading(false);

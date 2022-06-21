@@ -23,6 +23,17 @@ export const fetchUserInfoFromDB = (id, token) => {
     },
   }).then((data) => data.json());
 };
+export const fetchActiveFoodTypesFromDB = (prms, token) => {
+  const params = new URLSearchParams(prms);
+
+  return fetch(base_url + "/foodType?" + params.toString(), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+  }).then((foodType) => foodType.json());
+};
 
 export const updateMonthsAfterDelete = async (month, year, index, token) => {
   const foodTypes = await fetchFoodTypesFromDB(token);
@@ -85,7 +96,8 @@ export const addNewMonth = async (month, year, index, token) => {
 };
 
 export const updateNewMonth = async (month, year, index, token) => {
-  const foodTypes = await fetchFoodTypesFromDB(token);
+  const foodTypes = await fetchActiveFoodTypesFromDB({ status: true }, token);
+
   const params = new URLSearchParams({
     week: index,
     month: month,
@@ -105,7 +117,6 @@ export const updateNewMonth = async (month, year, index, token) => {
   let dayObject = {};
 
   if (foodTypes.length < Object.keys(foodWeek[0].monday).length) {
-
     const prevFoodTypes = Object.keys(foodWeek[0].monday);
     prevFoodTypes.forEach((foodType) => {
       foodTypes.forEach((type) => {
@@ -140,11 +151,9 @@ export const updateNewMonth = async (month, year, index, token) => {
             [property]: foodWeek[0].sunday[property],
           };
         }
-
       });
     });
   } else {
-
     dayObject.monday = foodWeek[0].monday;
     dayObject.tuesday = foodWeek[0].tuesday;
     dayObject.wednesday = foodWeek[0].wednesday;
@@ -450,24 +459,25 @@ export const fetchWeekFromDB = (month, year, token) => {
 };
 
 export const addFood = (n, t, i, ing, feat, desc, token) => {
-  const uploadImages = [];
-  for (const img of i) {
-    uploadImages.push(img.name);
-  }
+  const formData = new FormData();
+
+  formData.append("name", n);
+  formData.append("type", t);
+  formData.append("image", i);
+  ing.forEach((item) => {
+    formData.append("ingredients", item);
+  });
+  feat.forEach((item) => {
+    formData.append("special_features", item);
+  });
+  formData.append("description", desc);
+
   return fetch(base_url + "/food/add", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "x-access-token": token,
     },
-    body: JSON.stringify({
-      name: n,
-      type: t,
-      images: uploadImages,
-      ingredients: ing,
-      special_features: feat,
-      description: desc,
-    }),
+    body: formData,
   }).then((data) => data.json());
 };
 

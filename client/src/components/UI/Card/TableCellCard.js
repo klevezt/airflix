@@ -62,7 +62,7 @@ const TableCellCard = (props) => {
 
         const arr = [];
         const food = await fetchFoodFromDBWithParams(
-          "?status=true",
+          { status: true },
           state.token
         );
         // ---- Error Handler ---- //

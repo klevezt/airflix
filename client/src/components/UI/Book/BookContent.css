@@ -6,7 +6,7 @@
 .page-content img {
     width: 50% !important;
     object-fit: cover;
-    max-height: 120px;
+    max-height: 150px;
 }
 
 .page-content h1 {
@@ -99,5 +99,5 @@
         margin: 0 2%;
     }
 
-    .page-content img{max-height: 170px;}
+    .page-content img{max-height: 220px;}
 }

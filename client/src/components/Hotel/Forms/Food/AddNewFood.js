@@ -63,7 +63,7 @@ const AddNewFoodForm = (props) => {
           e,
           nameRef.current.value,
           newFoodType,
-          imageRef.current.files,
+          imageRef.current.files[0],
           ingredients,
           specialFeatures,
           descriptionRef.current.value
@@ -221,6 +221,7 @@ const AddNewFoodForm = (props) => {
               type="file"
               ref={imageRef}
               autoComplete="off"
+              required
             />
           </div>
         </div>

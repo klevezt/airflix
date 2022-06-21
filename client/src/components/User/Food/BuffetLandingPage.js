@@ -215,7 +215,7 @@ const BuffetLandingPage = () => {
               <div className="user-services-img">
                 <img src={`${currentFood.image}`} alt="buffet" />
               </div>
-              <div className="user-services-content">
+              <div className="user-buffet-content">
                 <h2>{t(currentFood.name)}</h2>
               </div>
             </div>

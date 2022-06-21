@@ -143,7 +143,7 @@ const Home = () => {
           throw new Error(foodd.error.msg);
         }
 
-        const { myArr } = await imageGetter(foodd, "Food/");
+        const { myArr } = await imageGetter(foodd, "Food/", true);
 
         if (myArr.length !== 0) {
           // ---- Error Handler ---- //
@@ -248,7 +248,7 @@ const Home = () => {
               className="w-100"
             />
             <div className="p-4">
-              <h2 className="text-center">{previewSelectedFood[0].name}</h2>
+              <h2>{previewSelectedFood[0].name}</h2>
               {previewSelectedFood[0].ingredients && (
                 <>
                   <hr />
@@ -297,11 +297,11 @@ const Home = () => {
               key={j}
               onClick={() => handlePreview(currentFood)}
             >
-              <div className="">
+              <div className="d-flex flex-direction-column">
                 <div className="user-services-img">
                   <img src={`${currentFood.img}`} alt="buffet" />
                 </div>
-                <div className="user-services-content">
+                <div className="user-buffet-content">
                   <h2>{t(currentFood.name.name)}</h2>
                 </div>
               </div>

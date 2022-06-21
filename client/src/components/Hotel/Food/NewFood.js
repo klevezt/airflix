@@ -27,7 +27,7 @@ const NewFood = () => {
     e,
     newFoodName,
     newFoodType,
-    newFoodImages,
+    newFoodImage,
     newFoodIngredients,
     newFoodSpecialFeatures,
     newFoodDescription
@@ -38,7 +38,7 @@ const NewFood = () => {
       const result = await addFood(
         newFoodName,
         newFoodType,
-        newFoodImages,
+        newFoodImage,
         newFoodIngredients,
         newFoodSpecialFeatures,
         newFoodDescription,

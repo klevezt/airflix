@@ -11,7 +11,6 @@ const AddNewFoodTypeForm = (props) => {
   const history = useHistory();
 
   const newFoodTypeName = useRef("");
-  const newFoodTypeProperty = useRef("");
   const imageRef = useRef("");
 
   return (
@@ -24,7 +23,6 @@ const AddNewFoodTypeForm = (props) => {
           e,
           newFoodTypeName.current.value,
           newFoodTypeName.current.value.replace(/\s+/g, "-").toLowerCase(),
-          // newFoodTypeProperty.current.value,
           imageRef.current.files[0]
         )
       }

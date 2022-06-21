@@ -41,7 +41,7 @@ router.route("/:id").get((req, res, next) => {
 router.route("/add").post((req, res, next) => {
   const name = req.body.name;
   const type = req.body.type;
-  const images = req.body.images;
+  const image = req.file.filename;
   const ingredients = req.body.ingredients;
   const special_features = req.body.special_features;
   const description = req.body.description;
@@ -51,7 +51,7 @@ router.route("/add").post((req, res, next) => {
     type,
     special_features,
     ingredients,
-    images,
+    image,
     description,
   });
 

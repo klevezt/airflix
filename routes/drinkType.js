@@ -3,7 +3,7 @@ const router = require("express").Router();
 let DrinkType = require("../models/drinkType.model");
 
 router.route("/").get((req, res, next) => {
-  DrinkType.find()
+  DrinkType.find(req.query)
     .then((drinkType) => {
       if (!drinkType) {
         const error = new Error("Could not find drink type.");
