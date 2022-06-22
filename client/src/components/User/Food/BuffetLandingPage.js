@@ -8,7 +8,8 @@ import { Fade, Backdrop, Modal, TextField } from "@mui/material";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
 import { weekNamesAliases } from "../../../Helpers/Const/constants";
 import {
-  getSelectedDayBelongsWeekInMonth, removeUpperAccents,
+  getSelectedDayBelongsWeekInMonth,
+  removeUpperAccents,
   // removeUpperAccents,
 } from "../../../Helpers/Functions/functions";
 import { fetchTodaysMenuFromDB } from "../../../api_requests/user_requests";
@@ -206,8 +207,8 @@ const BuffetLandingPage = () => {
         return (
           <div
             className={`user-home-todayFood-inner-wrapper ${
-              todaysFoodCategories[q][1].length - 1 === 0 && "w-100"
-            } ${kk === 0 && "final-element"}`}
+              todaysFoodCategories[q][1].length - 1 === 0 ? "w-100" : ""
+            }${kk === 0 ? "final-element" : ""}`}
             onClick={() => handlePreview(currentFood)}
             key={j}
           >
@@ -223,22 +224,21 @@ const BuffetLandingPage = () => {
         );
       });
     });
-
-    if (category[1].length !== 0 && foodPerEachCategory[0] !== null) {
+    if (category[1].length !== 0 && foodPerEachCategory[0] !== null ) {
       return (
         <div className="mb-3 max-width-100 w-100" key={q}>
           <div className="user-buffet-general-headline-wrapper">
             <h2 className="user-buffet-general-headline">{t(category[0])}</h2>
           </div>
           <div className="user-home-events-scroller-outer-wrapper">
-            <div className="user-home-events-scroller">
+            <div className="user-home-events-scroller user-buffer-food-scroller ">
               {foodPerEachCategory}
             </div>
           </div>
         </div>
       );
     }
-    return 0;
+    return "";
   });
 
   const handleSearchRequest = async () => {
@@ -292,7 +292,7 @@ const BuffetLandingPage = () => {
         throw new Error(foodd.error.msg);
       }
 
-      const { myArr } = await imageGetter(foodd, "Food/",true);
+      const { myArr } = await imageGetter(foodd, "Food/", true);
 
       // ---- Error Handler ---- //
       if (myArr === undefined || myArr === null) {

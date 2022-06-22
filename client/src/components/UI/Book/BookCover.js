@@ -38,7 +38,7 @@ const BookCover = (props) => {
         )}
         <div
           className={`user-home-general-headline-wrapper ${
-            props.withSearch ? "mb-4" : ""
+            props.withSearch ? "" : ""
           }`}
         >
           <h2 className="user-home-general-headline">

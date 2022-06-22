@@ -17,11 +17,13 @@
     align-items: center;
     width: 100%;
     margin-bottom: 20px;
-    background: white;
+    background: #464646;
     padding: 10px;
     color: white;
     border-radius: 5px;
-    color: #464646;
+    color: #ffffff;
+    border: 3px solid;
+    position: relative;
 }
 
 .user-book-general-search h4{
@@ -29,7 +31,12 @@
     margin-bottom: 0;
 }
 .user-book-general-search svg{
-    font-size: 32px;
+        background: white;
+        color: #464646;
+        position: absolute;
+        left: 0px;
+        height: 100%;
+        width: 40px;
 }
 .user-book-general-search svg:hover{
     cursor: pointer;
@@ -160,7 +167,7 @@
         cursor: pointer;
     }
     .user-book-general-search h4 {
-        color: #464646;
+        color: white;
         font-size: 24px;
         margin: 0;
         z-index: 9;
