@@ -3,14 +3,11 @@ export const initialState = {
   authenticated: false,
   token: "",
   refreshToken: "",
-  allUsers: [],
 };
 
 export const actionTypes = {
   SET_USER: "SET_USER",
   REMOVE_JWT_TOKEN: "REMOVE_JWT_TOKEN",
-  GET_ALL_USERS_ADMIN: "GET_ALL_USERS_ADMIN",
-  ADD_NEW_USER_ADMIN: "ADD_NEW_USER_ADMIN",
   GET_CURRENT_USER: "GET_CURRENT_USER",
   SET_NEW_JWT_TOKEN: "SET_NEW_JWT_TOKEN",
   LOGOUT_USER: "LOGOUT_USER",
@@ -39,16 +36,6 @@ const reducer = (state, action) => {
         authenticated: action.authenticated,
         token: action.token,
         refreshToken: action.refreshToken,
-      };
-    case actionTypes.GET_ALL_USERS_ADMIN:
-      return {
-        ...state,
-        allUsers: action.users,
-      };
-    case actionTypes.ADD_NEW_USER_ADMIN:
-      return {
-        ...state,
-        allUsers: [...state.allUsers, action.new_user],
       };
     case actionTypes.GET_CURRENT_USER:
       return {

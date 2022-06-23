@@ -40,6 +40,7 @@ import AddNewService from "./Forms/Services/AddNewService";
 import ServicesDetails from "./Services/ServicesDetails";
 import AddNewServiceType from "./Forms/Services/AddNewServiceType";
 import EventEdit from "./Forms/Events/EditEvent";
+import Home from "./Home/Home";
 
 const Hotel = () => {
   const [state] = useStateValue();
@@ -148,6 +149,9 @@ const Hotel = () => {
             </Route>
             <Route exact path="/events/add">
               {state.authenticated && <AddNewEvent />}
+            </Route>
+            <Route exact path="/">
+              {state.authenticated && <Home />}
             </Route>
           </div>
         </div>
