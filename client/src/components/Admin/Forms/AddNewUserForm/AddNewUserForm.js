@@ -8,11 +8,11 @@ const AddNewUserForm = (props) => {
   //   const [state, dispatch] = useStateValue();
   const [new_username, setNewUsername] = useState("");
   const [new_password, setNewPassword] = useState("");
-  const [new_role, setNewRole] = useState("");
+  // const [new_role, setNewRole] = useState("");
 
   const handleUsernameInput = (e) => setNewUsername(e.target.value);
   const handlePasswordInput = (e) => setNewPassword(e.target.value);
-  const handleRoleInput = (e) => setNewRole(e.target.value);
+  // const handleRoleInput = (e) => setNewRole(e.target.value);
 
   return (
     <form
@@ -23,7 +23,7 @@ const AddNewUserForm = (props) => {
           e,
           new_username,
           bcrypt.hashSync(new_password, bcrypt.genSaltSync()),
-          new_role
+          ""
         )
       }
     >

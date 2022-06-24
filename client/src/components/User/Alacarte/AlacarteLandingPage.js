@@ -69,7 +69,7 @@ const AlacarteLandingPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [state.token]);
+  }, [dispatch, state.token, state.refreshToken]);
 
   const alacarteCatalog = catalog.map((alacarte, i) => {
     return (

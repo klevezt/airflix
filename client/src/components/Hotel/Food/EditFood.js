@@ -71,25 +71,28 @@ const EditFood = () => {
     [state.token]
   );
 
-  const handleEditFood = async (id) => {
-    setIsSpinnerLoading(true);
-    try {
-      const food = await getFoodEdit(id, state.token);
-      // ---- Error Handler ---- //
-      if (food.error) {
-        setErrorMessage(food.error.msg);
-        throw new Error(food.error.msg);
-      }
+  const handleEditFood = useCallback(
+    async (id) => {
+      setIsSpinnerLoading(true);
+      try {
+        const food = await getFoodEdit(id, state.token);
+        // ---- Error Handler ---- //
+        if (food.error) {
+          setErrorMessage(food.error.msg);
+          throw new Error(food.error.msg);
+        }
 
-      setSelectedFood(food);
-      setEditFood(true);
-      setIsSpinnerLoading(false);
-    } catch (err) {
-      setError(true);
-      setEditFood(true);
-      setIsSpinnerLoading(false);
-    }
-  };
+        setSelectedFood(food);
+        setEditFood(true);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setEditFood(true);
+        setIsSpinnerLoading(false);
+      }
+    },
+    [state.token]
+  );
 
   const handleDeleteFood = useCallback(
     async (id) => {
@@ -201,7 +204,7 @@ const EditFood = () => {
       });
     });
     setMenu(tempArray);
-  }, [food, handleDeleteFood, handleFoodStatus]);
+  }, [food, handleEditFood, handleDeleteFood, handleFoodStatus, t]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -245,7 +248,7 @@ const EditFood = () => {
 
     controller = null;
     return () => controller?.abort();
-  }, [isSpinnerLoading, editFood]);
+  }, [isSpinnerLoading, editFood, foodTableRows]);
 
   /* Status Handler */
 

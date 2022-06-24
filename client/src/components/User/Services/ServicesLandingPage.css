@@ -70,22 +70,19 @@
     padding: 20px !important;
     flex-basis: 40%;
   }
+    .user-services-wrapper {
+      flex-wrap: nowrap;
+    }
+    
+  .user-services-img {
+      flex-basis: 60%;
+      position: relative;
+      min-height: 200px;
+    }
+ 
 }
 
 @media(min-width:768px){
-
-  
-    .user-services-img {
-        flex-basis: 60%;
-        position: relative;
-        min-height: 200px;
-      }
- 
- 
-
-  .user-services-wrapper{
-    flex-wrap: nowrap;
-  }
 
   .user-services-content h2{
     font-size: 24px;

@@ -115,7 +115,7 @@ const BuffetLandingPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [search, state.token]);
+  }, [search, state.token, date]);
 
   const handleOpen = () => {
     setOpenSearch(true);

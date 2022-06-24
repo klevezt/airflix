@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useCallback } from "react";
 import { Link } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
@@ -39,7 +39,7 @@ const ServicesComponent = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const basicFetch = async () =>{
+  const basicFetch = useCallback(async () => {
     const data = await fetchServicesTypesFromDB(state.token);
     // ---- Error Handler ---- //
     if (data.error) {
@@ -58,7 +58,7 @@ const ServicesComponent = () => {
     }
 
     setServices(myArr);
-  } 
+  }, [state.token]); 
 
   useEffect(() => {
     let controller = new AbortController();
@@ -77,7 +77,7 @@ const ServicesComponent = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [state.token]);
+  }, [state.token, basicFetch]);
 
   const handleDeleteServiceType = async (id) => {
     setIsSpinnerLoading(true);

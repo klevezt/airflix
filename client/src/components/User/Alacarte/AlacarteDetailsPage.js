@@ -34,7 +34,7 @@ const AlacarteDetailsPage = () => {
         const token = isExpired ? dataaa.accessToken : state.token;
 
         const data = await fetchAlacarteWithParamasFromDB(
-          {type :  params.type},
+          { type: params.type },
           token
         );
 
@@ -69,14 +69,16 @@ const AlacarteDetailsPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [params.type, state.token]);
+  }, [params.type, dispatch, state.token, state.refreshToken]);
 
-  const allDrinkDetails = alacarteDetails.map((alacarte, i) => {
+  const allAlacarteDetails = alacarteDetails.map((alacarte, i) => {
     return (
       <Fragment key={i}>
         <div className="drink-details-each-drink-wrapper d-flex justify-content-between align-items-start">
-          <img src={`${alacarte.image}`} alt="alacarte" />
-          <div className="drink-details-each-drink-text text-end">
+          <img src={alacarte.image} alt="alacarte" />
+          <div
+            className={`drink-details-each-drink-text text-end ${alacarteDetails.length > 2 ? "has-border" : ""}`}
+          >
             <h3>{t(alacarte.name)}</h3>
             <p>
               {alacarte.ingredients.map((ing, j) => (
@@ -99,7 +101,7 @@ const AlacarteDetailsPage = () => {
       {!error && (
         <BookContent
           contentHeadline={params.type}
-          details={allDrinkDetails}
+          details={allAlacarteDetails}
           loading={isSpinnerLoading}
         />
       )}

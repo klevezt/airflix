@@ -44,7 +44,7 @@
   .drinkTypes-user-box .img-wrapper img{
     border-radius: 5px;
     object-fit: cover;
-    border: 2px solid #ffffff;
+    border: 1px solid rgba(15, 15, 15, 0.6);
     height: 100%;
   }
   .drinkTypes-user-box .img-wrapper {
@@ -56,9 +56,9 @@
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
     background: #0091a4;
-    bottom: 2px;
-    left: 2px;
-    right: 2px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
   }
  
   .drinkTypes-user-box__bookmark-text-wrapper h2{

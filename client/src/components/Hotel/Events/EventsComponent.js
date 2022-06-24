@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { NavLink, Link, useHistory } from "react-router-dom";
 import {
   deleteEvent,
@@ -38,7 +38,7 @@ const EventsComponent = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
-  const basicFetch = async () => {
+  const basicFetch = useCallback(async () => {
     const arr = [];
 
     try {
@@ -76,7 +76,7 @@ const EventsComponent = () => {
       setError(true);
       setIsSpinnerLoading(false);
     }
-  };
+  },[state.token]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -93,7 +93,7 @@ const EventsComponent = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [state.token]);
+  }, [state.token, basicFetch]);
 
   const handleToggleEventStatus = async (id, newStatus) => {
     setIsSpinnerLoading(true);

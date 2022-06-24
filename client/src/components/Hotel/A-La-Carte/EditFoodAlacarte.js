@@ -95,6 +95,30 @@ const EditFoodAlacarte = () => {
     },
     [state.token]
   );
+
+  const handleEditAlacarte = useCallback(
+    async (id) => {
+      setIsSpinnerLoading(true);
+      try {
+        const alacarte = await getAlacarteEdit(id, state.token);
+        // ---- Error Handler ---- //
+        if (alacarte.error) {
+          setErrorMessage(alacarte.error.msg);
+          throw new Error(alacarte.error.msg);
+        }
+
+        setSelectedAlacarte(alacarte);
+        setEditAlacarte(true);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setIsSpinnerLoading(false);
+        setEditAlacarte(true);
+        setError(true);
+      }
+    },
+    [state.token]
+  );
+
   const alacarteTableRows = useCallback(() => {
     const tempArray = [];
 
@@ -132,7 +156,12 @@ const EditFoodAlacarte = () => {
       });
     });
     setMenu(tempArray);
-  }, [alacarte, menu, handleAlacarteStatus, handleDeleteAlacarte, state.token]);
+  }, [
+    alacarte,
+    handleEditAlacarte,
+    handleAlacarteStatus,
+    handleDeleteAlacarte,
+  ]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -170,34 +199,14 @@ const EditFoodAlacarte = () => {
 
   useEffect(() => {
     let controller = new AbortController();
-    
+
     alacarteTableRows();
-    
+
     controller = null;
     return () => controller?.abort();
-  }, [isSpinnerLoading]);
+  }, [isSpinnerLoading, alacarteTableRows]);
 
   /* Status Handler */
-
-  const handleEditAlacarte = async (id) => {
-    setIsSpinnerLoading(true);
-    try {
-      const alacarte = await getAlacarteEdit(id, state.token);
-      // ---- Error Handler ---- //
-      if (alacarte.error) {
-        setErrorMessage(alacarte.error.msg);
-        throw new Error(alacarte.error.msg);
-      }
-
-      setSelectedAlacarte(alacarte);
-      setEditAlacarte(true);
-      setIsSpinnerLoading(false);
-    } catch (err) {
-      setIsSpinnerLoading(false);
-      setEditAlacarte(true);
-      setError(true);
-    }
-  };
 
   const handleUpdateAlacarte = async (
     e,
@@ -231,7 +240,7 @@ const EditFoodAlacarte = () => {
       }
 
       setEditAlacarte(false);
-      
+
       const alacarte = await fetchAlacarteFromDB(state.token);
       // ---- Error Handler ---- //
       if (alacarte.error) {

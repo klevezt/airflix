@@ -6,6 +6,7 @@
   justify-content: space-around;
   /* flex-direction: column; */
   align-items: center;
+  min-height: 78vh;
 }
 .food-landing-page .column > div {
   height: 100%;
@@ -228,6 +229,9 @@
 }
 
 @media (max-width:767.98px) {
+  .modalFoodSearch-container {
+    max-width: 80vw;
+  }
   .user-container.mb-80 {
       margin-bottom: 20px;
     }

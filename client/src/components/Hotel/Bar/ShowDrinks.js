@@ -10,7 +10,7 @@ import ErrorComponent from "../../Error/Error";
 import "./ShowDrinks.css";
 import ImageGrid from "../../UI/ImageGrid/ImageGrid";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
-import CubeSpinner from "../../UI/Spinners/CubeSpinner";
+// import CubeSpinner from "../../UI/Spinners/CubeSpinner";
 import FadeUpLong from "../../hoc/FadeUpLong";
 import { useStateValue } from "../../../StateProvider";
 import { imageGetter } from "../../../Helpers/Const/constants";

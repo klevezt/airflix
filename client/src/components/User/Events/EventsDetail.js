@@ -71,7 +71,7 @@ function EventsDetail() {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [params.eventAlias, state.token]);
+  }, [params.eventAlias, dispatch, state.token, state.refreshToken]);
 
   return (
     <>

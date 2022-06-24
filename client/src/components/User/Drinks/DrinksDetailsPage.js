@@ -77,11 +77,13 @@ const DrinksDetailsPage = (props) => {
       <Fragment key={i}>
         <div
           className={`drink-details-each-drink-wrapper d-flex justify-content-between align-items-start ${
-            drinkDetails.length - 1 !== i && ""
-          }`}
+              i >= 2 ? "has-border" : ""
+            }`}
         >
-          <img src={`${drink.image}`} alt="drink" />
-          <div className="drink-details-each-drink-text text-end">
+          <img src={drink.image} alt="drink" />
+          <div
+            className="drink-details-each-drink-text text-end"
+          >
             <h3>{t(drink.name)}</h3>
             <p>
               {drink.ingredients.map((ing, j) => (

@@ -1,20 +1,31 @@
 
 .drink-details-each-drink-wrapper{
-  border-bottom: 1px solid #0091a4;
   padding: 20px 0px;
   margin: 0 10px;
 }
+ .drink-details-each-drink-wrapper.has-border {
+   border-top: 1px solid #0091a4;
+ }
 .drink-details-each-drink-wrapper:last-child{
   border-bottom: none;
 }
 .drink-details-each-drink-text{
   width: 49%;
   padding-left: 1%;
+  position: relative;
+  height: 100%;
 }
 .drink-details-each-drink-text h2{
   font-family: 'Source Serif Pro';
   font-size: 20px;
   margin: 0;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #0091a4;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
 }
   .drink-details-each-drink-text h3{
   font-family: 'Source Serif Pro';
@@ -27,4 +38,13 @@
 
 .drink-details-each-drink-wrapper > img {
   height: 220px;
+}
+@media(max-width:574.98px){
+  .drink-details-each-drink-wrapper.has-border {
+      border-top: none;
+    }
+    .drink-details-each-drink-wrapper {
+      flex-basis: 100%;
+        border-bottom: 1px solid #0091a4;
+    }
 }

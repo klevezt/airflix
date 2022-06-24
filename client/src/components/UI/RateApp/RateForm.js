@@ -9,10 +9,10 @@ import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfi
 
 import "./RateApp.css";
 import IconButton from "../Buttons/IconButton";
-import { Close } from "@mui/icons-material";
+import { Close, Publish } from "@mui/icons-material";
 import { removeUpperAccents } from "../../../Helpers/Functions/functions";
 
-const RateAppForm = (props) => {
+const RateApp = (props) => {
   const { t } = useTranslation();
   const [rating, setRating] = useState(null);
   const reviewContentRef = useRef("");
@@ -95,6 +95,7 @@ const RateAppForm = (props) => {
             size="large"
             aria-required
             max={10}
+            className="rating-wrapper"
           />
           {rating && <p>{rating}/10</p>}
           {!rating && <p>0/10</p>}
@@ -116,22 +117,27 @@ const RateAppForm = (props) => {
         </div>
       </div>
       <hr />
-      <IconButton
-        text={removeUpperAccents(t("submit"))}
-        variant="contained"
-        type="submit"
-      />
-
-      <div className="user-more-button">
-        <IconButton
-          text={removeUpperAccents(t("close"))}
-          icon={<Close className="mr-2" />}
-          variant="contained"
-          onClick={props.close}
-        />
+      <div className="row">
+        <div className=" user-more-button w-auto">
+          <IconButton
+            text={removeUpperAccents(t("submit"))}
+            icon={<Publish />}
+            variant="contained"
+            type="submit"
+          />
+        </div>
+        <div className="col-4">
+          <IconButton
+            text={removeUpperAccents(t("close"))}
+            icon={<Close />}
+            variant="contained"
+            onClick={props.close}
+            color="error"
+          />
+        </div>
       </div>
     </form>
   );
 };
 
-export default RateAppForm;
+export default RateApp;

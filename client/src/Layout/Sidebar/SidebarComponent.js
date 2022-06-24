@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Home,
@@ -20,18 +20,34 @@ import {
   Event,
   ExitToApp,
   LocalActivity,
+  ThumbsUpDown,
+  Close,
 } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
-import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Fade,
+  Backdrop,
+  Modal,
+} from "@mui/material";
 import { useStateValue } from "../../StateProvider";
 import "./SidebarComponent.css";
 import LanguageSwitcher from "../../components/UI/LanguageSwitcher/LanguageSwitcher";
 import { actionTypes } from "../../reducer";
+import IconButton from "../../components/UI/Buttons/IconButton";
+import { removeUpperAccents } from "../../Helpers/Functions/functions";
+import { rateTheApp } from "../../api_requests/user_requests";
+import reactDom from "react-dom";
+import RateAppForm from "../../components/UI/RateApp/RateForm";
 
 const SidebarComponent = () => {
-  const [state,dispatch] = useStateValue();
+  const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const [successRate, setSuccessRate] = useState(false);
 
   const AUTHENTICATED = state.authenticated;
 
@@ -49,6 +65,79 @@ const SidebarComponent = () => {
       refreshToken: "",
     });
   };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSuccessRateClose = () => {
+    setSuccessRate(false);
+  };
+
+  const handleRateSubmit = async (e, name, rating, content) => {
+    e.preventDefault();
+    await rateTheApp({ name, rating, content }, state.token);
+    setSuccessRate(true);
+    setOpen(false);
+  };
+
+  const rateModal = reactDom.createPortal(
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      className={"modalMenu"}
+      open={open}
+      onClose={handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={open}>
+        <div className="modalRate-container">
+          <RateAppForm
+            handleRateSubmit={handleRateSubmit}
+            close={handleClose}
+          />
+        </div>
+      </Fade>
+    </Modal>,
+    document.getElementById("user-rate-app-root")
+  );
+
+  const successRateModal = reactDom.createPortal(
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      className={"modalMenu"}
+      open={successRate}
+      onClose={handleSuccessRateClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={successRate}>
+        <div className="modalRate-container p-4">
+          <h2 className="text-center mb-4">{t("thanks_for_the_rating")}</h2>
+          <IconButton
+            text={removeUpperAccents(t("close"))}
+            icon={<Close className="mr-2" />}
+            color="warning"
+            variant="contained"
+            onClick={handleSuccessRateClose}
+          />
+        </div>
+      </Fade>
+    </Modal>,
+    document.getElementById("user-rate-app-root")
+  );
 
   return (
     <div
@@ -139,10 +228,6 @@ const SidebarComponent = () => {
                 <h5> {t("sidebar_food")} </h5>
               </AccordionSummary>
               <AccordionDetails className="accordion-details">
-                {/* <NavLink exact to="/food">
-                  <BurstMode className="mr-10" />
-                  {t("sidebar_all_food")}
-                </NavLink> */}
                 <NavLink exact to="/food/menu">
                   <ListAlt className="mr-10" />
                   {t("sidebar_view_menu")}
@@ -293,6 +378,21 @@ const SidebarComponent = () => {
         <li>
           <LanguageSwitcher />
         </li>
+
+        {open && rateModal}
+        {successRate && successRateModal}
+        {USER_ROLE && (
+          <li>
+            <IconButton
+              text={removeUpperAccents(t("rate_us"))}
+              icon={<ThumbsUpDown className="mr-2" />}
+              color="warning"
+              variant="contained"
+              className="w-auto"
+              onClick={handleOpen}
+            />
+          </li>
+        )}
       </ul>
     </div>
   );

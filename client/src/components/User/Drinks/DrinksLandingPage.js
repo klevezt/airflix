@@ -69,7 +69,7 @@ const DrinksLandingPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [state.token]);
+  }, [dispatch, state.token, state.refreshToken]);
 
   const drinkCatalog = catalog.map((drink, i) => {
     return (

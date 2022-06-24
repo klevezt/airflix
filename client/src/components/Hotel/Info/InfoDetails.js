@@ -84,7 +84,7 @@ const InfoDetails = () => {
 
         const arr = [];
 
-        content.map((c) => {
+        content.forEach((c) => {
           arr.push(JSON.parse(c));
         });
 
@@ -170,7 +170,7 @@ const InfoDetails = () => {
         throw new Error(info.error.msg);
       }
       const content = info[0].content;
-      content.map((c) => {
+      content.forEach((c) => {
         arr.push(JSON.parse(c));
       });
 
@@ -208,7 +208,7 @@ const InfoDetails = () => {
 
       arr.length = 0;
       const content = data[0].content;
-      content.map((c) => {
+      content.forEach((c) => {
         arr.push(JSON.parse(c));
       });
 

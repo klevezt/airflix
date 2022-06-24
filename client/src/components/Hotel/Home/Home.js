@@ -191,7 +191,7 @@ const Home = () => {
           const arr = [];
           const tempContent = element.content;
 
-          tempContent.map((c) => {
+          tempContent.forEach((c) => {
             arr.push(JSON.parse(c));
           });
           contentArray.push(arr);
@@ -218,7 +218,7 @@ const Home = () => {
 
     controller = null;
     return () => controller?.abort();
-  }, [state.token]);
+  }, [dispatch,state.token, state.refreshToken]);
 
   const handleOpen = () => {
     setOpen(true);

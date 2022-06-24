@@ -106,25 +106,28 @@ const EditDrink = () => {
     [state.token]
   );
 
-  const handleEditDrink = async (id) => {
-    setIsSpinnerLoading(true);
-    try {
-      const drink = await getDrinkEdit(id, state.token);
-      // ---- Error Handler ---- //
-      if (drink.error) {
-        setErrorMessage(drink.error.msg);
-        throw new Error(drink.error.msg);
-      }
+  const handleEditDrink = useCallback(
+    async (id) => {
+      setIsSpinnerLoading(true);
+      try {
+        const drink = await getDrinkEdit(id, state.token);
+        // ---- Error Handler ---- //
+        if (drink.error) {
+          setErrorMessage(drink.error.msg);
+          throw new Error(drink.error.msg);
+        }
 
-      setSelectedDrink(drink);
-      setEditDrink(true);
-      setIsSpinnerLoading(false);
-    } catch (err) {
-      setError(true);
-      setEditDrink(true);
-      setIsSpinnerLoading(false);
-    }
-  };
+        setSelectedDrink(drink);
+        setEditDrink(true);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setEditDrink(true);
+        setIsSpinnerLoading(false);
+      }
+    },
+    [state.token]
+  );
 
   const handleDeleteDrink = useCallback(
     async (id) => {
@@ -233,7 +236,7 @@ const EditDrink = () => {
               <Link
                 to="/bar/edit"
                 onClick={() => {
-                  window.confirm(`${t("confirm_delete_drink")}`) &&
+                  window.confirm(t("confirm_delete_drink")) &&
                     handleDeleteDrink(item._id);
                 }}
               >
@@ -248,7 +251,7 @@ const EditDrink = () => {
       setError(true);
       setIsSpinnerLoading(false);
     }
-  }, [drinks, handleDrinkStatus, handleDeleteDrink]);
+  }, [drinks, handleEditDrink, handleDrinkStatus, handleDeleteDrink, t]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -257,7 +260,7 @@ const EditDrink = () => {
 
     controller = null;
     return () => controller?.abort();
-  }, [isSpinnerLoading, editDrink]);
+  }, [isSpinnerLoading, editDrink, drinkTableRows]);
 
   return (
     <>

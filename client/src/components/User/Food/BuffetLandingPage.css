@@ -23,6 +23,8 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+
   
 @media(max-width:574.98px){
 
@@ -35,8 +37,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    border: 1px solid white;
-    box-shadow: 0px 5px 8px -5px;
+    border: 1px solid rgba(15, 15, 15, 0.6);
     position: relative;
     width: 100%;
     border-radius: 5px;

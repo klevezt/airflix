@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import { deleteEvent, fetchEventsFromDB, toggleEventContentStatus } from "../../../api_requests/hotel_requests";
 import LoadingSpinner from "../../UI/Spinners/LoadingSpinner";
@@ -23,7 +23,7 @@ const EventsAll = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
-  const basicFetch = async () => {
+  const basicFetch = useCallback(async () => {
     const arr = [];
 
     try {
@@ -62,7 +62,7 @@ const EventsAll = () => {
       setError(true);
       setIsSpinnerLoading(false);
     }
-  };
+  },[state.token]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -79,7 +79,7 @@ const EventsAll = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [state.token]);
+  }, [state.token, basicFetch]);
 
   const handleToggleEventStatus = async (id, newStatus) => {
     setIsSpinnerLoading(true);

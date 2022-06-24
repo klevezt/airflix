@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import IconButton from "../../UI/Buttons/IconButton";
@@ -54,7 +54,7 @@ const ServicesDetails = () => {
 
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
-  const basicFetch = async () => {
+  const basicFetch = useCallback(async () => {
     try {
       const services = await fetchServiceFromDB(params.alias, state.token);
       // ---- Error Handler ---- //
@@ -78,7 +78,7 @@ const ServicesDetails = () => {
       setError(true);
       setIsSpinnerLoading(false);
     }
-  };
+  }, [params.alias,state.token]);
 
   // All useEffect Hooks
   useEffect(() => {
@@ -108,7 +108,7 @@ const ServicesDetails = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [state.token, params.alias]);
+  }, [state.token, params.alias, basicFetch]);
 
   // All handle events
   const handleDeleteService = async (id) => {

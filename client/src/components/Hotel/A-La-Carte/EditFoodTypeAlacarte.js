@@ -64,6 +64,69 @@ const EditFoodTypeAlacarte = () => {
     [state.token]
   );
 
+  const handleAlacarteTypeStatus = useCallback(
+    async (id, status, type) => {
+      setIsSpinnerLoading(true);
+      try {
+        const result = await setAlacarteTypeStatus(id, status, state.token);
+        // ---- Error Handler ---- //
+        if (result.error) {
+          setErrorMessage(result.error.msg);
+          throw new Error(result.error.msg);
+        }
+
+        if (!status) {
+          const result2 = await updateAlacarteOfAlacarteType_Status(
+            type,
+            state.token
+          );
+          // ---- Error Handler ---- //
+          if (result2.error) {
+            setErrorMessage(result2.error.msg);
+            throw new Error(result2.error.msg);
+          }
+        }
+
+        const food = await fetchFoodTypesAlacarteFromDB(state.token);
+        // ---- Error Handler ---- //
+        if (food.error) {
+          setErrorMessage(food.error.msg);
+          throw new Error(food.error.msg);
+        }
+
+        setFoodType(food);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setIsSpinnerLoading(false);
+      }
+    },
+    [state.token]
+  );
+
+  const handleEditAlacarteType = useCallback(
+    async (id) => {
+      setIsSpinnerLoading(true);
+      try {
+        const food = await getAlacarteTypeEdit(id, state.token);
+        // ---- Error Handler ---- //
+        if (food.error) {
+          setErrorMessage(food.error.msg);
+          throw new Error(food.error.msg);
+        }
+
+        setSelectedAlacarteType(food);
+        setEditAlacarteType(true);
+        setIsSpinnerLoading(false);
+      } catch (err) {
+        setError(true);
+        setEditAlacarteType(true);
+        setIsSpinnerLoading(false);
+      }
+    },
+    [state.token]
+  );
+
   const foodTableRows = useCallback(() => {
     const tempArray = [];
     foodType.forEach((item) => {
@@ -101,7 +164,12 @@ const EditFoodTypeAlacarte = () => {
       });
     });
     setMenu(tempArray);
-  }, [foodType, handleDeleteAlacarteType, menu]);
+  }, [
+    foodType,
+    handleAlacarteTypeStatus,
+    handleEditAlacarteType,
+    handleDeleteAlacarteType,
+  ]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -135,66 +203,9 @@ const EditFoodTypeAlacarte = () => {
 
     controller = null;
     return () => controller?.abort();
-  }, [isSpinnerLoading]);
+  }, [isSpinnerLoading, foodTableRows]);
 
   /* Status Handler */
-
-  const handleAlacarteTypeStatus = async (id, status, type) => {
-    setIsSpinnerLoading(true);
-    try {
-      const result = await setAlacarteTypeStatus(id, status, state.token);
-      // ---- Error Handler ---- //
-      if (result.error) {
-        setErrorMessage(result.error.msg);
-        throw new Error(result.error.msg);
-      }
-
-      if (!status) {
-        const result2 = await updateAlacarteOfAlacarteType_Status(
-          type,
-          state.token
-        );
-        // ---- Error Handler ---- //
-        if (result2.error) {
-          setErrorMessage(result2.error.msg);
-          throw new Error(result2.error.msg);
-        }
-      }
-
-      const food = await fetchFoodTypesAlacarteFromDB(state.token);
-      // ---- Error Handler ---- //
-      if (food.error) {
-        setErrorMessage(food.error.msg);
-        throw new Error(food.error.msg);
-      }
-
-      setFoodType(food);
-      setIsSpinnerLoading(false);
-    } catch (err) {
-      setError(true);
-      setIsSpinnerLoading(false);
-    }
-  };
-
-  const handleEditAlacarteType = async (id) => {
-    setIsSpinnerLoading(true);
-    try {
-      const food = await getAlacarteTypeEdit(id, state.token);
-      // ---- Error Handler ---- //
-      if (food.error) {
-        setErrorMessage(food.error.msg);
-        throw new Error(food.error.msg);
-      }
-
-      setSelectedAlacarteType(food);
-      setEditAlacarteType(true);
-      setIsSpinnerLoading(false);
-    } catch (err) {
-      setError(true);
-      setEditAlacarteType(true);
-      setIsSpinnerLoading(false);
-    }
-  };
 
   const toggleEditAlacarteType = async () => {
     setIsSpinnerLoading(true);

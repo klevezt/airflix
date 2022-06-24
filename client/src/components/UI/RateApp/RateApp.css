@@ -1,13 +1,16 @@
 .rate-form{
     position: relative;
     border: none;
-    max-width: 90%;
+    max-width: 80vw;
+    max-height: 70vh;
+    overflow: auto;
     margin: auto;
     background-color: white;
     text-align: start;
-    padding: 20px 0px;
+    padding: 20px;
 }
-
+.rating-wrapper{display: flex;flex-wrap: wrap;justify-content: center;}
+.rating-wrapper label{color:#faaf00 ;}
 .rate-form hr{border: 1px solid #0091a4 !important;}
-.rate-form button{border: 1px solid #0091a4;}
+/* .rate-form button{border: 1px solid #0091a4;} */
 .text-error{color: red;font-weight: bold;}

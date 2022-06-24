@@ -102,12 +102,14 @@
     .page-content .page-content-calligrafy-line {
             width: 75% !important;
         }
-    .page-content-listing {
-        display: flex;
-        flex-wrap: wrap;
-    }
+    
      .page-content-listing > div{
         flex-basis: 46%;
         margin: 0 2%;
     }
+}
+
+.page-content-listing {
+    display: flex;
+    flex-wrap: wrap;
 }

@@ -129,5 +129,7 @@
     .user-services-details-content span{
         display: none;
     }
-    
+    .user-services-details-content{
+        justify-content: space-between;
+    }
 }

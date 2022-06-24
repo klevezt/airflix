@@ -37,10 +37,7 @@ const Info = () => {
         );
         const token = isExpired ? dataaa.accessToken : state.token;
 
-        const all_info = await fetchInfoTypesFromDB(
-          { status: true },
-          token
-        );
+        const all_info = await fetchInfoTypesFromDB({ status: true }, token);
 
         // ---- Error Handler ---- //
         if (all_info.error) {
@@ -52,7 +49,7 @@ const Info = () => {
           const arr = [];
           const tempContent = element.content;
 
-          tempContent.map((c) => {
+          tempContent.forEach((c) => {
             arr.push(JSON.parse(c));
           });
           contentArray.push(arr);
@@ -78,7 +75,7 @@ const Info = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [state.token]);
+  }, [dispatch, state.token, state.refreshToken]);
 
   const allInfo = info.map((inf, i) => {
     return (

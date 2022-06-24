@@ -75,7 +75,7 @@ const EventsAll = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [state.token]);
+  }, [dispatch, state.token, state.refreshToken]);
 
   const allEvents = events.map((event, i) => {
     return (

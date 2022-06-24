@@ -86,7 +86,7 @@ const EventsComponent = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [state.token]);
+  }, [dispatch, state.token, state.refreshToken]);
 
   const upcomingEvent = events.map((event, i) => {
     if (i !== 0) return "";
