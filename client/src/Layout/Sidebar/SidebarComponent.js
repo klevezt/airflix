@@ -384,7 +384,7 @@ const SidebarComponent = () => {
         {USER_ROLE && (
           <li>
             <IconButton
-              text={removeUpperAccents(t("rate_us"))}
+              text={removeUpperAccents(t("rate_the_app"))}
               icon={<ThumbsUpDown className="mr-2" />}
               color="warning"
               variant="contained"

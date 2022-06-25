@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { actionTypes } from "../../reducer";
 import { useStateValue } from "../../StateProvider";
 import IconButton from "../UI/Buttons/IconButton";
@@ -24,9 +24,11 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [errorButtonText, setErrorButtonText] = useState("");
 
-  const [loginAvatar, setLoginAvatar] = useState('');
+  const [loginAvatar, setLoginAvatar] = useState("");
 
   const [state, dispatch] = useStateValue();
+
+  const hiddenRef = useRef("");
 
   useEffect(() => {
     let controller = new AbortController();
@@ -39,8 +41,7 @@ const LoginForm = () => {
         );
         // ---- Error Handler ---- //
         if (avatar === undefined || avatar === null) {
-          let tmp_error =
-            "Login/useEffect => Avatar imageGetter Problem";
+          let tmp_error = "Login/useEffect => Avatar imageGetter Problem";
           setErrorMessage(tmp_error);
           throw new Error(tmp_error);
         }
@@ -95,7 +96,7 @@ const LoginForm = () => {
     setError(false);
     if (username === "") setUsernameError(true);
     if (password === "") setPasswordError(true);
-    if (username !== "" && password !== "") {
+    if (username !== "" && password !== "" && hiddenRef.current.value === "") {
       authenticateUser(username, password);
     }
   };
@@ -130,6 +131,7 @@ const LoginForm = () => {
             <h2 className="form-headline">ΕΙΣΟΔΟΣ</h2>
           </div>
           <div className="container">
+            <input type="text" className="hide" ref={hiddenRef} />
             <div className="row mb-3">
               <label htmlFor="uname" className="col-sm-3 col-form-label">
                 {t("username")}
