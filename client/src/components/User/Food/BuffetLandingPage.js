@@ -115,7 +115,7 @@ const BuffetLandingPage = () => {
     exec();
     controller = null;
     return () => controller?.abort();
-  }, [search, state.token, date]);
+  }, [search, state.token]);
 
   const handleOpen = () => {
     setOpenSearch(true);
@@ -189,8 +189,9 @@ const BuffetLandingPage = () => {
                 text={removeUpperAccents(t("close"))}
                 icon={<Close className="mr-2" />}
                 variant="contained"
+                color="error"
                 onClick={handleClosePreview}
-                className="mt-3"
+                className=" w-auto mt-3"
               />
             </div>
           </div>
@@ -207,7 +208,7 @@ const BuffetLandingPage = () => {
         return (
           <div
             className={`user-home-todayFood-inner-wrapper ${
-              todaysFoodCategories[q][1].length - 1 === 0 ? "w-100" : ""
+              todaysFoodCategories[q][1].length - 1 === 0 ? "w-100 " : ""
             }${kk === 0 ? "final-element" : ""}`}
             onClick={() => handlePreview(currentFood)}
             key={j}

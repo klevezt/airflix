@@ -104,7 +104,7 @@ const EditService = (props) => {
         </div>
         <div className="row mb-3">
           <label htmlFor="changeImg" className="col-sm-3 col-form-label">
-            {t("change_images")}
+            {t("change_image")}
           </label>
           <div className="col-sm-3 align-self-center">
             <input

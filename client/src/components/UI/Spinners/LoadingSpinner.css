@@ -10,6 +10,13 @@
     transform: translateX(-50%) translateY(-50%);
 }
 
+.relogin-wrapper .spinner{
+  position: relative;
+  transform: none;
+  left: unset;
+  top: unset;
+}
+
 .spinner>div {
   background-color: #0091a4;
   height: 100%;

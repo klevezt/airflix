@@ -31,6 +31,7 @@
   .user-buffer-food-scroller {
       display: -webkit-inline-box;
       flex-wrap: nowrap;
+      width: 100%;
     }
 
   .user-buffet-wrapper {
@@ -42,7 +43,7 @@
     width: 100%;
     border-radius: 5px;
     margin-bottom: 20px;
-    margin-top: 20px;
+    margin-top: 0px;
   }
   
   .user-buffet-wrapper .user-services-img img {

@@ -175,7 +175,7 @@ const EditEvent = (props) => {
 
             <div className="row mb-3">
               <label htmlFor="event_image" className="col-sm-2 col-form-label">
-                {t("change_images")}
+                {t("change_image")}
               </label>
               <div className="col-sm-10 align-self-center">
                 <input

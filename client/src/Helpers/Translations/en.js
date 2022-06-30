@@ -126,6 +126,7 @@ const en = {
     special_features: "Special features",
     images: "Image",
     image: "Image",
+    change_image: "Change image",
     change_images: "Change images",
     change_password: "Change password",
     new_password: "New password",

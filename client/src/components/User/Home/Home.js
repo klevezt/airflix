@@ -303,7 +303,7 @@ const Home = () => {
           return (
             <div
               className={`user-home-todayFood-inner-wrapper ${
-                q === 0 && kk === 0 ? "final-element" : ""
+                q === 0 && kk === 0 ? " final-element" : ""
               }`}
               key={j}
               onClick={() => handlePreview(currentFood)}

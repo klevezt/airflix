@@ -58,7 +58,9 @@
   border-bottom: 1px solid;
   text-align: start;
 }
-
+.mobile__left__sidebar .menu-img a{
+  padding: 0;
+}
 .mobile__left__sidebar .menu-img .mobile-menu-text {
   bottom: 5px;
   left: 25px;
@@ -80,7 +82,7 @@
   padding: 15px;
   padding: 15px;
   object-fit: cover;
-  max-height: 200px;
+  max-height: 130px;
   max-width: 200px;
 }
 .close {

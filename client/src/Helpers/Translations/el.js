@@ -129,6 +129,7 @@ const el = {
     special_features: "Ιδιαίτερα χαρακτηριστικά",
     image: "Εικόνα",
     images: "Εικόνες",
+    change_image: "Αλλαγή εικόνας",
     change_images: "Αλλαγή εικόνων",
     change_password: "Αλλαγή κωδικού",
     new_password: "Νέος κωδικός",
