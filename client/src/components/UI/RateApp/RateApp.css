@@ -14,3 +14,12 @@
 .rate-form hr{border: 1px solid #0091a4 !important;}
 /* .rate-form button{border: 1px solid #0091a4;} */
 .text-error{color: red;font-weight: bold;}
+
+.rate-user-more-button button{background: #0091a4;}
+
+@media(max-width:574px){
+    .rating-wrapper{
+        font-size: 20px!important;
+    }
+    .rate-form{padding: 10px;}
+}

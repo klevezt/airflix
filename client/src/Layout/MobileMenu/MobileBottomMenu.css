@@ -74,7 +74,7 @@
   top: 0;
   bottom: 0;
   background-color: #464646; /* Black fallback color */
-  overflow: hidden; /* Disable horizontal scroll */
+  overflow: scroll; /* Disable horizontal scroll */
   transition: 0s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
 }
 
@@ -121,6 +121,7 @@
   /* text-transform: uppercase; */
   text-align: start;
 }
+.overlay .menu-img a {padding: 0;}
 
 /* When you mouse over the navigation links, change their color */
 .overlay a:hover,

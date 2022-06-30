@@ -21,7 +21,6 @@
 .btn-primary-theme.submit-btn {
   color: #292929;
   outline: none;
-  /* box-shadow: none; */
 }
 .btn-check:focus + .btn,
 .btn:focus {

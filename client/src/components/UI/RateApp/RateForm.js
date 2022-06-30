@@ -51,7 +51,7 @@ const RateApp = (props) => {
         >
           {t("your_name")}
         </label>
-        <div className="col-sm-10">
+        <div className="col-sm-12">
           <input
             type="text"
             className="form-control form-control-sm"
@@ -118,7 +118,7 @@ const RateApp = (props) => {
       </div>
       <hr />
       <div className="row">
-        <div className=" user-more-button w-auto">
+        <div className="rate-user-more-button mt-0 col-12 col-sm-5">
           <IconButton
             text={removeUpperAccents(t("submit"))}
             icon={<Publish />}
@@ -126,7 +126,7 @@ const RateApp = (props) => {
             type="submit"
           />
         </div>
-        <div className="col-4">
+        <div className="col-12 col-sm-7 mt-2 mt-sm-0">
           <IconButton
             text={removeUpperAccents(t("close"))}
             icon={<Close />}
