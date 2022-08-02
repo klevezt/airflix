@@ -118,7 +118,7 @@ const RateApp = (props) => {
       </div>
       <hr />
       <div className="row">
-        <div className="user-more-button w-auto">
+        <div className="bg-main-color col-12 col-sm-6">
           <IconButton
             text={removeUpperAccents(t("submit"))}
             icon={<Publish />}
@@ -126,7 +126,7 @@ const RateApp = (props) => {
             type="submit"
           />
         </div>
-        <div className="col-4">
+        <div className="col-12 col-sm-6 mt-2 mt-sm-0">
           <IconButton
             text={removeUpperAccents(t("close"))}
             icon={<Close />}
