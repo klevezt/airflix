@@ -42,6 +42,7 @@ import { removeUpperAccents } from "../../Helpers/Functions/functions";
 import { rateTheApp } from "../../api_requests/user_requests";
 import reactDom from "react-dom";
 import RateAppForm from "../../components/UI/RateApp/RateForm";
+import { logout } from "../../api_requests/auth_requests";
 
 const SidebarComponent = () => {
   const [state, dispatch] = useStateValue();
@@ -55,8 +56,9 @@ const SidebarComponent = () => {
   const HOTEL_ROLE = AUTHENTICATED && state.user.role === "Hotel";
   const USER_ROLE = AUTHENTICATED && state.user.role === "Customer";
 
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
     localStorage.clear();
+    await logout(state.refreshToken);
 
     dispatch({
       type: actionTypes.REMOVE_JWT_TOKEN,

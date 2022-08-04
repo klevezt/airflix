@@ -8,6 +8,7 @@ import "./HeaderComponent.css";
 import { useTranslation } from "react-i18next";
 import ErrorComponent from "../../components/Error/Error";
 import { imageGetter } from "../../Helpers/Const/constants";
+import { logout } from "../../api_requests/auth_requests";
 
 const Header = () => {
   const { t } = useTranslation();
@@ -44,8 +45,9 @@ const Header = () => {
   }, []);
   
 
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
     localStorage.clear();
+    await logout(state.refreshToken);
 
     dispatch({
       type: actionTypes.REMOVE_JWT_TOKEN,

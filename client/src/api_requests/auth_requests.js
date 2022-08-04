@@ -10,6 +10,16 @@ export const issueNewToken = (refreshToken) => {
   }).then((data) => data.json());
 };
 
+export const logout = (refreshToken) => {
+  return fetch(process.env.REACT_APP_SERVER_URL + "/auth/logout", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": refreshToken,
+    },
+  }).then((data) => data.json());
+};
+
 export const authenticateUserWithToken = (username, password) => {
   return fetch(base_url + "/auth/login", {
     method: "POST",
@@ -20,6 +30,23 @@ export const authenticateUserWithToken = (username, password) => {
       username,
       password,
     }),
+  })
+    .then((data) => data.json())
+    .then((userWithToken) => {
+      // document.cookie = `token=${userWithToken.accessToken};max-age=10;`;
+      // document.cookie = `refresh-token=${userWithToken.refreshToken};max-age=60;`;
+      return userWithToken;
+    })
+    .catch((err) => err);
+};
+
+export const authenticateUserWithRefreshToken = (refreshToken) => {
+  return fetch(base_url + "/auth/login/redirect", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": refreshToken,
+    }
   })
     .then((data) => data.json())
     .then((userWithToken) => {

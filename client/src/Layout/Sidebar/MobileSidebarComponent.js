@@ -27,6 +27,7 @@ import { rateTheApp } from "../../api_requests/user_requests";
 import { imageGetter } from "../../Helpers/Const/constants";
 import ErrorComponent from "../../components/Error/Error";
 import { removeUpperAccents } from "../../Helpers/Functions/functions";
+import { logout } from "../../api_requests/auth_requests";
 
 const MobileSidebarComponent = (props) => {
   const [state, dispatch] = useStateValue();
@@ -69,8 +70,9 @@ const MobileSidebarComponent = (props) => {
     return () => controller?.abort();
   }, []);
 
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
     localStorage.clear();
+    await logout(state.refreshToken);
 
     dispatch({
       type: actionTypes.REMOVE_JWT_TOKEN,

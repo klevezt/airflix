@@ -29,6 +29,7 @@ import reactDom from "react-dom";
 import { useTranslation } from "react-i18next";
 import ErrorComponent from "../Error/Error";
 import { checkTokenExpiration } from "../../Helpers/Functions/functions";
+import { logout } from "../../api_requests/auth_requests";
 
 const User = () => {
   const [state, dispatch] = useStateValue();
@@ -84,8 +85,10 @@ const User = () => {
     return () => clearInterval(intervalId);
   }, [state.token, state.refreshToken, dispatch,t]);
 
-  const handleClose = () => {
+  const handleClose = async () => {
     setAutoLogout(false);
+    await logout(state.refreshToken);
+
     dispatch({
       type: actionTypes.REMOVE_JWT_TOKEN,
       authenticated: false,

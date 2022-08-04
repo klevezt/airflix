@@ -14,10 +14,34 @@ require("dotenv").config();
 ///////////////////////////
 
 let refreshTokens = [];
+const tokenExpiresIn = "10s";
+const refreshTokenExpiresIn = "300s";
+
+router.route("/login/redirect").post(async (req, res) => {
+  const refreshToken = req.header("x-access-token");
+  try {
+    const tmpUser = JWT.verify(refreshToken, process.env.REFRESH_KEY);
+    const { username } = tmpUser;
+    const user = await Users.findOne({ username });
+    if (refreshTokens.includes(refreshToken)) {
+      console.log("YESSSS");
+    }
+    return res.status(200).json({ user });
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({
+      error: {
+        msg: "Invalid token",
+      },
+    });
+  }
+});
 
 // Log in
 router.route("/login").post(async (req, res) => {
   const { username, password } = req.body;
+
+  console.log(refreshTokens);
 
   // Look for user email in the database
   const user = await Users.findOne({ username });
@@ -43,13 +67,13 @@ router.route("/login").post(async (req, res) => {
   }
 
   // Send JWT access token
-  const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
-    expiresIn: "1000s",
+  const accessToken = JWT.sign({ username }, process.env.TOKEN_KEY, {
+    expiresIn: tokenExpiresIn,
   });
 
   // Refresh token
-  const refreshToken = await JWT.sign({ username }, process.env.REFRESH_KEY, {
-    expiresIn: "6000s",
+  const refreshToken = JWT.sign({ username }, process.env.REFRESH_KEY, {
+    expiresIn: refreshTokenExpiresIn,
   });
 
   // Set refersh token in refreshTokens array
@@ -81,10 +105,10 @@ router.route("/token").post(async (req, res) => {
   }
 
   try {
-    const user = await JWT.verify(refreshToken, process.env.REFRESH_KEY);
+    const user = JWT.verify(refreshToken, process.env.REFRESH_KEY);
     const { username } = user;
-    const accessToken = await JWT.sign({ username }, process.env.TOKEN_KEY, {
-      expiresIn: "1000s",
+    const accessToken = JWT.sign({ username }, process.env.TOKEN_KEY, {
+      expiresIn: tokenExpiresIn,
     });
     res.status(200).json({ accessToken });
   } catch (error) {
@@ -102,7 +126,7 @@ router.route("/logout").delete(async (req, res) => {
   const refreshToken = req.header("x-access-token");
 
   refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-  res.sendStatus(204);
+  res.status(204);
 });
 
 module.exports = router;
