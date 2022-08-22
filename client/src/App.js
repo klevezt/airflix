@@ -29,7 +29,7 @@ import { getCookie } from "./Helpers/Functions/functions";
 
 const App = () => {
   const [state, dispatch] = useStateValue();
-  const [isSpinnerLoading, setIsSpinnerLoading] = useState(false);
+  const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(true);
 
   const [error, setError] = useState(false);
@@ -52,6 +52,8 @@ const App = () => {
         refreshToken === "undefined"
       ) {
         localStorage.clear();
+        setIsSpinnerLoading(false);
+
         return dispatch({
           type: actionTypes.REMOVE_JWT_TOKEN,
           authenticated: false,
@@ -77,9 +79,8 @@ const App = () => {
           } else {
             localStorage.setItem("token", accessToken);
             localStorage.setItem("rToken", refreshToken);
-            // console.log(user);
-            // console.log(accessToken);
-            // console.log(refreshToken);
+            setIsSpinnerLoading(false);
+
             dispatch({
               type: actionTypes.SET_USER,
               user: user,
@@ -93,10 +94,23 @@ const App = () => {
         } finally {
           setIsSpinnerLoading(false);
         }
+      } else {
+        setIsSpinnerLoading(false);
       }
     };
     exec();
     return () => controller?.abort();
+  }, [dispatch]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setModalOpen(false);
+      setIsSpinnerLoading(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   const modalRelogin = reactDom.createPortal(
@@ -105,19 +119,21 @@ const App = () => {
       aria-describedby="transition-modal-description"
       className="modalMenu relogin-wrapper"
       open={modalOpen}
-      // onClose={handleClose}
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-        style: {
-          backgroundColor: "rgb(255 255 255 / 50%)",
+      components={Backdrop}
+      componentsProps={{
+        Backdrop: {
+          timeout: 500,
+          style: {
+            backgroundColor: "rgb(255 255 255 / 50%)",
+          },
         },
       }}
     >
       <Fade in={modalOpen}>
-        {/* <LoadingSpinner /> */}
-        <p>HAHAHAHAHA</p>
+        <div>
+          <LoadingSpinner />
+        </div>
       </Fade>
     </Modal>,
     document.getElementById("login-root")

@@ -85,19 +85,6 @@ const User = () => {
     return () => clearInterval(intervalId);
   }, [state.token, state.refreshToken, dispatch,t]);
 
-  const handleClose = async () => {
-    setAutoLogout(false);
-    await logout(state.refreshToken);
-
-    dispatch({
-      type: actionTypes.REMOVE_JWT_TOKEN,
-      authenticated: false,
-      token: "",
-      refreshToken: "",
-    });
-    localStorage.clear();
-  };
-
   const logoutModal = reactDom.createPortal(
     <Modal
       aria-labelledby="transition-modal-title"
@@ -115,7 +102,6 @@ const User = () => {
           <ErrorComponent
             errorMessage={errorMessage}
             loggout
-            handleClose={handleClose}
           />
         </div>
       </Fade>

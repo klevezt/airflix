@@ -14,8 +14,8 @@ require("dotenv").config();
 ///////////////////////////
 
 let refreshTokens = [];
-const tokenExpiresIn = "10s";
-const refreshTokenExpiresIn = "300s";
+const tokenExpiresIn = "15s";
+const refreshTokenExpiresIn = "30s";
 
 router.route("/login/redirect").post(async (req, res) => {
   const refreshToken = req.header("x-access-token");

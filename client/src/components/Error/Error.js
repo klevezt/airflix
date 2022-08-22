@@ -67,10 +67,10 @@ const Error = (props) => {
           <form className="general-form">
             <IconButton
               text={removeUpperAccents(btnText)}
-              icon={props.loggout && <ExitToApp className="mr-2" />}
+              icon={<ExitToApp className="mr-2" />}
               variant="contained"
               className="btn error-btn"
-              onClick={props.loggout ? props.handleClose : submitHandler}
+              onClick={submitHandler}
             />
           </form>
         </div>
