@@ -17,15 +17,10 @@ import { Fade, Backdrop, Modal } from "@mui/material";
 import jwt from "jsonwebtoken";
 import { actionTypes } from "./reducer";
 import LoadingSpinner from "./components/UI/Spinners/LoadingSpinner";
-import {
-  authenticateUserWithRefreshToken,
-  authenticateUserWithToken,
-  logout,
-} from "./api_requests/auth_requests";
+import { authenticateUserWithRefreshToken } from "./api_requests/auth_requests";
 import ErrorComponent from "./components/Error/Error";
 
 import "./App.css";
-import { getCookie } from "./Helpers/Functions/functions";
 
 const App = () => {
   const [state, dispatch] = useStateValue();

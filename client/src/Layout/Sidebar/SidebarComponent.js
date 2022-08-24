@@ -45,6 +45,7 @@ import RateAppForm from "../../components/UI/RateApp/RateForm";
 import { logout } from "../../api_requests/auth_requests";
 
 const SidebarComponent = () => {
+
   const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -56,9 +57,9 @@ const SidebarComponent = () => {
   const HOTEL_ROLE = AUTHENTICATED && state.user.role === "Hotel";
   const USER_ROLE = AUTHENTICATED && state.user.role === "Customer";
 
-  const logoutHandler = async () => {
+  const logoutHandler = () => {
     localStorage.clear();
-    await logout(state.refreshToken);
+    logout(state.refreshToken);
 
     dispatch({
       type: actionTypes.REMOVE_JWT_TOKEN,
@@ -66,6 +67,7 @@ const SidebarComponent = () => {
       token: "",
       refreshToken: "",
     });
+
   };
 
   const handleOpen = () => {

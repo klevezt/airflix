@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 import Sidebar from "../../Layout/Sidebar/SidebarComponent";
 
@@ -23,13 +23,14 @@ import EventsAll from "./Events/EventsAll";
 import EventsDetail from "./Events/EventsDetail";
 import Info from "./Info/Info";
 import { actionTypes } from "../../reducer";
-import { Fade, Backdrop, Modal } from "@mui/material";
+import { Fade, Backdrop, Modal, Button } from "@mui/material";
 import reactDom from "react-dom";
 // import IconButton from "../UI/Buttons/IconButton";
 import { useTranslation } from "react-i18next";
 import ErrorComponent from "../Error/Error";
 import { checkTokenExpiration } from "../../Helpers/Functions/functions";
-import { logout } from "../../api_requests/auth_requests";
+
+import PageNotFound from "../404/PageNotFound";
 
 const User = () => {
   const [state, dispatch] = useStateValue();
@@ -83,7 +84,7 @@ const User = () => {
     }, 60000);
 
     return () => clearInterval(intervalId);
-  }, [state.token, state.refreshToken, dispatch,t]);
+  }, [state.token, state.refreshToken, dispatch, t]);
 
   const logoutModal = reactDom.createPortal(
     <Modal
@@ -99,10 +100,7 @@ const User = () => {
     >
       <Fade in={autoLoggout}>
         <div className="modalRate-container">
-          <ErrorComponent
-            errorMessage={errorMessage}
-            loggout
-          />
+          <ErrorComponent errorMessage={errorMessage} loggout />
         </div>
       </Fade>
     </Modal>,
@@ -120,73 +118,78 @@ const User = () => {
             <div className="container">
               {state.authenticated && state.user.role === "Customer" && (
                 <div className="user-container text-center mb-80">
-                  <Route exact path="/info">
-                    {state.authenticated && <Info />}
-                  </Route>
-                  <Route exact path="/services">
-                    {state.authenticated && (
-                      <ServicesLandingPage user={state.user} />
-                    )}
-                  </Route>
-                  <Route exact path="/services/:type/detail">
-                    {state.authenticated && (
-                      <ServicesDetailsPage />
-                    )}
-                  </Route>
-                  {/* <Route exact path="/settings">
+                  <Switch>
+                    <Route exact path="/info">
+                      {state.authenticated && <Info />}
+                    </Route>
+                    <Route exact path="/services">
+                      {state.authenticated && (
+                        <ServicesLandingPage user={state.user} />
+                      )}
+                    </Route>
+                    <Route exact path="/services/:type/detail">
+                      {state.authenticated && <ServicesDetailsPage />}
+                    </Route>
+                    {/* <Route exact path="/settings">
                   {state.authenticated && <Settings user={state.user} />}
                 </Route> */}
-                  <Route exact path="/food">
-                    {state.authenticated && <FoodLandingPage />}
-                  </Route>
-                  <Route exact path="/buffet">
-                    {state.authenticated && (
-                      <BuffetLandingPage user={state.user} />
-                    )}
-                  </Route>
-                  {/* <Route exact path="/buffet/:type/detail">
+                    <Route exact path="/food">
+                      {state.authenticated && <FoodLandingPage />}
+                    </Route>
+                    <Route exact path="/buffet">
+                      {state.authenticated && (
+                        <BuffetLandingPage user={state.user} />
+                      )}
+                    </Route>
+                    {/* <Route exact path="/buffet/:type/detail">
                   {state.authenticated && (
                     <div className="p-relative  d-flex">
                       <BuffetDetailsPage />
                     </div>
                   )}
                 </Route> */}
-                  <Route exact path="/alacarte">
-                    {state.authenticated && (
-                      <AlacarteLandingPage user={state.user} />
-                    )}
-                  </Route>
-                  <Route exact path="/alacarte/:type/detail">
-                    {state.authenticated && (
-                      <div className="p-relative  d-flex">
-                        <AlacarteDetailsPage user={state.user} />
-                      </div>
-                    )}
-                  </Route>
-                  <Route exact path="/drinks">
-                    {state.authenticated && (
-                      <DrinksLandingPage user={state.user} />
-                    )}
-                  </Route>
-                  <Route exact path="/drinks/:type/detail">
-                    {state.authenticated && (
-                      <div className="p-relative  d-flex">
-                        <DrinksDetailsPage user={state.user} />
-                      </div>
-                    )}
-                  </Route>
-                  <Route exact path="/events">
-                    {state.authenticated && <Events user={state.user} />}
-                  </Route>
-                  <Route exact path="/events/all">
-                    {state.authenticated && <EventsAll user={state.user} />}
-                  </Route>
-                  <Route exact path="/events/view/:eventAlias">
-                    {state.authenticated && <EventsDetail user={state.user} />}
-                  </Route>
-                  <Route exact path="/">
-                    {state.authenticated && <Home user={state.user} />}
-                  </Route>
+                    <Route exact path="/alacarte">
+                      {state.authenticated && (
+                        <AlacarteLandingPage user={state.user} />
+                      )}
+                    </Route>
+                    <Route exact path="/alacarte/:type/detail">
+                      {state.authenticated && (
+                        <div className="p-relative  d-flex">
+                          <AlacarteDetailsPage user={state.user} />
+                        </div>
+                      )}
+                    </Route>
+                    <Route exact path="/drinks">
+                      {state.authenticated && (
+                        <DrinksLandingPage user={state.user} />
+                      )}
+                    </Route>
+                    <Route exact path="/drinks/:type/detail">
+                      {state.authenticated && (
+                        <div className="p-relative  d-flex">
+                          <DrinksDetailsPage user={state.user} />
+                        </div>
+                      )}
+                    </Route>
+                    <Route exact path="/events">
+                      {state.authenticated && <Events user={state.user} />}
+                    </Route>
+                    <Route exact path="/events/all">
+                      {state.authenticated && <EventsAll user={state.user} />}
+                    </Route>
+                    <Route exact path="/events/view/:eventAlias">
+                      {state.authenticated && (
+                        <EventsDetail user={state.user} />
+                      )}
+                    </Route>
+                    <Route exact path="/">
+                      {state.authenticated && <Home user={state.user} />}
+                    </Route>
+                    <Route exact path="*">
+                      <PageNotFound />
+                    </Route>
+                  </Switch>
                 </div>
               )}
             </div>

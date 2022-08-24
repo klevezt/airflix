@@ -30,6 +30,7 @@ import { removeUpperAccents } from "../../Helpers/Functions/functions";
 import { logout } from "../../api_requests/auth_requests";
 
 const MobileSidebarComponent = (props) => {
+
   const [state, dispatch] = useStateValue();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -70,9 +71,9 @@ const MobileSidebarComponent = (props) => {
     return () => controller?.abort();
   }, []);
 
-  const logoutHandler = async () => {
+  const logoutHandler = () => {
     localStorage.clear();
-    await logout(state.refreshToken);
+    logout(state.refreshToken);
 
     dispatch({
       type: actionTypes.REMOVE_JWT_TOKEN,
@@ -80,6 +81,7 @@ const MobileSidebarComponent = (props) => {
       token: "",
       refreshToken: "",
     });
+    
   };
 
   const handleOpen = () => {

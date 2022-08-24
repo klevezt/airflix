@@ -45,9 +45,9 @@ const Header = () => {
   }, []);
   
 
-  const logoutHandler = async () => {
+  const logoutHandler =  () => {
     localStorage.clear();
-    await logout(state.refreshToken);
+    logout(state.refreshToken);
 
     dispatch({
       type: actionTypes.REMOVE_JWT_TOKEN,

@@ -164,6 +164,8 @@ const en = {
     no_information: "There are no information",
     no_services: "There are no services",
     drinks: "Drinks",
+    page_not_found: "Page not found.",
+    page_not_found_description: "The page you requested does not exist. Return to the home page following the link below."
   },
 };
 

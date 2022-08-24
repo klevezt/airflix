@@ -2,7 +2,6 @@
   border: 2px solid rgba(143, 15, 15, 0.925) ;
   outline: none;
   border-radius: 10px;
-  width: 90%;
   height: auto;
   background-color: white;
   z-index: 1;
@@ -12,7 +11,17 @@
   flex-wrap: wrap;
   flex-direction: column;
   padding: 20px;
-  max-width: 65%;
+}
+
+@media(min-width: 991px){
+  .error-wrapper {
+    width: 30%;
+  }
+}
+@media(max-width: 990.98px) {
+  .error-wrapper {
+      width: 80%;
+    }
 }
 
 .error-wrapper p{

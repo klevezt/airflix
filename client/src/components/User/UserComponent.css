@@ -73,3 +73,9 @@ table.table-sm td {
 .user-container .toggle-visibility-wrapper button {
   background-color: #0091a4;
 }
+
+.page-not-found h2,
+.page-not-found h4{
+  color: white;
+  margin: 20px;
+}
